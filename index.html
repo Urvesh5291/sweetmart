@@ -12,7 +12,7 @@
         .logo-area { display: flex; align-items: center; gap: 12px; }
         .logo-area img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700; }
         header h1 { font-size: 1.6rem; color: #fff; }
-        nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 600; }
+        nav a { color: #fff; text-decoration: none; margin-left: 15px; font-weight: 600; font-size: 0.95rem; }
         nav a:hover { color: #FFD700; }
         .hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1599785209707-a456fc1337bb?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center; color: white; text-align: center; padding: 100px 20px; }
         .hero h2 { font-size: 3rem; margin-bottom: 10px; color: #FFD700; }
@@ -34,9 +34,10 @@
         .order-controls select { padding: 8px; margin: 5px 0; width: 90%; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background-color: #fff; text-align: center; }
         .preview-text { font-size: 0.9rem; color: #2e7d32; font-weight: bold; margin: 5px 0; }
         .highlight-tag { display: inline-block; background: #2e7d32; color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 8px; }
-        .about-section { background-color: #fff; padding: 50px 20px; text-align: center; margin-top: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-        .about-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; }
-        .about-section p { max-width: 800px; margin: auto; font-size: 1.1rem; color: #555; line-height: 1.8; }
+        .about-section, .brandguide-section { background-color: #fff; padding: 40px 20px; margin-top: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .about-section h2, .brandguide-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; text-align: center; }
+        .about-section p, .brandguide-section ul { max-width: 800px; margin: auto; font-size: 1.05rem; color: #555; line-height: 1.8; }
+        .brandguide-section ul { list-style-type: square; padding-left: 20px; }
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.3); }
         .cart-bar span { font-size: 1.2rem; font-weight: bold; color: #FFD700; }
         #invoice-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; overflow-y: auto; }
@@ -47,20 +48,21 @@
         .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; font-size: 0.9rem; text-align: left; }
         .invoice-table th { background-color: #8B0000; color: white; }
         .total-row { font-weight: bold; text-align: right; margin-top: 10px; font-size: 1.1rem; }
-        footer { background-color: #222; color: white; text-align: center; padding: 30px 20px; margin-bottom: 60px; }
+        footer { background-color: #222; color: white; text-align: center; padding: 30px 20px; margin-bottom: 60px; border-top: 4px solid #FFD700; }
     </style>
 </head>
 <body>
         <header>
         <div class="logo-area">
-            <img src="23997.png" alt="Patel Sweet Mart Logo">
+            <img src="Logo.png" alt="Patel Sweet Mart Logo">
             <h1>પટેલ સ્વીટ માર્ટ</h1>
         </div>
         <nav>
             <a href="#home">હોમ</a>
             <a href="#menu">મીઠાઈ અને નાસ્તા</a>
             <a href="#about">અમારા વિશે</a>
-            <a href="#cart-section" onclick="openCartModal()">કાર્ટ (Cart)</a>
+            <a href="#brandguide">બ્રાન્ડ ગાઇડ</a>
+            <a href="#cart" onclick="openCartModal()">કાર્ટ (Cart)</a>
         </nav>
     </header>
 
@@ -76,7 +78,7 @@
         <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
         <div class="grid">
             
-            <!-- 1. Toprapak (Updated name from Khas Torapak) -->
+            <!-- 1. Toprapak (Updated name) -->
             <div class="card">
                 <img src="torapak.jpg" alt="ટોપ્રાપાક">
                 <h3>ટોપ્રાપાક</h3>
@@ -150,7 +152,7 @@
                     <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
                     <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">🛒 કાર્ટમાં ઉમેરો</button>
                 </div>
-                                          </div>
+    </div>
                 <!-- 6. Jalebi -->
             <div class="card">
                 <img src="jalebi.jpg" alt="જલેબી">
@@ -233,8 +235,19 @@
     <section id="about" class="about-section container">
         <h2>અમારા વિશે (About Us)</h2>
         <p>પટેલ સ્વીટ માર્ટ, મુખ્ય બજાર ખેરવા (Est. 1995) ખાતે આવેલી એક પરંપરાગત અને વિશ્વાસપાત્ર દુકાન છે[span_0](start_span)[span_0](end_span). અમે શુદ્ધ દેશી ઘી અને ગુણવત્તાયુક્ત સામગ્રીથી બનેલી સ્વાદિષ્ટ મીઠાઈઓ અને ફરસાણ પ્રદાન કરીએ છીએ. હવે ખેરવા ઉપરાંત અમદાવાદ ખાતે પણ અમારા ગ્રાહકો ઘર બેઠા ઓર્ડર કરી શકે છે.</p>
-                        </section>
-                           <!-- Floating Cart Bar -->
+    </section>
+
+    <!-- Brand Guide Section -->
+    <section id="brandguide" class="brandguide-section container">
+        <h2>બ્રાન્ડ ગાઇડ (Brand Guide)</h2>
+        <ul>
+            <li><strong>બ્રાન્ડ નામ:</strong> પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)[span_1](start_span)[span_1](end_span)</li>
+            <li><strong>સ્થાપના વર્ષ:</strong> ૧૯૯૫ (Est. 1995)[span_2](start_span)[span_2](end_span)</li>
+            <li><strong>મુખ્ય રંગો:</strong> મરૂન (Maroon - #8B0000), ગોલ્ડન યલો (#FFD700), અને લીલો રંગ (Toprapak mate #2e7d32).</li>
+            <li><strong>લોગો ઓળખ:</strong> વર્તુળાકાર લોગો જેમાં 'શ્રીજી', ગુજરાતી અને અંગ્રેજી નામ દર્શાવેલ છે[span_3](start_span)[span_3](end_span).</li>
+        </ul>
+    </section>
+        <!-- Floating Cart Bar -->
     <div class="cart-bar">
         <div>કાર્ટમાં આઈટમ્સ: <span id="cart-count">0</span> | કુલ: <span id="cart-total">₹0</span></div>
         <button type="button" class="btn whatsapp-btn" style="margin: 0;" onclick="openCartModal()">📄 બિલ બનાવો & મોકલો</button>
@@ -280,8 +293,7 @@
         <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા અને અમદાવાદ. સર્વાધિકાર સુરક્ષિત.</p>
         <p>શુદ્ધતા અને પરંપરાનો ભરોસો</p>
     </footer>
-
-    <script>
+        <script>
         let cart = [];
 
         function updatePrice(id, ratePerKg) {
@@ -380,31 +392,37 @@
                 modal.style.display = 'none';
             }
         }
-    </script>
-</body>
-</html>
-# 🎨 પટેલ સ્વીટ માર્ટ - બ્રાન્ડ ગાઇડ (Brand Guide)
+        </script>
+        <?php
+// PHP Database Connection Script for Patel Sweet Mart
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "patel_sweet_mart";
 
-## ૧. બ્રાન્ડ પરિચય (Brand Overview)
-* **નામ:** પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)[span_1](start_span)[span_1](end_span)
-* **સ્થાપના વર્ષ:** ૧૯૯૫ (Est. 1995)[span_2](start_span)[span_2](end_span)
-* **સ્થળ:** મુખ્ય બજાર, ખેરવા (અને અમદાવાદ શાખા)[span_3](start_span)[span_3](end_span)
-* **ટેગલાઇન:** "શુદ્ધતા અને પરંપરાનો સાચો સ્વાદ"
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-## ૨. લોગો અને પ્રતીક (Logo & Identity)
-* **લોગો ડિઝાઇન:** વર્તુળાકાર (Circular) વેરિઅન્ટ જેમાં ઉપર "• શ્રીજી •", મધ્યમાં ગુજરાતીમાં "પટેલ સ્વીટ માર્ટ" અને નીચે અંગ્રેજીમાં "PATEL SWEET MART EST. 1995" દર્શાવેલ છે[span_4](start_span)[span_4](end_span).
-* **પ્રિન્ટ અને વેબસાઇટ:** લોગો હંમેશાં હેડરના ડાબા ખૂણે અથવા પોસ્ટરની મધ્યમાં સ્પષ્ટ દેખાય તે રીતે ઉપયોગ કરવો.
+// Check connection
+if ($conn->connect_error) {
+    die("Database Connection Failed: " . $conn->connect_error);
+}
 
-## ૩. કલર પેલેટ (Color Palette)
-* **મેરૂન / મરૂન રેડ (Maroon - #8B0000):** મુખ્ય હેડર, બ્રાન્ડ પ્રાઇમરી કલર અને બોક્સ બેકગ્રાઉન્ડ માટે. પરંપરા અને શુદ્ધતા દર્શાવે છે.
-* **ગોલ્ડન યલો (Golden Yellow - #FFD700):** હાઇલાઇટ્સ, ઓફર્સ અને પ્રાઇસ ટેગ માટે.
-* **લીલો રંગ (Green - #2e7d32):** ખાસ ટોપ્રાપાક (Toprapak) ની ઓળખ તથા વોટ્સએપ બટન/સક્સેસ ટેગ માટે.
-* **ક્રીમ બેકગ્રાઉન્ડ (Off-White/Cream - #fff9f4):** વેબસાઇટનું મુખ્ય બેકગ્રાઉન્ડ રંગ.
+// Example function to save orders into database
+if (isset($_POST['save_order'])) {
+    $customer_name = $_POST['customer_name'];
+    $total_amount = $_POST['total_amount'];
+    $order_details = $_POST['order_details'];
 
-## ૪. ટાઇપોગ્રાફી (Typography & Language)
-* **પ્રાયમરી ભાષા:** ગુજરાતી (શુદ્ધ અને પારંપારિક શબ્દો જેમ કે ટોપ્રાપાક, મોહનથાળ, પેંડા).
-* **ફોન્ટ ફેમિલી:** 'Segoe UI', Tahoma, Geneva, Verdana (મોબાઇલ અને લેપટોપ બંનેમાં એકસરખા દેખાય તેવા સચોટ ફોન્ટ).
+    $sql = "INSERT INTO orders (customer_name, total_amount, order_details, order_date) VALUES ('$customer_name', '$total_amount', '$order_details', NOW())";
 
-## ૫. પેકેજિંગ અને માર્કેટિંગ ગાઇડલાઇન્સ
-* **મિઠાઈ પેકેજિંગ:** સ્ટેન્ડ-અપ ઝિપલોક પાઉચ અને ઓટોમેટેડ મશીનરી પેકેજિંગ.
-* **સોશિયલ મીડિયા (Instagram: urvesh_5291):** 9:16 શોર્ટ-ફોર્મ વિડિઓઝ અને અમદાવાદ/ખેરવા લોકેશન ટેગ સાથે પ્રમોશન.
+    if ($conn->query($sql) === TRUE) {
+        echo "Order successfully saved to database!";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+$conn->close();
+?>
+    
