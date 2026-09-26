@@ -38,12 +38,13 @@
         .about-section h2, .brandguide-section h2, .history-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; text-align: center; }
         .about-section p, .brandguide-section ul { max-width: 800px; margin: auto; font-size: 1.05rem; color: #555; line-height: 1.8; }
         .brandguide-section ul { list-style-type: square; padding-left: 20px; }
+        .form-input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; }
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.3); }
         .cart-bar span { font-size: 1.2rem; font-weight: bold; color: #FFD700; }
         #invoice-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; overflow-y: auto; }
         .invoice-box { background: white; padding: 25px; width: 90%; max-width: 450px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: left; max-height: 90vh; overflow-y: auto; }
         .invoice-box h2 { text-align: center; color: #8B0000; margin-bottom: 5px; }
-        .invoice-box p { text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 15px; }
+        .invoice-box p { text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px; }
         .invoice-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; font-size: 0.9rem; text-align: left; }
         .invoice-table th { background-color: #8B0000; color: white; }
@@ -62,7 +63,7 @@
             <a href="#menu">મીઠાઈ અને નાસ્તા</a>
             <a href="#about">અમારા વિશે</a>
             <a href="#brandguide">બ્રાન્ડ ગાઇડ</a>
-            <a href="#history">હિસ્ટ્રી (History)</a>
+            <a href="#history">હિસ્ટ્રી</a>
             <a href="#cart" onclick="openCartModal()">કાર્ટ (Cart)</a>
         </nav>
     </header>
@@ -153,8 +154,8 @@
                     <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
                     <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">🛒 કાર્ટમાં ઉમેરો</button>
                 </div>
-            </div>
-                        <!-- 6. Jalebi -->
+    </div>
+                <!-- 6. Jalebi -->
             <div class="card">
                 <img src="jalebi.jpg" alt="જલેબી">
                 <h3>ગરમાગરમ જલેબી</h3>
@@ -249,24 +250,139 @@
         </ul>
     </section>
 
-    <!-- Order History Section (Database Connected View) -->
+    <!-- Order History Section -->
     <section id="history" class="history-section container">
-        <h2>ઓર્ડર હિસ્ટ્રી (Order History - Database)</h2>
-        <p style="text-align: center; margin-bottom: 20px; color: #666;">કોણે, ક્યારે અને કેટલો ઓર્ડર કર્યો તેની સંપૂર્ણ વિગત:</p>
+        <h2>ઓર્ડર હિસ્ટ્રી (Order History)</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: #666;">કોણે, ક્યારે અને કેટલો ઓર્ડર કર્યો તેની વિગતો:</p>
         <table class="invoice-table">
             <thead>
                 <tr>
                     <th>ઓર્ડર ID</th>
                     <th>ગ્રાહકનું નામ</th>
+                    <th>મોબાઈલ નંબર</th>
                     <th>તારીખ & સમય</th>
-                    <th>ઓર્ડર વિગત (Bill Details)</th>
                     <th>કુલ રકમ</th>
                 </tr>
             </thead>
             <tbody id="history-table-body">
-                <!-- PHP / Database Data will be loaded here -->
                 <tr>
-                    <td colspan="5" style="text-align: center;">કોઈ ઓર્ડર હિસ્ટ્રી ઉપલબ્ધ નથી અથવા ડેટાબેઝ કનેક્ટ કરો.</td>
+                    <td colspan="5" style="text-align: center;">કોઈ ઓર્ડર હિસ્ટ્રી ઉપલબ્ધ નથી. ડેટાબેઝ કનેક્ટ કરો.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+                <!-- 6. Jalebi -->
+            <div class="card">
+                <img src="jalebi.jpg" alt="જલેબી">
+                <h3>ગરમાગરમ જલેબી</h3>
+                <p>રસ ભરેલી અને ક્રિસ્પી ગરમાગરમ દેશી ઘીની જલેબી.</p>
+                <div class="price-tag">₹ 380 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-jalebi" onchange="updatePrice('jalebi', 380)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-jalebi" class="preview-text">કિંમત: ₹380</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ગરમાગરમ જલેબી', 380, 'select-jalebi')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 7. Ganthiya -->
+            <div class="card">
+                <img src="ganthiya.jpg" alt="ગાંઠિયા">
+                <h3>ચટાકેદાર ગાંઠિયા</h3>
+                <p>ચા સાથે માણવા માટેના એકદમ નરમ અને તાજા ગાંઠિયા.</p>
+                <div class="price-tag">₹ 340 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-ganthiya" onchange="updatePrice('ganthiya', 340)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-ganthiya" class="preview-text">કિંમત: ₹340</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ચટાકેદાર ગાંઠિયા', 340, 'select-ganthiya')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 8. Chorafari -->
+            <div class="card">
+                <img src="chorafari.jpg" alt="ચોરાફળી">
+                <h3>ચોરાફળી</h3>
+                <p>સ્પેશિયલ મસાલા સાથેની ચટાકેદાર અને કરકરી ચોરાફળી.</p>
+                <div class="price-tag">₹ 360 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-chorafari" onchange="updatePrice('chorafari', 360)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-chorafari" class="preview-text">કિંમત: ₹360</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ચોરાફળી', 360, 'select-chorafari')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 9. Chavanu -->
+            <div class="card">
+                <img src="chavanu.jpg" alt="ચવાણું">
+                <h3>મિક્સ ચવાણું</h3>
+                <p>વિવિધ સેવ, ગાંઠિયા અને મસાલાનું સ્વાદિષ્ટ મિક્સ ચવાણું.</p>
+                <div class="price-tag">₹ 350 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-chavanu" onchange="updatePrice('chavanu', 350)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-chavanu" class="preview-text">કિંમત: ₹350</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('મિક્સ ચવાણું', 350, 'select-chavanu')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 10. Faradi -->
+            <div class="card">
+                <img src="faradi.jpg" alt="ફરાળી નાસ્તો">
+                <h3>ફરાળી નાસ્તો</h3>
+                <p>ઉપવાસ કે વ્રત માટે ખાસ શુદ્ધ અને ટેસ્ટી ફરાળી આઈટમ્સ.</p>
+                <div class="price-tag">₹ 400 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-faradi" onchange="updatePrice('faradi', 400)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-faradi" class="preview-text">કિંમત: ₹400</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ફરાળી નાસ્તો', 400, 'select-faradi')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <section id="about" class="about-section container">
+        <h2>અમારા વિશે (About Us)</h2>
+        <p>પટેલ સ્વીટ માર્ટ, મુખ્ય બજાર ખેરવા (Est. 1995) ખાતે આવેલી એક પરંપરાગત અને વિશ્વાસપાત્ર દુકાન છે[span_0](start_span)[span_0](end_span). અમે શુદ્ધ દેશી ઘી અને ગુણવત્તાયુક્ત સામગ્રીથી બનેલી સ્વાદિષ્ટ મીઠાઈઓ અને ફરસાણ પ્રદાન કરીએ છીએ. હવે ખેરવા ઉપરાંત અમદાવાદ ખાતે પણ અમારા ગ્રાહકો ઘર બેઠા ઓર્ડર કરી શકે છે.</p>
+    </section>
+
+    <!-- Brand Guide Section -->
+    <section id="brandguide" class="brandguide-section container">
+        <h2>બ્રાન્ડ ગાઇડ (Brand Guide)</h2>
+        <ul>
+            <li><strong>બ્રાન્ડ નામ:</strong> પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)[span_1](start_span)[span_1](end_span)</li>
+            <li><strong>સ્થાપના વર્ષ:</strong> ૧૯૯૫ (Est. 1995)[span_2](start_span)[span_2](end_span)</li>
+            <li><strong>મુખ્ય રંગો:</strong> મરૂન (Maroon - #8B0000), ગોલ્ડન યલો (#FFD700), અને લીલો રંગ (ટોપરાપાક માટે #2e7d32).</li>
+            <li><strong>લોગો ઓળખ:</strong> વર્તુળાકાર લોગો જેમાં 'શ્રીજી', ગુજરાતી અને અંગ્રેજી નામ દર્શાવેલ છે[span_3](start_span)[span_3](end_span).</li>
+        </ul>
+    </section>
+
+    <!-- Order History Section -->
+    <section id="history" class="history-section container">
+        <h2>ઓર્ડર હિસ્ટ્રી (Order History)</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: #666;">કોણે, ક્યારે અને કેટલો ઓર્ડર કર્યો તેની વિગતો:</p>
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>ઓર્ડર ID</th>
+                    <th>ગ્રાહકનું નામ</th>
+                    <th>મોબાઈલ નંબર</th>
+                    <th>તારીખ & સમય</th>
+                    <th>કુલ રકમ</th>
+                </tr>
+            </thead>
+            <tbody id="history-table-body">
+                <tr>
+                    <td colspan="5" style="text-align: center;">કોઈ ઓર્ડર હિસ્ટ્રી ઉપલબ્ધ નથી. ડેટાબેઝ કનેક્ટ કરો.</td>
                 </tr>
             </tbody>
         </table>
@@ -283,8 +399,19 @@
             <h2>પટેલ સ્વીટ માર્ટ</h2>
             <p>મુખ્ય બજાર, ખેરવા | ફોન: 9173565466</p>
             <hr style="border: 0.5px solid #ddd; margin: 10px 0;">
-            <p style="text-align: left; margin: 5px 0; font-size: 0.9rem;">તારીખ: <span id="bill-date"></span></p>
             
+            <!-- Customer Details Inputs -->
+            <div style="margin-bottom: 10px;" class="no-print">
+                <input type="text" id="cust-name" placeholder="ગ્રાહકનું નામ દાખલ કરો" class="form-input" required>
+                <input type="text" id="cust-phone" placeholder="મોબાઈલ નંબર દાખલ કરો" class="form-input" required>
+            </div>
+
+            <div style="font-size: 0.9rem; margin-bottom: 10px;">
+                <p style="text-align: left; margin: 2px 0;">નામ: <span id="bill-cust-name" style="font-weight: bold;">-</span></p>
+                <p style="text-align: left; margin: 2px 0;">મોબાઈલ: <span id="bill-cust-phone" style="font-weight: bold;">-</span></p>
+                <p style="text-align: left; margin: 2px 0;">તારીખ અને સમય: <span id="bill-date-time" style="font-weight: bold;">-</span></p>
+            </div>
+
             <table class="invoice-table">
                 <thead>
                     <tr>
@@ -362,6 +489,12 @@
                 return;
             }
 
+            let nameInput = document.getElementById('cust-name').value || 'ગ્રાહક';
+            let phoneInput = document.getElementById('cust-phone').value || '-';
+            
+            document.getElementById('bill-cust-name').innerText = nameInput;
+            document.getElementById('bill-cust-phone').innerText = phoneInput;
+
             let tbody = document.getElementById('bill-items-list');
             tbody.innerHTML = '';
             let totalPrice = 0;
@@ -381,14 +514,14 @@
 
             document.getElementById('bill-total-amount').innerText = 'કુલ રકમ: ₹' + totalPrice;
 
-            const today = new Date();
-            const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-            document.getElementById('bill-date').innerText = dateStr;
+            const now = new Date();
+            const dateTimeStr = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear() + ' ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('bill-date-time').innerText = dateTimeStr;
 
-            const message = `નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A${orderTextSummary}%0A*કુલ રકમ:* ₹${totalPrice}%0A%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
+            const message = `નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી ઓર્ડર આપવો છે:%0A*ગ્રાહક:* ${nameInput}%0A*મોબાઈલ:* ${phoneInput}%0A*સમય:* ${dateTimeStr}%0A%0A${orderTextSummary}%0A*કુલ રકમ:* ₹${totalPrice}%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
             document.getElementById('whatsapp-link').href = `https://wa.me/919173565466?text=${message}`;
 
-            const smsText = `Patel Sweet Mart Order:%0A` + orderTextSummary.replace(/%0A/g, '\n') + `Total: Rs.${totalPrice}`;
+            const smsText = `Patel Sweet Mart Order:\nName: ${nameInput}\nPhone: ${phoneInput}\nTime: ${dateTimeStr}\n` + orderTextSummary.replace(/%0A/g, '\n') + `Total: Rs.${totalPrice}`;
             document.getElementById('sms-link').href = `sms:9173565466?body=${encodeURIComponent(smsText)}`;
 
             document.getElementById('invoice-modal').style.display = 'flex';
@@ -416,16 +549,15 @@
                 modal.style.display = 'none';
             }
         }
-    </script>
-</body>
-</html>
-
-<?php
+        </script>
+        <?php
 /* 
   ===================================================================
-  PHP DATABASE CONNECTION & ORDER HISTORY SCRIPT (Backend Backend)
+  PHP DATABASE CONNECTION & ORDER HISTORY BACKEND SCRIPT
   ===================================================================
-  A code database sathe connect karva ane history mate order fetch karva mate chhe:
+  Aa PHP script database sathe connect kari ne customer ni details, 
+  date, time ane bill ni mahiti 'orders' table ma save kare chhe ane 
+  history section ma load kare chhe:
 */
 /*
 $servername = "localhost";
@@ -433,25 +565,29 @@ $username = "root";
 $password = "";
 $dbname = "patel_sweet_mart";
 
-$conn = new mysqli($servername,$username, $password,$dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    // Handle connection error
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetching history data for display
-$sql = "SELECT id, customer_name, order_date, order_details, total_amount FROM orders ORDER BY id DESC";
+// Fetching history data for display in website history table
+$sql = "SELECT id, customer_name, customer_phone, order_date, total_amount FROM orders ORDER BY id DESC";
 $result = $conn->query($sql);
-if ($result &&$result->num_rows > 0) {
-    while($row =$result->fetch_assoc()) {
+if ($result && $result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
         echo "<tr>
             <td>{$row['id']}</td>
             <td>{$row['customer_name']}</td>
+            <td>{$row['customer_phone']}</td>
             <td>{$row['order_date']}</td>
-            <td>{$row['order_details']}</td>
             <td>₹{$row['total_amount']}</td>
         </tr>";
     }
+} else {
+    echo "<tr><td colspan='5' style='text-align: center;'>કોઈ ઓર્ડર હિસ્ટ્રી ઉપલબ્ધ નથી.</td></tr>";
 }
 $conn->close();
 */
 ?>
+</body>
+</html>
