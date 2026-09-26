@@ -1,373 +1,160 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
-body { background-color: #fff9f4; color: #333; line-height: 1.6; }
-header { background-color: #8B0000; color: #fff; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); flex-wrap: wrap; position: sticky; top: 0; z-index: 1001; }
-.logo-area { display: flex; align-items: center; gap: 12px; }
-.logo-area img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700; }
-header h1 { font-size: 1.6rem; color: #fff; }
-nav a { color: #fff; text-decoration: none; margin-left: 15px; font-weight: 600; font-size: 0.95rem; }
-nav a:hover { color: #FFD700; }
-.hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1599785209707-a456fc1337bb?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center; color: white; text-align: center; padding: 100px 20px; }
-.hero h2 { font-size: 3rem; margin-bottom: 10px; color: #FFD700; }
-.hero p { font-size: 1.2rem; margin-bottom: 20px; }
-.btn { background-color: #d9534f; color: white; padding: 10px 25px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; text-decoration: none; display: inline-block; margin: 5px; }
-.btn:hover { opacity: 0.9; }
-.whatsapp-btn { background-color: #25D366; font-weight: bold; }
-.whatsapp-btn:hover { background-color: #1ebe5d; }
-.container { max-width: 1200px; margin: auto; padding: 40px 20px; }
-.section-title { text-align: center; margin-bottom: 40px; color: #8B0000; font-size: 2.2rem; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
-.card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; padding-bottom: 20px; transition: transform 0.3s ease; }
-.card:hover { transform: translateY(-5px); }
-.card img { width: 100%; height: 190px; object-fit: cover; }
-.card h3 { margin: 15px 0 8px; color: #333; }
-.card p { color: #666; padding: 0 15px; font-size: 0.95rem; min-height: 45px; }
-.price-tag { font-weight: bold; color: #8B0000; margin: 10px 0; font-size: 1.1rem; }
-.order-controls { padding: 0 15px; margin-top: 10px; }
-.order-controls select { padding: 8px; margin: 5px 0; width: 90%; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background-color: #fff; text-align: center; }
-.preview-text { font-size: 0.9rem; color: #2e7d32; font-weight: bold; margin: 5px 0; }
-.highlight-tag { display: inline-block; background: #2e7d32; color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 8px; }
-.about-section, .brandguide-section, .history-section { background-color: #fff; padding: 40px 20px; margin-top: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-.about-section h2, .brandguide-section h2, .history-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; text-align: center; }
-.about-section p, .brandguide-section ul { max-width: 800px; margin: auto; font-size: 1.05rem; color: #555; line-height: 1.8; }
-.brandguide-section ul { list-style-type: square; padding-left: 20px; }
-.form-input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; }
-.cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.3); }
-.cart-bar span { font-size: 1.2rem; font-weight: bold; color: #FFD700; }
-#invoice-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; overflow-y: auto; }
-.invoice-box { background: white; padding: 25px; width: 90%; max-width: 450px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: left; max-height: 90vh; overflow-y: auto; }
-.invoice-box h2 { text-align: center; color: #8B0000; margin-bottom: 5px; }
-.invoice-box p { text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px; }
-.invoice-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-.invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; font-size: 0.9rem; text-align: left; }
-.invoice-table th { background-color: #8B0000; color: white; }
-.total-row { font-weight: bold; text-align: right; margin-top: 10px; font-size: 1.1rem; }
-footer { background-color: #222; color: white; text-align: center; padding: 30px 20px; margin-bottom: 60px; border-top: 4px solid #FFD700; }
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>પટેલ સ્વીટ માર્ટ - પરંપરાનો સ્વાદ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
 
-/* Auth Overlay CSS */
-.auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-.auth-card { background: #fff; width: 100%; max-width: 400px; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; }
-.auth-card h2 { color: #8B0000; margin-bottom: 20px; }
-.auth-group { margin-bottom: 15px; text-align: left; }
-.auth-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #333; font-weight: 600; }
-.auth-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem; }
-.auth-btn { width: 100%; background-color: #8B0000; color: white; padding: 10px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; margin-top: 10px; font-weight: bold; }
-.auth-btn:hover { background-color: #a00000; }
-.auth-link { margin-top: 15px; font-size: 0.9rem; color: #666; }
-.auth-link a { color: #8B0000; text-decoration: none; font-weight: bold; }
-.auth-link a:hover { text-decoration: underline; }
-.form-box { display: none; }
-.form-box.active { display: block; }
-<div id="auth-overlay" class="auth-overlay">
-    <div class="auth-card">
-        <!-- 1. LOGIN FORM -->
-        <div id="login-box" class="form-box active">
-            <h2>પટેલ સ્વીટ માર્ટ - Login</h2>
-            <form onsubmit="handleLogin(event)">
-                <div class="auth-group">
-                    <label>Username / Email</label>
-                    <input type="text" id="login-user" required placeholder="Tamaru username nakho">
-                </div>
-                <div class="auth-group">
-                    <label>Password</label>
-                    <input type="password" id="login-pass" required placeholder="Password nakho">
-                </div>
-                <button type="submit" class="auth-btn">Login karo</button>
-                <p id="login-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
-            </form>
-            <div class="auth-link">
-                <p>Password bhuli gaya? <a href="#" onclick="switchForm('forgot-box')">Forget Password</a></p>
-                <p style="margin-top: 5px;">Account nathi? <a href="#" onclick="switchForm('signup-box')">Signup karo</a></p>
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="Patel Sweet Mart Logo.jpg" alt="Patel Sweet Mart Logo">
+        </div>
+        <nav class="nav-links">
+            <a href="#mithai">મીઠાઈ</a>
+            <a href="#namkeen">નમકીન</a>
+            <a href="#gifting">ગિફ્ટિંગ</a>
+            <a href="#story">અમારી કહાની</a>
+            <a href="#contact">સંપર્ક</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="lang-btn">EN</button>
+            <a href="https://wa.me/919173565466" class="wa-icon-top" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="badge">1995 થી વણઝટી એતિહાસ</span>
+            <h1>પરંપરાનો સ્વાદ.<br>નવી પેઢી માટે.</h1>
+            <p>ખેરાડા • અમદાવાદ — શ્રેષ્ઠ ગુજરાતી મીઠાઈ, નમકીન અને ભેટ.</p>
+            <div class="hero-buttons">
+                <a href="#mithai" class="btn-primary">મીઠાઈ જુઓ</a>
+                <a href="#story" class="btn-secondary">અમારી કહાની</a>
             </div>
         </div>
+        <div class="hero-images">
+            <div class="img-card"><img src="ladva.jpg" alt="લાડવા"></div>
+            <div class="img-card"><img src="jalebi.jpg" alt="જલેબી"></div>
+            <div class="img-card"><img src="penda.jpg" alt="પેંડા"></div>
+        </div>
+    </section>
 
-        <!-- 2. SIGNUP FORM -->
-        <div id="signup-box" class="form-box">
-            <h2>નવું Account બનાવો</h2>
-            <form onsubmit="handleSignup(event)">
-                <div class="auth-group">
-                    <label>Username</label>
-                    <input type="text" id="signup-username" required placeholder="Username banavo">
+    <!-- Products Section -->
+    <section id="mithai" class="products-section">
+        <div class="section-title">
+            <span class="sub-heading">શોધો</span>
+            <h2>અમારી ખ્યાતિ</h2>
+        </div>
+        
+        <div class="category-grid">
+            <!-- Mithai Category -->
+            <div class="cat-card">
+                <div class="cat-images-preview">
+                    <img src="mohanthal.jpg" alt="મોહનથાળ">
+                    <img src="torapak.jpg" alt="તોરાપાક">
+                    <img src="feni.jpg" alt="ફેણી">
                 </div>
-                <div class="auth-group">
-                    <label>Email</label>
-                    <input type="email" id="signup-email" required placeholder="Email id nakho">
+                <h3>મીઠાઈ</h3>
+                <p>મોહનથાળ • તોરાપાક • લાડવા • જલેબી</p>
+                <a href="products.html?cat=mithai" class="explore-link">જુઓ →</a>
+            </div>
+
+            <!-- Namkeen Category -->
+            <div class="cat-card" id="namkeen">
+                <div class="cat-images-preview">
+                    <img src="ganthiya.jpg" alt="ગાંઠિયા">
+                    <img src="chorafari.jpg" alt="ચોરાફળી">
+                    <img src="chavanu.jpg" alt="ચવાણું">
                 </div>
-                <div class="auth-group">
-                    <label>Password</label>
-                    <input type="password" id="signup-password" required placeholder="Strong password nakho">
+                <h3>નમકીન</h3>
+                <p>ગાંઠિયા • ચોરાફળી • ચવાણું • ફરસાણ</p>
+                <a href="products.html?cat=namkeen" class="explore-link">જુઓ →</a>
+            </div>
+
+            <!-- Gifting Category -->
+            <div class="cat-card" id="gifting">
+                <div class="cat-images-preview gift-preview">
+                    <img src="Patel Sweet Mart Logo.jpg" alt="ગિફ્ટ હેમ્પર્સ">
                 </div>
-                <button type="submit" class="auth-btn">Signup karo</button>
-                <p id="signup-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
-            </form>
-            <div class="auth-link">
-                <p>Already account che? <a href="#" onclick="switchForm('login-box')">Login karo</a></p>
+                <h3>ગિફ્ટ હેમ્પર</h3>
+                <p>તહેવાર • લગ્ન • કોર્પોરેટ</p>
+                <a href="products.html?cat=gifting" class="explore-link">જુઓ →</a>
             </div>
         </div>
+    </section>
 
-        <!-- 3. FORGET PASSWORD FORM -->
-        <div id="forgot-box" class="form-box">
-            <h2>Password Reset કરો</h2>
-            <form onsubmit="handleForgot(event)">
-                <div class="auth-group">
-                    <label>Registered Email</label>
-                    <input type="email" id="forgot-email" required placeholder="Tamaro registered email nakho">
-                </div>
-                <div class="auth-group">
-                    <label>Navo Password</label>
-                    <input type="password" id="forgot-newpass" required placeholder="Navo password nakho">
-                </div>
-                <button type="submit" class="auth-btn">Password Update કરો</button>
-                <p id="forgot-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
-            </form>
-            <div class="auth-link">
-                <p><a href="#" onclick="switchForm('login-box')">Back to Login</a></p>
+    <!-- Story Section -->
+    <section id="story" class="story-section">
+        <div class="story-img">
+            <img src="mohanthal.jpg" alt="Making Sweet">
+            <div class="estd-badge">ESTD.<br>1995</div>
+        </div>
+        <div class="story-content">
+            <span class="sub-heading">અમારી કહાની</span>
+            <h2>1995થી — ખેરાડાની એતિહાસ</h2>
+            <p>ખેરાડાના મુખ્ય બજારમાં, 1995માં, એક એતિહાસ શરૂ થઈ. શ્રેષ્ઠ ઘી, ગુણવત્તાયુક્ત સામગ્રી અને પ્રામાણિક હૃદયથી બનાવેલ દરેક મીઠાઈ — ગ્રાહકોના ઘર સુધી.</p>
+            
+            <div class="timeline-grid">
+                <div class="t-box"><h4>1995</h4><p>ખેરાડા ખાતે સ્થાપના</p></div>
+                <div class="t-box"><h4>2010</h4><p>અમદાવાદ ઉપલબ્ધ</p></div>
+                <div class="t-box"><h4>2024</h4><p>WhatsApp ઓર્ડર</p></div>
+                <div class="t-box"><h4>આજ</h4><p>હજારો ખુશ ગ્રાહક</p></div>
             </div>
         </div>
-    </div>
-</div>
-<header>
-    <div class="logo-area">
-        <img src="Logo.png" alt="Patel Sweet Mart Logo">
-        <h1>પટેલ સ્વીટ માર્ટ</h1>
-    </div>
-    <nav>
-        <a href="#home">હોમ</a>
-        <a href="#menu">મીઠાઈ અને નાસ્તા</a>
-        <a href="#about">અમારા વિશે</a>
-        <a href="#brandguide">બ્રાન્ડ ગાઇડ</a>
-        <a href="#history">હિસ્ટ્રી</a>
-        <a href="#cart" onclick="openCartModal()">કાર્ટ (Cart)</a>
-        <a href="#" onclick="handleLogout()" style="color: #FFD700; font-weight: bold;">લૉગઆઉટ (Logout)</a>
-    </nav>
-</header>
-<section id="home" class="hero">
-    <h2>શુદ્ધતા અને પરંપરાનો સાચો સ્વાદ</h2>
-    <p>મુખ્ય બજાર, ખેરવા થી સીધા તમારા ઘર સુધી (ખેરવા અને અમદાવાદ)</p>
-    <div>
-        <a href="#menu" class="btn">મેનુ જુઓ</a>
-    </div>
-</section>
+    </section>
 
-<div class="container" id="menu">
-    <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
-    <div class="grid">
-        <!-- 1. ટોપરાપાક -->
-        <div class="card">
-            <img src="torapak.jpg" alt="ટોપરાપાક">
-            <h3>ટોપરાપાક</h3>
-            <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ ટોપરાપાક.</p>
-            <div class="price-tag">₹ 500 / કિલો</div>
-            <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
-            <div class="order-controls">
-                <select id="select-torapak" onchange="updatePrice('torapak', 500)">
-                    <option value="0.01">10 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option>
-                </select>
-                <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
-                <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ટોપરાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
+    <!-- Festival / Gifting Banner -->
+    <section class="festival-banner">
+        <div class="fest-text">
+            <span>ભેટ</span>
+            <h2>ઉત્સવ, પ્રેમ અને ભેટ</h2>
+            <p>દિવાળી, રક્ષાબંધન, ઉત્તરાયણ, લગ્ન, કોર્પોરેટ — દરેક ઉત્સવ માટે ખાસ ભેટ હેમ્પર. WhatsApp પર ઓર્ડર આપો.</p>
+            <div class="fest-tags">
+                <span>Diwali</span><span>Wedding</span><span>Corporate</span><span>Festivals</span>
+            </div>
+            <a href="https://wa.me/919173565466" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp પર ઓર્ડર</a>
+        </div>
+        <div class="fest-image">
+            <img src="Patel Sweet Mart Logo.jpg" alt="Gift Box">
+        </div>
+    </section>
+
+    <!-- Contact & Footer Section -->
+    <footer id="contact" class="footer">
+        <div class="footer-top">
+            <div class="f-col brand-col">
+                <img src="Patel Sweet Mart Logo.jpg" alt="Logo">
+                <h3>પટેલ સ્વીટ માર્ટ</h3>
+                <p>પરંપરાનો સ્વાદ. નવી પેઢી માટે.</p>
+            </div>
+            <div class="f-col">
+                <h4>ઝડપી લિંક</h4>
+                <a href="#mithai">મીઠાઈ</a>
+                <a href="#namkeen">નમકીન</a>
+                <a href="#gifting">ગિફ્ટ હેમ્પર</a>
+                <a href="#story">અમારી કહાની</a>
+            </div>
+            <div class="f-col">
+                <h4>સ્ટોર</h4>
+                <p><i class="fas fa-map-marker-alt"></i> મુખ્ય બજાર, ખેરાડા</p>
+                <p><i class="fab fa-whatsapp"></i> અમદાવાદ (WhatsApp)</p>
+                <p><i class="fas fa-phone"></i> 91735 65466</p>
             </div>
         </div>
-        <!-- Baki ni badhi items tame tamara mutabik muki sako cho -->
-    </div>
-</div>
-
-<section id="about" class="about-section container">
-    <h2>અમારા વિશે (About Us)</h2>
-    <p>પટેલ સ્વીટ માર્ટ, મુખ્ય બજાર ખેરવા (Est. 1995) ખાતે આવેલી એક પરંપરાગત અને વિશ્વાસપાત્ર દુકાન છે. શુદ્ધ દેશી ઘી અને ગુણવત્તાયુક્ત સામગ્રીથી બનેલી સ્વાદિષ્ટ મીઠાઈઓ અને ફરસાણ પ્રદાન કરીએ છીએ.</p>
-</section>
-
-<section id="brandguide" class="brandguide-section container">
-    <h2>બ્રાન્ડ ગાઇડ (Brand Guide)</h2>
-    <ul>
-        <li><strong>બ્રાન્ડ નામ:</strong> પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)</li>
-        <li><strong>સ્થાપના વર્ષ:</strong> ૧૯૯૫ (Est. 1995)</li>
-        <li><strong>મુખ્ય રંગો:</strong> મરૂન (#8B0000), ગોલ્ડન યલો (#FFD700), અને લીલો રંગ (ટોપરાપાક માટે #2e7d32).</li>
-    </ul>
-</section>
-
-<section id="history" class="history-section container">
-    <h2>ઓર્ડર હિસ્ટ્રી (Order History)</h2>
-    <table class="invoice-table">
-        <thead>
-            <tr>
-                <th>ઓર્ડર ID</th>
-                <th>ગ્રાહકનું નામ</th>
-                <th>મોબાઈલ નંબર</th>
-                <th>તારીખ & સમય</th>
-                <th>કુલ રકમ</th>
-            </tr>
-        </thead>
-        <tbody id="history-table-body">
-            <tr><td colspan="5" style="text-align: center;">કોઈ ઓર્ડર હિસ્ટ્રી ઉપલબ્ધ નથી.</td></tr>
-        </tbody>
-    </table>
-</section>
-
-<div class="cart-bar">
-    <div>કાર્ટમાં આઈટમ્સ: <span id="cart-count">0</span> | કુલ: <span id="cart-total">₹0</span></div>
-    <button type="button" class="btn whatsapp-btn" style="margin: 0;" onclick="openCartModal()">📄 બિલ બનાવો & મોકલો</button>
-</div>
-
-<!-- Invoice Modal -->
-<div id="invoice-modal">
-    <div class="invoice-box" id="pdf-content">
-        <h2>પટેલ સ્વીટ માર્ટ</h2>
-        <p>મુખ્ય બજાર, ખેરવા | ફોન: 9173565466</p>
-        <hr style="border: 0.5px solid #ddd; margin: 10px 0;">
-        <div style="margin-bottom: 10px;" class="no-print">
-            <input type="text" id="cust-name" placeholder="ગ્રાહકનું નામ દાખલ કરો" class="form-input" required>
-            <input type="text" id="cust-phone" placeholder="મોબાઈલ નંબર દાખલ કરો" class="form-input" required>
+        <div class="footer-bottom">
+            <p>© 2026 પટેલ સ્વીટ માર્ટ. સર્વ અધિકાર સુરક્ષિત.</p>
+            <p>શુદ્ધતા અને પરંપરાનો ભરોસો — 1995થી</p>
         </div>
-        <table class="invoice-table">
-            <thead><tr><th>આઈટમ</th><th>વજન</th><th>કિંમત</th></tr></thead>
-            <tbody id="bill-items-list"></tbody>
-        </table>
-        <div class="total-row" id="bill-total-amount">કુલ રકમ: ₹0</div>
-        <div style="text-align: center; margin-top: 15px;" class="no-print">
-            <button type="button" class="btn" style="background-color: #2e7d32; width: 100%;" onclick="downloadPDF()">📥 PDF ડાઉનલોડ કરો</button>
-            <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; display: inline-block; margin-top: 5px; box-sizing: border-box; text-align: center;">💬 WhatsApp પર મોકલો</a>
-            <button type="button" class="btn" style="background-color: #777; width: 100%; margin-top: 8px;" onclick="closeCartModal()">બંધ કરો</button>
-        </div>
-    </div>
-</div>
+    </footer>
 
-<footer>
-    <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા અને અમદાવાદ. સર્વાધિકાર સુરક્ષિત.</p>
-</footer>
-let cart = [];
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919173565466" class="floating-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-function updatePrice(id, ratePerKg) {
-    const selectElement = document.getElementById('select-' + id);
-    const qty = parseFloat(selectElement.value);
-    const price = Math.round(ratePerKg * qty);
-    document.getElementById('preview-' + id).innerText = 'કિંમત: ₹' + price;
-}
-
-function addToCart(itemName, ratePerKg, selectId) {
-    const selectElement = document.getElementById(selectId);
-    const qtyVal = parseFloat(selectElement.value);
-    const price = Math.round(ratePerKg * qtyVal);
-    let qtyText = qtyVal >= 1 ? qtyVal + ' કિલો' : (qtyVal * 1000) + ' ગ્રામ';
-
-    cart.push({ name: itemName, qtyText: qtyText, price: price });
-    updateCartUI();
-    alert(itemName + ' (' + qtyText + ') કાર્ટમાં ઉમેરાઈ ગયું છે!');
-}
-
-function updateCartUI() {
-    document.getElementById('cart-count').innerText = cart.length;
-    document.getElementById('cart-total').innerText = '₹' + cart.reduce((sum, item) => sum + item.price, 0);
-}
-
-function openCartModal() {
-    if (cart.length === 0) {
-        alert('કાર્ટ ખાલી છે!');
-        return;
-    }
-    let nameInput = document.getElementById('cust-name').value || 'ગ્રાહક';
-    let phoneInput = document.getElementById('cust-phone').value || '-';
-    
-    let tbody = document.getElementById('bill-items-list');
-    tbody.innerHTML = '';
-    let totalPrice = 0;
-    let orderTextSummary = "";
-
-    cart.forEach(item => {
-        totalPrice += item.price;
-        orderTextSummary += `- ${item.name} (${item.qtyText}): ₹${item.price}%0A`;
-        tbody.innerHTML += `<tr><td>${item.name}</td><td>${item.qtyText}</td><td>₹${item.price}</td></tr>`;
-    });
-
-    document.getElementById('bill-total-amount').innerText = 'કુલ રકમ: ₹' + totalPrice;
-    const message = `ઓર્ડર:%0A*નામ:* ${nameInput}%0A*મોબાઈલ:* ${phoneInput}%0A%0A${orderTextSummary}%0A*કુલ રકમ:* ₹${totalPrice}`;
-    document.getElementById('whatsapp-link').href = `https://wa.me/919173565466?text=${message}`;
-
-    document.getElementById('invoice-modal').style.display = 'flex';
-}
-
-function closeCartModal() {
-    document.getElementById('invoice-modal').style.display = 'none';
-}
-
-function downloadPDF() {
-    html2pdf().from(document.getElementById('pdf-content')).save('Patel_Sweet_Mart_Bill.pdf');
-}
-
-// Form Switch (Login / Signup / Forgot)
-function switchForm(boxId) {
-    document.querySelectorAll('.form-box').forEach(box => box.classList.remove('active'));
-    document.getElementById(boxId).classList.add('active');
-}
-
-// Signup Logic
-function handleSignup(e) {
-    e.preventDefault();
-    const username = document.getElementById('signup-username').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    const errorMsg = document.getElementById('signup-error');
-
-    let users = JSON.parse(localStorage.getItem('sweetMartUsers')) || [];
-    if(users.find(u => u.email === email)) {
-        errorMsg.innerText = "Aa email already registered che!";
-        return;
-    }
-    users.push({ username, email, password });
-    localStorage.setItem('sweetMartUsers', JSON.stringify(users));
-    errorMsg.style.color = "green";
-    errorMsg.innerText = "Signup successful! Login karo.";
-    setTimeout(() => switchForm('login-box'), 1500);
-}
-
-// Login Logic
-function handleLogin(e) {
-    e.preventDefault();
-    const userInput = document.getElementById('login-user').value;
-    const passInput = document.getElementById('login-pass').value;
-    const errorMsg = document.getElementById('login-error');
-
-    let users = JSON.parse(localStorage.getItem('sweetMartUsers')) || [];
-    const validUser = users.find(u => (u.username === userInput || u.email === userInput) && u.password === passInput);
-
-    if(validUser) {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('currentUsername', validUser.username);
-        document.getElementById('auth-overlay').style.display = 'none';
-    } else {
-        errorMsg.innerText = "Username ya Password khoto che!";
-    }
-}
-
-// Forgot Password Logic
-function handleForgot(e) {
-    e.preventDefault();
-    const email = document.getElementById('forgot-email').value;
-    const newPass = document.getElementById('forgot-newpass').value;
-    const errorMsg = document.getElementById('forgot-error');
-
-    let users = JSON.parse(localStorage.getItem('sweetMartUsers')) || [];
-    let userIndex = users.findIndex(u => u.email === email);
-
-    if(userIndex !== -1) {
-        users[userIndex].password = newPass;
-        localStorage.setItem('sweetMartUsers', JSON.stringify(users));
-        errorMsg.style.color = "green";
-        errorMsg.innerText = "Password update thai gayo!";
-        setTimeout(() => switchForm('login-box'), 1500);
-    } else {
-        errorMsg.innerText = "Aa email malyo nathi!";
-    }
-}
-
-// Logout Function
-function handleLogout() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('currentUsername');
-    location.reload();
-}
-
-// Check Login on Page Load
-window.addEventListener('DOMContentLoaded', () => {
-    if(localStorage.getItem('isLoggedIn') === 'true') {
-        document.getElementById('auth-overlay').style.display = 'none';
-    }
-});
+</body>
+</html>
