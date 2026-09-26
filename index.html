@@ -3,86 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>પટેલ સ્વીટ માર્ટ - ખેરવા</title>
+    <title>પટેલ સ્વીટ માર્ટ - શુદ્ધ સ્વાદ અને પરંપરા</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #fff9f4;
             color: #333;
+            line-height: 1.6;
         }
         header {
-            background-color: #d35400;
-            color: white;
-            text-align: center;
-            padding: 20px;
+            background-color: #8B0000;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            flex-wrap: wrap;
         }
         header h1 {
-            margin: 0;
-            font-size: 28px;
+            font-size: 1.8rem;
         }
-        header p {
-            margin: 5px 0 0;
-            font-size: 16px;
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+        }
+        nav a:hover {
+            color: #FFD700;
+        }
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1599785209707-a456fc1337bb?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .whatsapp-btn {
+            background-color: #25D366;
+            font-weight: bold;
+        }
+        .whatsapp-btn:hover {
+            background-color: #1ebe5d;
         }
         .container {
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
+            margin: auto;
+            padding: 40px 20px;
         }
         .section-title {
             text-align: center;
-            color: #d35400;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            color: #8B0000;
+            font-size: 2.2rem;
         }
-        .products-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
         }
         .card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             text-align: center;
-            padding: 15px;
+            padding-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
         .card img {
             width: 100%;
-            height: 180px;
+            height: 190px;
             object-fit: cover;
-            border-radius: 6px;
         }
         .card h3 {
-            margin: 15px 0 10px;
-            color: #2c3e50;
+            margin: 15px 0 8px;
+            color: #333;
         }
         .card p {
-            color: #e67e22;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 15px;
+            color: #666;
+            padding: 0 15px;
+            font-size: 0.95rem;
+            min-height: 45px;
         }
-        .order-btn {
-            background-color: #25d366;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
+        .highlight-tag {
             display: inline-block;
-        }
-        .order-btn:hover {
-            background-color: #1ebe57;
+            background: #2e7d32;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 8px;
         }
         footer {
-            background-color: #2c3e50;
+            background-color: #222;
             color: white;
             text-align: center;
-            padding: 15px;
+            padding: 30px 20px;
             margin-top: 40px;
+        }
+        footer p {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -90,99 +145,154 @@
 
     <header>
         <h1>પટેલ સ્વીટ માર્ટ</h1>
-        <p>શુદ્ધ સ્વાદ અને પરંપરાગત મીઠાઈઓ - ખેરવા (પાટડી)</p>
-        <p><b>આખા ગુજરાતમાં હોમ ડિલિવરી ઉપલબ્ધ!</b></p>
+        <nav>
+            <a href="#home">હોમ</a>
+            <a href="#menu">મીઠાઈ અને નાસ્તા</a>
+            <a href="#about">અમારા વિશે</a>
+            <a href="#contact">સંપર્ક</a>
+        </nav>
     </header>
 
-    <div class="container">
-        <h2 class="section-title">અમારી ખાસ પ્રોડક્ટ્સ</h2>
-        
-        <div class="products-grid">
-            <!-- પ્રોડક્ટ ૧: લીલો તોરાપાક -->
+    <section id="home" class="hero">
+        <h2>શુદ્ધતા અને પરંપરાનો સાચો સ્વાદ</h2>
+        <p>મુખ્ય બજાર, ખેરવા થી સીધા તમારા ઘર સુધી (ખેરવા અને અમદાવાદ)</p>
+        <div>
+            <a href="#menu" class="btn">મેનુ જુઓ</a>
+            <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" target="_blank">💬 વોટ્સએપ પર ઓર્ડર કરો</a>
+        </div>
+    </section>
+
+    <div class="container" id="menu">
+        <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
+        <div class="grid">
+            
+            <!-- Torapak -->
             <div class="card">
-                <img src="torapak.jpg" alt="લીલો તોરાપાક">
-                <h3>લીલો તોરાપાક</h3>
-                <p>₹ ૪૫૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20લીલો%20તોરાપાક%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
+                <img src="torapak.jpg" alt="તોરાપાક">
+                <h3>ખાસ તોરાપાક</h3>
+                <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ તોરાપાક.</p>
+                <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20તોરાપાકનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
             </div>
 
-            <!-- પ્રોડક્ટ ૨: પેંડા -->
-            <div class="card">
-                <img src="penda.jpg" alt="પેંડા">
-                <h3>સ્પેશિયલ પેંડા</h3>
-                <p>₹ ૪૦૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20પેંડા%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
-            </div>
-
-            <!-- પ્રોડક્ટ ૩: ગાંઠિયા -->
-            <div class="card">
-                <img src="ganthiya.jpg" alt="ગાંઠિયા">
-                <h3>સ્વાદીષ્ટ ગાંઠિયા</h3>
-                <p>₹ ૩૦૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20ગાંઠિયા%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
-            </div>
-
-            <!-- પ્રોડક્ટ ૪: મોહનથાળ -->
+            <!-- Mohanthal -->
             <div class="card">
                 <img src="mohanthal.jpg" alt="મોહનથાળ">
-                <h3>દાણાદાર મોહનથાળ</h3>
-                <p>₹ ૪૮૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20મોહનથાળ%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
+                <h3>મોહનથાળ</h3>
+                <p>મોંમાં ઓગળી જાય તેવો એકદમ દાણાદાર અને શુદ્ધ ઘીનો મોહનથાળ.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20મોહનથાળનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
             </div>
 
-            <!-- પ્રોડક્ટ ૫: ચવાણું -->
+            <!-- Penda -->
             <div class="card">
-                <img src="chavanu.jpg" alt="ચવાણું">
-                <h3>ચવાણું</h3>
-                <p>₹ ૨૮૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20ચવાણું%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
+                <img src="penda.jpg" alt="પેંડા">
+                <h3>માવા પેંડા</h3>
+                <p>શુદ્ધ માવા અને દૂધમાંથી બનાવેલા સ્વાદિષ્ટ અને તાજા પેંડા.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પેંડાનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
             </div>
 
-            <!-- પ્રોડક્ટ ૬: ફરાદી -->
+            <!-- Ladva -->
             <div class="card">
-                <img src="faradi.jpg" alt="ફરાદી">
-                <h3>ફરાદી</h3>
-                <p>₹ ૩૫૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20ફરાદી%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
+                <img src="ladva.jpg" alt="લાડવા">
+                <h3>સ્પેશિયલ લાડવા</h3>
+                <p>તહેવારો અને પ્રસંગો માટે ખાસ બૂંદી અને મોતીચૂરના લાડવા.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20લાડવાનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
             </div>
 
-            <!-- પ્રોડક્ટ ૭: જલેબી -->
-            <div class="card">
-                <img src="jalebi.jpg" alt="જલેબી">
-                <h3>ગરમાગરમ જલેબી</h3>
-                <p>₹ ૩૬૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20જલેબી%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
-            </div>
-
-            <!-- પ્રોડક્ટ ૮: ચોરાફળી -->
-            <div class="card">
-                <img src="chorafari.jpg" alt="ચોરાફળી">
-                <h3>સ્પેશિયલ ચોરાફળી</h3>
-                <p>₹ ૩૨૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20ચોરાફળી%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
-            </div>
-
-            <!-- પ્રોડક્ટ ૯: ફેણી -->
+            <!-- Feni -->
             <div class="card">
                 <img src="feni.jpg" alt="ફેણી">
                 <h3>સ્વાદિષ્ટ ફેણી</h3>
-                <p>₹ ૪૫૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20ફેણી%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
+                <p>એકદમ ક્રિસ્પી અને મોંમાં ભીંજાઈ જાય તેવી પરંપરાગત ફેણી.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20ફેણીનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
             </div>
 
-            <!-- પ્રોડક્ટ ૧૦: લાડવા -->
+            <!-- Jalebi -->
             <div class="card">
-                <img src="ladva.jpg" alt="લાડવા">
-                <h3>પરંપરાગત લાડવા</h3>
-                <p>₹ ૩૮૦ / કિલો</p>
-                <a href="https://wa.me/919173565466?text=મારે%20લાડવા%20નો%20ઓર્ડર%20આપવો%20છે." class="order-btn" target="_blank">WhatsApp પર ઓર્ડર કરો</a>
+                <img src="jalebi.jpg" alt="જલેબી">
+                <h3>ગરમાગરમ જલેબી</h3>
+                <p>રસ ભરેલી અને ક્રિસ્પી ગરમાગરમ દેશી ઘીની જલેબી.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20જલેબીનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
+            </div>
+
+            <!-- Ganthiya -->
+            <div class="card">
+                <img src="ganthiya.jpg" alt="ગાંઠિયા">
+                <h3>ચટાકેદાર ગાંઠિયા</h3>
+                <p>ચા સાથે માણવા માટેના એકદમ નરમ અને તાજા ગાંઠિયા.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20ગાંઠિયાનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
+            </div>
+
+            <!-- Chorafari -->
+            <div class="card">
+                <img src="chorafari.jpg" alt="ચોરાફળી">
+                <h3>ચોરાફળી</h3>
+                <p>સ્પેશિયલ મસાલા સાથેની ચટાકેદાર અને કરકરી ચોરાફળી.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20ચોરાફળીનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
+            </div>
+
+            <!-- Chavanu -->
+            <div class="card">
+                <img src="chavanu.jpg" alt="ચવાણું">
+                <h3>મિક્સ ચવાણું</h3>
+                <p>વિવિધ સેવ, ગાંઠિયા અને મસાલાનું સ્વાદિષ્ટ મિક્સ ચવાણું.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20ચવાણાનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
+            </div>
+
+            <!-- Faradi -->
+            <div class="card">
+                <img src="faradi.jpg" alt="ફરાળી નાસ્તો">
+                <h3>ફરાળી નાસ્તો</h3>
+                <p>ઉપવાસ કે વ્રત માટે ખાસ શુદ્ધ અને ટેસ્ટી ફરાળી આઈટમ્સ.</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20ફરાળી%20નાસ્તાનો%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem;" target="_blank">ઓર્ડર કરો</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container" id="about" style="background: #fff; border-radius: 8px; padding: 40px; margin-bottom: 40px;">
+        <h2 class="section-title" style="margin-bottom: 20px;">પટેલ સ્વીટ માર્ટ વિશે</h2>
+        <p style="text-align: center; max-width: 800px; margin: auto; color: #555;">
+            અમારી દુકાન <strong>મુખ્ય બજાર, ખેરવા</strong> ખાતે આવેલી છે. અમે ગ્રાહકોને શુદ્ધતા અને ગુણવત્તાયુક્ત પરંપરાગત ગુજરાતી મીઠાઈઓ અને નાસ્તા પૂરા પાડીએ છીએ. હવે ખેરવા ઉપરાંત <strong>અમદાવાદ</strong> ખાતે પણ હોમ ડિલિવરીની સુવિધા ઉપલબ્ધ છે. સ્ટેન્ડ-અપ ઝિપલોક પેકિંગ દ્વારા મીઠાઈઓની તાજગી લાંબા સમય સુધી જળવાઈ રહે છે.
+        </p>
+    </div>
+
+    <div class="container" id="contact">
+        <h2 class="section-title">સંપર્ક કરો</h2>
+        <p style="text-align: center; margin-bottom: 20px;">ઓર્ડર કરવા અથવા વધુ માહિતી માટે અમારો સંપર્ક કરો:</p>
+        <div style="text-align: center; font-size: 1.1rem; color: #444;">
+            <p>📍 <strong>સરનામું:</strong> મુખ્ય બજાર, ખેરવા, ગુજરાત</p>
+            <p>🚚 <strong>ડિલિવરી સ્થળો:</strong> ખેરવા અને અમદાવાદ</p>
+            <p>📞 <strong>ફોન / વોટ્સએપ:</strong> <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." target="_blank" style="color: #25D366; font-weight: bold; text-decoration: none;">+91 91735 65466 (વોટ્સએપ કરો)</a></p>
+            <div style="margin-top: 25px;">
+                <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="font-size: 1.1rem; padding: 12px 30px;" target="_blank">💬 સીધા વોટ્સએપ પર ઓર્ડર આપੋ</a>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>સરનામું: મુખ્ય બજાર, ખેરવા, પાટડી, સુરેન્દ્રનગર | સંપર્ક: +91 9173565466</p>
-        <p>&copy; 2026 પટેલ સ્વીટ માર્ટ. સર્વાધિકાર સુરક્ષિત.</p>
+        <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા. સર્વાધિકાર સુરક્ષિત.</p>
+        <p>Designed for Pure Traditional Taste</p>
     </footer>
 
 </body>
