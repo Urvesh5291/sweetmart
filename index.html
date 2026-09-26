@@ -101,6 +101,7 @@
             text-align: center;
             padding-bottom: 20px;
             transition: transform 0.3s ease;
+            position: relative;
         }
         .card:hover {
             transform: translateY(-5px);
@@ -140,11 +141,10 @@
             background-color: #fff;
             text-align: center;
         }
-        .preview-text {
-            font-size: 0.9rem;
-            color: #2e7d32;
+        .checkbox-container {
+            margin-top: 10px;
             font-weight: bold;
-            margin: 5px 0;
+            color: #8B0000;
         }
         .highlight-tag {
             display: inline-block;
@@ -154,6 +154,21 @@
             border-radius: 4px;
             font-size: 0.8rem;
             margin-top: 8px;
+        }
+        .floating-order-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
         }
         footer {
             background-color: #222;
@@ -165,6 +180,8 @@
         footer p {
             margin-bottom: 10px;
         }
+
+        /* Modal Popup Styling */
         #invoice-modal {
             display: none;
             position: fixed;
@@ -220,29 +237,6 @@
             margin-top: 10px;
             font-size: 1.1rem;
         }
-        .cart-float-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #8B0000;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
-            z-index: 998;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        @media print {
-            body * { visibility: hidden; }
-            #invoice-modal, #invoice-modal * { visibility: visible; }
-            #invoice-modal { position: absolute; left: 0; top: 0; background: white; width: 100%; height: 100%; }
-            .invoice-box { box-shadow: none; width: 100%; max-width: 100%; }
-            .invoice-box button, .invoice-box a { display: none !important; }
-        }
     </style>
 </head>
 <body>
@@ -266,16 +260,10 @@
         </div>
     </section>
 
-    <!-- Floating Cart Button -->
-    <div class="cart-float-btn" onclick="openCartModal()">
-        🛒 ઓર્ડર કાર્ટ (<span id="cart-count">0</span>)
-    </div>
-
     <div class="container" id="menu">
         <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
         <div class="grid">
-            
-            <!-- 1. Torapak -->
+                        <!-- 1. Torapak -->
             <div class="card">
                 <img src="torapak.jpg" alt="તોરાપાક">
                 <h3>ખાસ તોરાપાક</h3>
@@ -283,6 +271,9 @@
                 <div class="price-tag">₹ 500 / કિલો</div>
                 <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
                 <div class="order-controls">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-torapak" value="ખાસ તોરાપાક" data-price="500"> આ પસંદ કરો
+                    </div>
                     <select id="select-torapak">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -295,11 +286,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('ખાસ તોરાપાક', 500, 'select-torapak')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -309,7 +298,10 @@
                 <h3>મોહનથાળ</h3>
                 <p>મોંમાં ઓગળી જાય તેવો એકદમ દાણાદાર અને શુદ્ધ ઘીનો મોહનથાળ.</p>
                 <div class="price-tag">₹ 480 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-mohanthal" value="મોહનથાળ" data-price="480"> આ પસંદ કરો
+                    </div>
                     <select id="select-mohanthal">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -322,20 +314,22 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('મોહનથાળ', 480, 'select-mohanthal')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
-                        <!-- 3. Penda -->
+
+            <!-- 3. Penda -->
             <div class="card">
                 <img src="penda.jpg" alt="પેંડા">
                 <h3>માવા પેંડા</h3>
                 <p>શુદ્ધ માવા અને દૂધમાંથી બનાવેલા સ્વાદિષ્ટ અને તાજા પેંડા.</p>
                 <div class="price-tag">₹ 520 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-penda" value="માવા પેંડા" data-price="520"> આ પસંદ કરો
+                    </div>
                     <select id="select-penda">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -348,11 +342,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('માવા પેંડા', 520, 'select-penda')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -362,7 +354,10 @@
                 <h3>સ્પેશિયલ લાડવા</h3>
                 <p>તહેવારો અને પ્રસંગો માટે ખાસ બૂંદી અને મોતીચૂરના લાડવા.</p>
                 <div class="price-tag">₹ 400 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-ladva" value="સ્પેશિયલ લાડવા" data-price="400"> આ પસંદ કરો
+                    </div>
                     <select id="select-ladva">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -375,11 +370,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('સ્પેશિયલ લાડવા', 400, 'select-ladva')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -389,7 +382,10 @@
                 <h3>સ્વાદિષ્ટ ફેણી</h3>
                 <p>એકદમ ક્રિસ્પી અને મોંમાં ભીંજાઈ જાય તેવી પરંપરાગત ફેણી.</p>
                 <div class="price-tag">₹ 450 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-feni" value="સ્વાદિષ્ટ ફેણી" data-price="450"> આ પસંદ કરો
+                    </div>
                     <select id="select-feni">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -402,11 +398,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -416,7 +410,10 @@
                 <h3>ગરમાગરમ જલેબી</h3>
                 <p>રસ ભરેલી અને ક્રિસ્પી ગરમાગરમ દેશી ઘીની જલેબી.</p>
                 <div class="price-tag">₹ 380 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-jalebi" value="ગરમાગરમ જલેબી" data-price="380"> આ પસંદ કરો
+                    </div>
                     <select id="select-jalebi">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -429,11 +426,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('ગરમાગરમ જલેબી', 380, 'select-jalebi')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -443,7 +438,10 @@
                 <h3>ચટાકેદાર ગાંઠિયા</h3>
                 <p>ચા સાથે માણવા માટેના એકદમ નરમ અને તાજા ગાંઠિયા.</p>
                 <div class="price-tag">₹ 340 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-ganthiya" value="ચટાકેદાર ગાંઠિયા" data-price="340"> આ પસંદ કરો
+                    </div>
                     <select id="select-ganthiya">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -456,11 +454,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('ચટાકેદાર ગાંઠિયા', 340, 'select-ganthiya')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -470,7 +466,10 @@
                 <h3>ચોરાફળી</h3>
                 <p>સ્પેશિયલ મસાલા સાથેની ચટાકેદાર અને કરકરી ચોરાફળી.</p>
                 <div class="price-tag">₹ 360 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-chorafari" value="ચોરાફળી" data-price="360"> આ પસંદ કરો
+                    </div>
                     <select id="select-chorafari">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -483,11 +482,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('ચોરાફળી', 360, 'select-chorafari')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -497,7 +494,10 @@
                 <h3>મિક્સ ચવાણું</h3>
                 <p>વિવિધ સેવ, ગાંઠિયા અને મસાલાનું સ્વાદિષ્ટ મિક્સ ચવાણું.</p>
                 <div class="price-tag">₹ 350 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-chavanu" value="મિક્સ ચવાણું" data-price="350"> આ પસંદ કરો
+                    </div>
                     <select id="select-chavanu">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -510,11 +510,9 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('મિક્સ ચવાણું', 350, 'select-chavanu')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -524,7 +522,10 @@
                 <h3>ફરાળી નાસ્તો</h3>
                 <p>ઉપવાસ કે વ્રત માટે ખાસ શુદ્ધ અને ટેસ્ટી ફરાળી આઈટમ્સ.</p>
                 <div class="price-tag">₹ 400 / કિલો</div>
-                <div class="order-controls">
+                <div class="order-controls" style="margin-top: 35px;">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="chk-faradi" value="ફરાળી નાસ્તો" data-price="400"> આ પસંદ કરો
+                    </div>
                     <select id="select-faradi">
                         <option value="0.01">10 ગ્રામ</option>
                         <option value="0.02">20 ગ્રામ</option>
@@ -537,140 +538,156 @@
                         <option value="2">2 કિલો</option>
                         <option value="5">5 કિલો</option>
                         <option value="10">10 કિલો</option>
-                        <option value="25">25 કિલો</option>
                         <option value="50">50 કિલો</option>
                         <option value="100">100 કિલો</option>
                     </select>
-                    <button type="button" class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 8px;" onclick="addToCart('ફરાળી નાસ્તો', 400, 'select-faradi')">➕ કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
         </div>
     </div>
-        <!-- Cart / Bill Modal Popup -->
+
+    <!-- Floating Button to Generate Bill -->
+    <button type="button" class="floating-order-btn" onclick="openMultiBillModal()">🛒 ઓર્ડર કન્ફર્મ કરો / બિલ બનાવો</button>
+
+    <!-- Bill Modal Popup -->
     <div id="invoice-modal">
-        <div class="invoice-box">
+        <div class="invoice-box" id="printable-area">
             <h2>પટેલ સ્વીટ માર્ટ</h2>
             <p>મુખ્ય બજાર, ખેરવા | ફોન: 9173565466</p>
             <hr style="border: 0.5px solid #ddd; margin: 10px 0;">
             <p style="text-align: left; margin: 5px 0; font-size: 0.9rem;">તારીખ: <span id="bill-date"></span></p>
-            
             <table class="invoice-table">
                 <thead>
                     <tr>
                         <th>આઈટમ</th>
                         <th>વજન</th>
                         <th>કિંમત</th>
-                        <th>હટાવો</th>
                     </tr>
                 </thead>
-                <tbody id="cart-items-body">
-                    <!-- Cart items will dynamically insert here -->
+                <tbody id="bill-items-list">
+                    <!-- Dynamic Items will load here -->
                 </tbody>
             </table>
-            
-            <div class="total-row" id="bill-total">કુલ રકમ: ₹0</div>
+            <div class="total-row" id="bill-total"></div>
             <hr style="border: 0.5px solid #ddd; margin: 15px 0;">
-            
-            <div style="text-align: center;">
-                <button type="button" class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px; font-size: 0.95rem;" onclick="printBill()">📥 બિલ પ્રિન્ટ / PDF સેવ કરો</button>
+            <div style="text-align: center;" id="modal-buttons">
+                <button type="button" class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px; font-size: 0.95rem;" onclick="downloadPDF()">📥 PDF ડાઉનલોડ કરો</button>
                 <br>
-                <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">💬 WhatsApp પર ઓર્ડર મોકલો</a>
+                <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">💬 WhatsApp પર મોકલો</a>
                 <br>
-                <button type="button" class="btn" style="background-color: #777; width: 100%; margin-top: 8px;" onclick="closeCartModal()">બંધ કરો</button>
+                <a id="sms-link" href="#" target="_blank" class="btn" style="width: 100%; background-color: #0277bd; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">📱 SMS દ્વારા મોકલો</a>
+                <br>
+                <button type="button" class="btn" style="background-color: #777; width: 100%; margin-top: 8px;" onclick="closeBillModal()">બંધ કરો</button>
             </div>
         </div>
     </div>
-
-    <footer>
+        <footer>
         <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા અને અમદાવાદ. સર્વાધિકાર સુરક્ષિત.</p>
         <p>શુદ્ધતા અને પરંપરાનો ભરોસો</p>
     </footer>
 
+    <!-- html2pdf Library for Auto PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <script>
-        let cart = [];
+        const products = [
+            { id: 'torapak', name: 'ખાસ તોરાપાક', rate: 500 },
+            { id: 'mohanthal', name: 'મોહનથાળ', rate: 480 },
+            { id: 'penda', name: 'માવા પેંડા', rate: 520 },
+            { id: 'ladva', name: 'સ્પેશિયલ લાડવા', rate: 400 },
+            { id: 'feni', name: 'સ્વાદિષ્ટ ફેણી', rate: 450 },
+            { id: 'jalebi', name: 'ગરમાગરમ જલેબી', rate: 380 },
+            { id: 'ganthiya', name: 'ચટાકેદાર ગાંઠિયા', rate: 340 },
+            { id: 'chorafari', name: 'ચોરાફળી', rate: 360 },
+            { id: 'chavanu', name: 'મિક્સ ચવાણું', rate: 350 },
+            { id: 'faradi', name: 'ફરાળી નાસ્તો', rate: 400 }
+        ];
 
-        function addToCart(itemName, ratePerKg, selectId) {
-            const selectElement = document.getElementById(selectId);
-            const qtyVal = parseFloat(selectElement.value);
-            const price = Math.round(ratePerKg * qtyVal);
-            
-            let qtyText = '';
-            if(qtyVal === 0.01) qtyText = '10 ગ્રામ';
-            else if(qtyVal === 0.02) qtyText = '20 ગ્રામ';
-            else if(qtyVal === 0.05) qtyText = '50 ગ્રામ';
-            else if(qtyVal === 0.1) qtyText = '100 ગ્રામ';
-            else if(qtyVal === 0.25) qtyText = '250 ગ્રામ';
-            else if(qtyVal === 0.5) qtyText = '500 ગ્રામ';
-            else if(qtyVal >= 1) qtyText = qtyVal + ' કિલો';
-            else qtyText = (qtyVal * 1000) + ' ગ્રામ';
+        function openMultiBillModal() {
+            let selectedItems = [];
+            let grandTotal = 0;
+            let whatsappText = "નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A";
+            let smsText = "Patel Sweet Mart Order:%0A";
 
-            // Check if item already exists in cart, update it or add new
-            const existingIndex = cart.findIndex(item => item.name === itemName && item.qtyText === qtyText);
-            if (existingIndex > -1) {
-                cart[existingIndex].price += price;
-            } else {
-                cart.push({ name: itemName, qtyText: qtyText, price: price });
+            products.forEach(prod => {
+                const chk = document.getElementById('chk-' + prod.id);
+                if (chk && chk.checked) {
+                    const selectEl = document.getElementById('select-' + prod.id);
+                    const qtyVal = parseFloat(selectEl.value);
+                    const price = Math.round(prod.rate * qtyVal);
+                    grandTotal += price;
+
+                    let qtyText = '';
+                    if (qtyVal === 0.01) qtyText = '10 ગ્રામ';
+                    else if (qtyVal === 0.02) qtyText = '20 ગ્રામ';
+                    else if (qtyVal === 0.05) qtyText = '50 ગ્રામ';
+                    else if (qtyVal === 0.1) qtyText = '100 ગ્રામ';
+                    else if (qtyVal === 0.25) qtyText = '250 ગ્રામ';
+                    else if (qtyVal === 0.5) qtyText = '500 ગ્રામ';
+                    else if (qtyVal >= 1) qtyText = qtyVal + ' કિલો';
+                    else qtyText = (qtyVal * 1000) + ' ગ્રામ';
+
+                    selectedItems.push({ name: prod.name, qty: qtyText, price: price });
+                    whatsappT1 = `*${prod.name}* - ${qtyText} - ₹${price}%0A`;
+                    whatsappText += whatsappT1;
+                    smsText += `${prod.name} (${qtyText}) - Rs.${price}, `;
+                }
+            });
+
+            if (selectedItems.length === 0) {
+                alert('કૃપા કરીને ઓર્ડર આપવા માટે ઓછામાં ઓછી એક આઈટમ પસંદ કરો!');
+                return;
             }
 
-            updateCartCount();
-            alert(itemName + ' (' + qtyText + ') કાર્ટમાં ઉમેરાઈ ગયું છે!');
-        }
-
-        function updateCartCount() {
-            document.getElementById('cart-count').innerText = cart.length;
-        }
-
-        function openCartModal() {
-            const tbody = document.getElementById('cart-items-body');
-            tbody.innerHTML = '';
-
-            if (cart.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #777;">તમારું કાર્ટ ખાલી છે.</td></tr>';
-                document.getElementById('bill-total').innerText = 'કુલ રકમ: ₹0';
-                document.getElementById('whatsapp-link').href = '#';
-            } else {
-                let grandTotal = 0;
-                let whatsappMsg = 'નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A';
-
-                cart.forEach((item, index) => {
-                    grandTotal += item.price;
-                    whatsappMsg += `*${index + 1}. ${item.name}* - ${item.qtyText} - ₹${item.price}%0A`;
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.name}</td>
-                        <td>${item.qtyText}</td>
-                        <td>₹${item.price}</td>
-                        <td style="text-align: center;"><button type="button" style="background: #d9534f; color: white; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer;" onclick="removeFromCart(${index})">❌</button></td>
-                    `;
-                    tbody.appendChild(row);
-                });
-
-                whatsappMsg += `%0A*કુલ રકમ:* ₹${grandTotal}%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
-                document.getElementById('bill-total').innerText = 'કુલ રકમ: ₹' + grandTotal;
-                document.getElementById('whatsapp-link').href = `https://wa.me/919173565466?text=${whatsappMsg}`;
-            }
-
+            // Set Date
             const today = new Date();
-            const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-            document.getElementById('bill-date').innerText = dateStr;
+            document.getElementById('bill-date').innerText = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+
+            // Populate Table
+            let tbodyHtml = '';
+            selectedItems.forEach(item => {
+                tbodyHtml += `<tr><td>${item.name}</td><td>${item.qty}</td><td>₹${item.price}</td></tr>`;
+            });
+            document.getElementById('bill-items-list').innerHTML = tbodyHtml;
+            document.getElementById('bill-total').innerText = 'કુલ રકમ: ₹' + grandTotal;
+
+            // WhatsApp Link
+            whatsappText += `%0A*કુલ રકમ: ₹${grandTotal}*%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
+            document.getElementById('whatsapp-link').href = `https://wa.me/919173565466?text=${whatsappText}`;
+
+            // SMS Link
+            smsText += `Total: Rs.${grandTotal}`;
+            document.getElementById('sms-link').href = `sms:9173565466?body=${encodeURIComponent(smsText)}`;
 
             document.getElementById('invoice-modal').style.display = 'flex';
+
+            // Automatic PDF Download triggered
+            setTimeout(() => {
+                downloadPDF();
+            }, 500);
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartCount();
-            openCartModal(); // Refresh modal view
-        }
-
-        function closeCartModal() {
+        function closeBillModal() {
             document.getElementById('invoice-modal').style.display = 'none';
         }
 
-        function printBill() {
-            window.print();
+        function downloadPDF() {
+            const element = document.getElementById('printable-area');
+            const btns = document.getElementById('modal-buttons');
+            btns.style.display = 'none'; // Hide buttons in PDF
+
+            const opt = {
+                margin:       0.5,
+                filename:     'Patel_Sweet_Mart_Bill.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save().then(() => {
+                btns.style.display = 'block'; // Restore buttons after PDF is generated
+            });
         }
 
         window.onclick = function(event) {
