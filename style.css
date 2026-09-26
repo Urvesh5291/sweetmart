@@ -1,0 +1,429 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans Gujarati', sans-serif;
+}
+
+body {
+    background-color: #FBF7F0;
+    color: #2C3E50;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container img {
+    height: 45px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #D35400;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.lang-btn {
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    background: transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.wa-icon-top {
+    background: #25D366;
+    color: white;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 80px;
+    background: linear-gradient(135deg, #FBF7F0 0%, #F3E5D8 100%);
+    min-height: 80vh;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.badge {
+    background: #F39C12;
+    color: white;
+    padding: 5px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    color: #1B365D;
+    margin: 20px 0;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary {
+    background: #F39C12;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #1B365D;
+    color: #1B365D;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.hero-images {
+    display: flex;
+    gap: 15px;
+}
+
+.img-card img {
+    width: 180px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border: 4px solid #fff;
+}
+
+/* Products Section */
+.products-section {
+    padding: 80px 50px;
+    text-align: center;
+}
+
+.section-title .sub-heading {
+    color: #D35400;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title h2 {
+    font-size: 36px;
+    color: #1B365D;
+    margin-top: 10px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.cat-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    text-align: left;
+    transition: 0.3s;
+}
+
+.cat-card:hover {
+    transform: translateY(-5px);
+}
+
+.cat-images-preview {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cat-images-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cat-card h3 {
+    font-size: 24px;
+    color: #1B365D;
+    margin-bottom: 5px;
+}
+
+.cat-card p {
+    color: #777;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.explore-link {
+    color: #1B365D;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Story Section */
+.story-section {
+    display: flex;
+    align-items: center;
+    padding: 80px 50px;
+    background: #fff;
+    gap: 60px;
+}
+
+.story-img {
+    position: relative;
+}
+
+.story-img img {
+    width: 450px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.estd-badge {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    background: #1B365D;
+    color: white;
+    padding: 20px;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 700;
+    border: 4px solid #fff;
+}
+
+.story-content h2 {
+    font-size: 36px;
+    color: #1B365D;
+    margin: 10px 0 20px 0;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.t-box {
+    background: #FBF7F0;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #1B365D;
+}
+
+.t-box h4 {
+    color: #1B365D;
+}
+
+/* Festival Banner */
+.festival-banner {
+    display: flex;
+    background: #1B365D;
+    color: white;
+    padding: 60px 80px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fest-text {
+    max-width: 600px;
+}
+
+.fest-text span {
+    color: #F39C12;
+    font-weight: 700;
+}
+
+.fest-text h2 {
+    font-size: 40px;
+    margin: 10px 0 20px 0;
+}
+
+.fest-tags span {
+    background: rgba(255,255,255,0.1);
+    padding: 6px 15px;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.btn-whatsapp {
+    display: inline-block;
+    background: #25D366;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 25px;
+}
+
+.fest-image img {
+    width: 350px;
+    border-radius: 15px;
+}
+
+/* Products Full Grid */
+.products-page-container {
+    padding: 60px 50px;
+    text-align: center;
+}
+
+.products-page-container h2 {
+    font-size: 36px;
+    color: #1B365D;
+    margin-bottom: 40px;
+}
+
+.product-grid-full {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.p-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.p-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.p-card h3 {
+    color: #1B365D;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.order-btn {
+    display: block;
+    background: #25D366;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Footer */
+.footer {
+    background: #111;
+    color: #aaa;
+    padding: 50px 80px 20px 80px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.f-col img {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.f-col h3, .f-col h4 {
+    color: white;
+    margin-bottom: 15px;
+}
+
+.f-col a {
+    display: block;
+    color: #aaa;
+    text-decoration: none;
+    margin-bottom: 8px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Floating WhatsApp */
+.floating-wa {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    z-index: 100;
+    text-decoration: none;
+}
