@@ -220,6 +220,28 @@
             margin-top: 10px;
             font-size: 1.1rem;
         }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #invoice-modal, #invoice-modal * {
+                visibility: visible;
+            }
+            #invoice-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                background: white;
+            }
+            .invoice-box {
+                box-shadow: none;
+                width: 100%;
+                max-width: 100%;
+            }
+            .invoice-box button, .invoice-box a {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -467,12 +489,4 @@
                 <tr>
                     <td id="bill-item"></td>
                     <td id="bill-qty"></td>
-                    <td id="bill-price"></td>
-                </tr>
-            </table>
-            <div class="total-row" id="bill-total"></div>
-            <hr style="border: 0.5px solid #ddd; margin: 15px 0;">
-            <div style="text-align: center;">
-                <button type="button" class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px; font-size: 0.95rem;" onclick="printBill()">📥 બિલ પ્રિન્ટ / PDF સેવ કરો</button>
-                <br>
-                <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inli
+               
