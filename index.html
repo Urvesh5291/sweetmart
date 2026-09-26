@@ -489,4 +489,79 @@
                 <tr>
                     <td id="bill-item"></td>
                     <td id="bill-qty"></td>
-               
+                                   <td id="bill-price"></td>
+                </tr>
+            </table>
+            <div class="total-row" id="bill-total"></div>
+            <hr style="border: 0.5px solid #ddd; margin: 15px 0;">
+            <div style="text-align: center;">
+                <button type="button" class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px; font-size: 0.95rem;" onclick="printBill()">📥 બિલ પ્રિન્ટ / PDF સેવ કરો</button>
+                <br>
+                <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">💬 WhatsApp પર મોકલો</a>
+                <br>
+                <button type="button" class="btn" style="background-color: #777; width: 100%; margin-top: 8px;" onclick="closeBillModal()">બંધ કરો</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા અને અમદાવાદ. સર્વાધિકાર સુરક્ષિત.</p>
+        <p>શુદ્ધતા અને પરંપરાનો ભરોસો</p>
+    </footer>
+
+    <script>
+        function updatePrice(id, ratePerKg) {
+            const selectElement = document.getElementById('select-' + id);
+            const qty = parseFloat(selectElement.value);
+            const price = Math.round(ratePerKg * qty);
+            document.getElementById('preview-' + id).innerText = 'કિંમત: ₹' + price;
+        }
+
+        function openBillModal(itemName, ratePerKg, selectId) {
+            const selectElement = document.getElementById(selectId);
+            const qtyVal = parseFloat(selectElement.value);
+            const price = Math.round(ratePerKg * qtyVal);
+            
+            let qtyText = '';
+            if(qtyVal === 0.25) qtyText = '250 ગ્રામ';
+            else if(qtyVal === 0.5) qtyText = '500 ગ્રામ';
+            else if(qtyVal === 1) qtyText = '1 કિલો';
+            else if(qtyVal === 1.5) qtyText = '1.5 કિલો';
+            else qtyText = qtyVal + ' કિલો';
+
+            // Set Current Date
+            const today = new Date();
+            const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+            document.getElementById('bill-date').innerText = dateStr;
+
+            document.getElementById('bill-item').innerText = itemName;
+            document.getElementById('bill-qty').innerText = qtyText;
+            document.getElementById('bill-price').innerText = '₹' + price;
+            document.getElementById('bill-total').innerText = 'કુલ રકમ: ₹' + price;
+
+            // WhatsApp Share Link
+            const message = `નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A*આઈટમ:* ${itemName}%0A*વજન:* ${qtyText}%0A*કિંમત:* ₹${price}%0A%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
+            const whatsappUrl = `https://wa.me/919173565466?text=${message}`;
+            document.getElementById('whatsapp-link').href = whatsappUrl;
+
+            document.getElementById('invoice-modal').style.display = 'flex';
+        }
+
+        function closeBillModal() {
+            document.getElementById('invoice-modal').style.display = 'none';
+        }
+
+        function printBill() {
+            window.print();
+        }
+
+        // Close modal when clicking outside the box
+        window.onclick = function(event) {
+            const modal = document.getElementById('invoice-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
