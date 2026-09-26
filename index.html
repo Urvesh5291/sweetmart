@@ -165,8 +165,6 @@
         footer p {
             margin-bottom: 10px;
         }
-
-        /* Modal Popup Styling */
         #invoice-modal {
             display: none;
             position: fixed;
@@ -221,26 +219,11 @@
             font-size: 1.1rem;
         }
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #invoice-modal, #invoice-modal * {
-                visibility: visible;
-            }
-            #invoice-modal {
-                position: absolute;
-                left: 0;
-                top: 0;
-                background: white;
-            }
-            .invoice-box {
-                box-shadow: none;
-                width: 100%;
-                max-width: 100%;
-            }
-            .invoice-box button, .invoice-box a {
-                display: none !important;
-            }
+            body * { visibility: hidden; }
+            #invoice-modal, #invoice-modal * { visibility: visible; }
+            #invoice-modal { position: absolute; left: 0; top: 0; background: white; }
+            .invoice-box { box-shadow: none; width: 100%; max-width: 100%; }
+            .invoice-box button, .invoice-box a { display: none !important; }
         }
     </style>
 </head>
@@ -489,7 +472,7 @@
                 <tr>
                     <td id="bill-item"></td>
                     <td id="bill-qty"></td>
-                                   <td id="bill-price"></td>
+                                    <td id="bill-price"></td>
                 </tr>
             </table>
             <div class="total-row" id="bill-total"></div>
@@ -529,7 +512,6 @@
             else if(qtyVal === 1.5) qtyText = '1.5 કિલો';
             else qtyText = qtyVal + ' કિલો';
 
-            // Set Current Date
             const today = new Date();
             const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
             document.getElementById('bill-date').innerText = dateStr;
@@ -539,7 +521,6 @@
             document.getElementById('bill-price').innerText = '₹' + price;
             document.getElementById('bill-total').innerText = 'કુલ રકમ: ₹' + price;
 
-            // WhatsApp Share Link
             const message = `નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A*આઈટમ:* ${itemName}%0A*વજન:* ${qtyText}%0A*કિંમત:* ₹${price}%0A%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
             const whatsappUrl = `https://wa.me/919173565466?text=${message}`;
             document.getElementById('whatsapp-link').href = whatsappUrl;
@@ -555,7 +536,6 @@
             window.print();
         }
 
-        // Close modal when clicking outside the box
         window.onclick = function(event) {
             const modal = document.getElementById('invoice-modal');
             if (event.target === modal) {
