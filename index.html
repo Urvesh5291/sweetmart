@@ -79,18 +79,7 @@
                 <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
                 <div class="order-controls">
                     <select id="select-torapak" onchange="updatePrice('torapak', 500)">
-                        <option value="0.01">10 ગ્રામ (₹5)</option>
-                        <option value="0.02">20 ગ્રામ (₹10)</option>
-                        <option value="0.05">50 ગ્રામ (₹25)</option>
-                        <option value="0.1">100 ગ્રામ (₹50)</option>
-                        <option value="0.25">250 ગ્રામ (₹125)</option>
-                        <option value="0.5">500 ગ્રામ (₹250)</option>
-                        <option value="1" selected>1 કિલો (₹500)</option>
-                        <option value="2">2 કિલો (₹1000)</option>
-                        <option value="5">5 કિલો (₹2500)</option>
-                        <option value="10">10 કિલો (₹5000)</option>
-                        <option value="50">50 કિલો (₹25000)</option>
-                        <option value="100">100 કિલો (₹50000)</option>
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
                     </select>
                     <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
                     <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ખાસ તોરાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
@@ -233,10 +222,183 @@
             </div>
 
         </div>
-    </div>
+             <header>
+        <h1>પટેલ સ્વીટ માર્ટ</h1>
+        <nav>
+            <a href="#home">હોમ</a>
+            <a href="#menu">મીઠાઈ અને નાસ્તા</a>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <h2>શુદ્ધતા અને પરંપરાનો સાચો સ્વાદ</h2>
+        <p>મુખ્ય બજાર, ખેરવા થી સીધા તમારા ઘર સુધી (ખેરવા અને અમદાવાદ)</p>
+        <div>
+            <a href="#menu" class="btn">મેનુ જુઓ</a>
+        </div>
+    </section>
+
+    <div class="container" id="menu">
+        <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
+        <div class="grid">
+            
+            <!-- 1. Torapak -->
+            <div class="card">
+                <img src="torapak.jpg" alt="તોરાપાક">
+                <h3>ખાસ તોરાપાક</h3>
+                <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ તોરાપાક.</p>
+                <div class="price-tag">₹ 500 / કિલો</div>
+                <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
+                <div class="order-controls">
+                    <select id="select-torapak" onchange="updatePrice('torapak', 500)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ખાસ તોરાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 2. Mohanthal -->
+            <div class="card">
+                <img src="mohanthal.jpg" alt="મોહનથાળ">
+                <h3>મોહનથાળ</h3>
+                <p>મોંમાં ઓગળી જાય તેવો એકદમ દાણાદાર અને શુદ્ધ ઘીનો મોહનથાળ.</p>
+                <div class="price-tag">₹ 480 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-mohanthal" onchange="updatePrice('mohanthal', 480)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-mohanthal" class="preview-text">કિંમત: ₹480</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('મોહનથાળ', 480, 'select-mohanthal')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 3. Penda -->
+            <div class="card">
+                <img src="penda.jpg" alt="પેંડા">
+                <h3>માવા પેંડા</h3>
+                <p>શુદ્ધ માવા અને દૂધમાંથી બનાવેલા સ્વાદિષ્ટ અને તાજા પેંડા.</p>
+                <div class="price-tag">₹ 520 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-penda" onchange="updatePrice('penda', 520)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-penda" class="preview-text">કિંમત: ₹520</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('માવા પેંડા', 520, 'select-penda')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 4. Ladva -->
+            <div class="card">
+                <img src="ladva.jpg" alt="લાડવા">
+                <h3>સ્પેશિયલ લાડવા</h3>
+                <p>તહેવારો અને પ્રસંગો માટે ખાસ બૂંદી અને મોતીચૂરના લાડવા.</p>
+                <div class="price-tag">₹ 400 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-ladva" onchange="updatePrice('ladva', 400)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-ladva" class="preview-text">કિંમત: ₹400</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('સ્પેશિયલ લાડવા', 400, 'select-ladva')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 5. Feni -->
+            <div class="card">
+                <img src="feni.jpg" alt="ફેણી">
+                <h3>સ્વાદિષ્ટ ફેણી</h3>
+                <p>એકદમ ક્રિસ્પી અને મોંમાં ભીંજાઈ જાય તેવી પરંપરાગત ફેણી.</p>
+                <div class="price-tag">₹ 450 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-feni" onchange="updatePrice('feni', 450)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 6. Jalebi -->
+            <div class="card">
+                <img src="jalebi.jpg" alt="જલેબી">
+                <h3>ગરમાગરમ જલેબી</h3>
+                <p>રસ ભરેલી અને ક્રિસ્પી ગરમાગરમ દેશી ઘીની જલેબી.</p>
+                <div class="price-tag">₹ 380 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-jalebi" onchange="updatePrice('jalebi', 380)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-jalebi" class="preview-text">કિંમત: ₹380</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ગરમાગરમ જલેબી', 380, 'select-jalebi')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 7. Ganthiya -->
+            <div class="card">
+                <img src="ganthiya.jpg" alt="ગાંઠિયા">
+                <h3>ચટાકેદાર ગાંઠિયા</h3>
+                <p>ચા સાથે માણવા માટેના એકદમ નરમ અને તાજા ગાંઠિયા.</p>
+                <div class="price-tag">₹ 340 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-ganthiya" onchange="updatePrice('ganthiya', 340)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-ganthiya" class="preview-text">કિંમત: ₹340</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ચટાકેદાર ગાંઠિયા', 340, 'select-ganthiya')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 8. Chorafari -->
+            <div class="card">
+                <img src="chorafari.jpg" alt="ચોરાફળી">
+                <h3>ચોરાફળી</h3>
+                <p>સ્પેશિયલ મસાલા સાથેની ચટાકેદાર અને કરકરી ચોરાફળી.</p>
+                <div class="price-tag">₹ 360 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-chorafari" onchange="updatePrice('chorafari', 360)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-chorafari" class="preview-text">કિંમત: ₹360</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ચોરાફળી', 360, 'select-chorafari')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 9. Chavanu -->
+            <div class="card">
+                <img src="chavanu.jpg" alt="ચવાણું">
+                <h3>મિક્સ ચવાણું</h3>
+                <p>વિવિધ સેવ, ગાંઠિયા અને મસાલાનું સ્વાદિષ્ટ મિક્સ ચવાણું.</p>
+                <div class="price-tag">₹ 350 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-chavanu" onchange="updatePrice('chavanu', 350)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-chavanu" class="preview-text">કિંમત: ₹350</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('મિક્સ ચવાણું', 350, 'select-chavanu')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+            <!-- 10. Faradi -->
+            <div class="card">
+                <img src="faradi.jpg" alt="ફરાળી નાસ્તો">
+                <h3>ફરાળી નાસ્તો</h3>
+                <p>ઉપવાસ કે વ્રત માટે ખાસ શુદ્ધ અને ટેસ્ટી ફરાળી આઈટમ્સ.</p>
+                <div class="price-tag">₹ 400 / કિલો</div>
+                <div class="order-controls">
+                    <select id="select-faradi" onchange="updatePrice('faradi', 400)">
+                        <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
+                    </select>
+                    <div id="preview-faradi" class="preview-text">કિંમત: ₹400</div>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ફરાળી નાસ્તો', 400, 'select-faradi')">🛒 કાર્ટમાં ઉમેરો</button>
+                </div>
+            </div>
+
+        </div>
+                        </div>
+    </div>   
         <!-- Floating Cart Bar -->
     <div class="cart-bar">
-        <div>કાર્ટમાં વસ્તુઓ: <span id="cart-count">0</span> | કુલ: <span id="cart-total">₹0</span></div>
+        <div>કાર્ટમાં આઈટમ્સ: <span id="cart-count">0</span> | કુલ: <span id="cart-total">₹0</span></div>
         <button type="button" class="btn whatsapp-btn" style="margin: 0;" onclick="openCartModal()">📄 બિલ બનાવો & મોકલો</button>
     </div>
 
@@ -267,9 +429,7 @@
             <div style="text-align: center;" class="no-print">
                 <button type="button" class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px;" onclick="downloadPDF()">📥 PDF ડાઉનલોડ કરો</button>
                 <br>
-                <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">💬 WhatsApp પર ઓર્ડર મોકલો</a>
-                <br>
-                <a id="sms-link" href="#" class="btn" style="background-color: #007bff; width: 100%; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">💬 SMS (ટેક્સ્ટ મેસેજ) મોકલો</a>
+                <a id="send-order-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center; margin-top: 5px;">💬 WhatsApp / SMS પર મોકલો</a>
                 <br>
                 <button type="button" class="btn" style="background-color: #777; width: 100%; margin-top: 8px;" onclick="closeCartModal()">બંધ કરો</button>
             </div>
@@ -305,14 +465,8 @@
             else if(qtyVal >= 1) qtyText = qtyVal + ' કિલો';
             else qtyText = (qtyVal * 1000) + ' ગ્રામ';
 
-            // Check if item already exists in cart, update it
-            let existingItem = cart.find(item => item.name === itemName);
-            if (existingItem) {
-                existingItem.qtyText = qtyText;
-                existingItem.price = price;
-            } else {
-                cart.push({ name: itemName, qtyText: qtyText, price: price });
-            }
+            // Push new item into cart (allows selecting the same product multiple times)
+            cart.push({ name: itemName, qtyText: qtyText, price: price });
 
             updateCartUI();
             alert(itemName + ' (' + qtyText + ') કાર્ટમાં ઉમેરાઈ ગયું છે!');
@@ -355,13 +509,9 @@
             const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
             document.getElementById('bill-date').innerText = dateStr;
 
-            // WhatsApp Share Link
+            // Combined Share Link for WhatsApp & SMS usage
             const message = `નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A${orderTextSummary}%0A*કુલ રકમ:* ₹${totalPrice}%0A%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
-            document.getElementById('whatsapp-link').href = `https://wa.me/919173565466?text=${message}`;
-
-            // SMS Share Link (Note: SMS opens text app with prefilled text)
-            const smsMessage = `પટેલ સ્વીટ માર્ટ ઓર્ડર: કુલ રકમ ₹${totalPrice}. કૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
-            document.getElementById('sms-link').href = `sms:9173565466?body=${encodeURIComponent(smsMessage)}`;
+            document.getElementById('send-order-link').href = `https://wa.me/919173565466?text=${message}`;
 
             document.getElementById('invoice-modal').style.display = 'flex';
         }
