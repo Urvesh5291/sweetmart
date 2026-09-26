@@ -130,21 +130,21 @@
             padding: 0 15px;
             margin-top: 10px;
         }
-        .order-controls input {
+        .order-controls select {
             padding: 8px;
             margin: 5px 0;
             width: 90%;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 0.95rem;
+            background-color: #fff;
             text-align: center;
         }
         .preview-text {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #2e7d32;
             font-weight: bold;
-            margin-bottom: 5px;
-            min-height: 20px;
+            margin: 5px 0;
         }
         .highlight-tag {
             display: inline-block;
@@ -166,25 +166,26 @@
             margin-bottom: 10px;
         }
 
-        /* Bill Modal Style */
+        /* Bill Modal Style Fixed */
         #invoice-modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 9999;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
         }
         .invoice-box {
             background: white;
             padding: 30px;
-            width: 350px;
+            width: 90%;
+            max-width: 400px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             text-align: left;
         }
         .invoice-box h2 {
@@ -254,9 +255,16 @@
                 <div class="price-tag">₹ 500 / કિલો</div>
                 <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
                 <div class="order-controls">
-                    <input type="number" id="input-torapak" placeholder="વજન લખો (દા.ત. 500 અથવા 1)" value="1" step="any" oninput="updateText('torapak', 500)">
-                    <div id="preview-torapak" class="preview-text">વજન: 1 કિલો (₹500)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ખાસ તોરાપાક', 500, 'input-torapak')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-torapak" onchange="updatePrice('torapak', 500)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ખાસ તોરાપાક', 500, 'select-torapak')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -267,9 +275,16 @@
                 <p>મોંમાં ઓગળી જાય તેવો એકદમ દાણાદાર અને શુદ્ધ ઘીનો મોહનથાળ.</p>
                 <div class="price-tag">₹ 480 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-mohanthal" placeholder="વજન લખો" value="1" step="any" oninput="updateText('mohanthal', 480)">
-                    <div id="preview-mohanthal" class="preview-text">વજન: 1 કિલો (₹480)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('મોહનથાળ', 480, 'input-mohanthal')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-mohanthal" onchange="updatePrice('mohanthal', 480)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-mohanthal" class="preview-text">કિંમત: ₹480</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('મોહનથાળ', 480, 'select-mohanthal')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -280,9 +295,16 @@
                 <p>શુદ્ધ માવા અને દૂધમાંથી બનાવેલા સ્વાદિષ્ટ અને તાજા પેંડા.</p>
                 <div class="price-tag">₹ 520 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-penda" placeholder="વજન લખો" value="1" step="any" oninput="updateText('penda', 520)">
-                    <div id="preview-penda" class="preview-text">વજન: 1 કિલો (₹520)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('માવા પેંડા', 520, 'input-penda')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-penda" onchange="updatePrice('penda', 520)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-penda" class="preview-text">કિંમત: ₹520</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('માવા પેંડા', 520, 'select-penda')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -293,9 +315,16 @@
                 <p>તહેવારો અને પ્રસંગો માટે ખાસ બૂંદી અને મોતીચૂરના લાડવા.</p>
                 <div class="price-tag">₹ 400 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-ladva" placeholder="વજન લખો" value="1" step="any" oninput="updateText('ladva', 400)">
-                    <div id="preview-ladva" class="preview-text">વજન: 1 કિલો (₹400)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('સ્પેશિયલ લાડવા', 400, 'input-ladva')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-ladva" onchange="updatePrice('ladva', 400)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-ladva" class="preview-text">કિંમત: ₹400</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('સ્પેશિયલ લાડવા', 400, 'select-ladva')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -306,9 +335,16 @@
                 <p>એકદમ ક્રિસ્પી અને મોંમાં ભીંજાઈ જાય તેવી પરંપરાગત ફેણી.</p>
                 <div class="price-tag">₹ 450 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-feni" placeholder="વજન લખો" value="1" step="any" oninput="updateText('feni', 450)">
-                    <div id="preview-feni" class="preview-text">વજન: 1 કિલો (₹450)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('સ્વાદિષ્ટ ફેણી', 450, 'input-feni')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-feni" onchange="updatePrice('feni', 450)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -319,9 +355,16 @@
                 <p>રસ ભરેલી અને ક્રિસ્પી ગરમાગરમ દેશી ઘીની જલેબી.</p>
                 <div class="price-tag">₹ 380 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-jalebi" placeholder="વજન લખો" value="1" step="any" oninput="updateText('jalebi', 380)">
-                    <div id="preview-jalebi" class="preview-text">વજન: 1 કિલો (₹380)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ગરમાગરમ જલેબી', 380, 'input-jalebi')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-jalebi" onchange="updatePrice('jalebi', 380)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-jalebi" class="preview-text">કિંમત: ₹380</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ગરમાગરમ જલેબી', 380, 'select-jalebi')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -332,9 +375,16 @@
                 <p>ચા સાથે માણવા માટેના એકદમ નરમ અને તાજા ગાંઠિયા.</p>
                 <div class="price-tag">₹ 340 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-ganthiya" placeholder="વજન લખો" value="1" step="any" oninput="updateText('ganthiya', 340)">
-                    <div id="preview-ganthiya" class="preview-text">વજન: 1 કિલો (₹340)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ચટાકેદાર ગાંઠિયા', 340, 'input-ganthiya')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-ganthiya" onchange="updatePrice('ganthiya', 340)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-ganthiya" class="preview-text">કિંમત: ₹340</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ચટાકેદાર ગાંઠિયા', 340, 'select-ganthiya')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -345,9 +395,16 @@
                 <p>સ્પેશિયલ મસાલા સાથેની ચટાકેદાર અને કરકરી ચોરાફળી.</p>
                 <div class="price-tag">₹ 360 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-chorafari" placeholder="વજન લખો" value="1" step="any" oninput="updateText('chorafari', 360)">
-                    <div id="preview-chorafari" class="preview-text">વજન: 1 કિલો (₹360)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ચોરાફળી', 360, 'input-chorafari')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-chorafari" onchange="updatePrice('chorafari', 360)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-chorafari" class="preview-text">કિંમત: ₹360</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ચોરાફળી', 360, 'select-chorafari')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -358,9 +415,16 @@
                 <p>વિવિધ સેવ, ગાંઠિયા અને મસાલાનું સ્વાદિષ્ટ મિક્સ ચવાણું.</p>
                 <div class="price-tag">₹ 350 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-chavanu" placeholder="વજન લખો" value="1" step="any" oninput="updateText('chavanu', 350)">
-                    <div id="preview-chavanu" class="preview-text">વજન: 1 કિલો (₹350)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('મિક્સ ચવાણું', 350, 'input-chavanu')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-chavanu" onchange="updatePrice('chavanu', 350)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-chavanu" class="preview-text">કિંમત: ₹350</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('મિક્સ ચવાણું', 350, 'select-chavanu')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -371,9 +435,16 @@
                 <p>ઉપવાસ કે વ્રત માટે ખાસ શુદ્ધ અને ટેસ્ટી ફરાળી આઈટમ્સ.</p>
                 <div class="price-tag">₹ 400 / કિલો</div>
                 <div class="order-controls">
-                    <input type="number" id="input-faradi" placeholder="વજન લખો" value="1" step="any" oninput="updateText('faradi', 400)">
-                    <div id="preview-faradi" class="preview-text">વજન: 1 કિલો (₹400)</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ફરાળી નાસ્તો', 400, 'input-faradi')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <select id="select-faradi" onchange="updatePrice('faradi', 400)">
+                        <option value="0.25">250 ગ્રામ</option>
+                        <option value="0.5">500 ગ્રામ</option>
+                        <option value="1" selected>1 કિલો</option>
+                        <option value="1.5">1.5 કિલો</option>
+                        <option value="2">2 કિલો</option>
+                        <option value="5">5 કિલો</option>
+                    </select>
+                    <div id="preview-faradi" class="preview-text">કિંમત: ₹400</div>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="generateBill('ફરાળી નાસ્તો', 400, 'select-faradi')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -401,82 +472,4 @@
             </table>
             <div class="total-row" id="bill-total"></div>
             <hr style="margin: 15px 0;">
-            <div style="text-align: center;">
-                <button class="btn" style="background-color: #2e7d32;" onclick="downloadPDFAndWhatsApp()">📥 PDF સેવ કરો & WhatsApp પર મોકલો</button>
-                <br>
-                <button class="btn" style="background-color: #555; padding: 5px 15px; font-size: 0.85rem; margin-top: 10px;" onclick="closeModal()">બંધ કરો</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" id="about" style="background: #fff; border-radius: 8px; padding: 40px; margin-bottom: 40px;">
-        <h2 class="section-title" style="margin-bottom: 20px;">પટેલ સ્વીટ માર્ટ વિશે</h2>
-        <p style="text-align: center; max-width: 800px; margin: auto; color: #555;">
-            અમારી દુકાન <strong>મુખ્ય બજાર, ખેરવા</strong> ખાતે આવેલી છે. અમે ગ્રાહકોને શુદ્ધતા અને ગુણવત્તાયુક્ત પરંપરાગત ગુજરાતી મીઠાઈઓ અને નાસ્તા પૂરા પાડીએ છીએ. હવે ખેરવા ઉપરાંત <strong>અમદાવાદ</strong> ખાતે પણ હોમ ડિલિવરીની સુવિધા ઉપલબ્ધ છે. સ્ટેન્ડ-અપ ઝિપલોક પેકિંગ દ્વારા મીઠાઈઓની તાજગી લાંબા સમય સુધી જળવાઈ રહે છે.
-        </p>
-    </div>
-
-    <div class="container" id="contact">
-        <h2 class="section-title">સંપર્ક કરો</h2>
-        <p style="text-align: center; margin-bottom: 20px;">ઓર્ડર કરવા અથવા વધુ માહિતી માટે અમારો સંપર્ક કરો:</p>
-        <div style="text-align: center; font-size: 1.1rem; color: #444;">
-            <p>📍 <strong>સરનામું:</strong> મુખ્ય બજાર, ખેરવા, ગુજરાત</p>
-            <p>🚚 <strong>ડિલિવરી સ્થળો:</strong> ખેરવા અને અમદાવાદ</p>
-            <p>📞 <strong>ફોન / વોટ્સએપ:</strong> <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." target="_blank" style="color: #25D366; font-weight: bold; text-decoration: none;">+91 91735 65466 (વોટ્સએપ કરો)</a></p>
-            <div style="margin-top: 25px;">
-                <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="font-size: 1.1rem; padding: 12px 30px;" target="_blank">💬 સીધા વોટ્સએપ પર ઓર્ડર આપો</a>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા. સર્વાધિકાર સુરક્ષિત.</p>
-        <p>Designed for Pure Traditional Taste</p>
-    </footer>
-
-    <script>
-        let currentOrder = {};
-
-        function getWeightTextAndMultiplier(val) {
-            let num = parseFloat(val);
-            if (isNaN(num) || num <= 0) num = 1;
-
-            let text = "";
-            let multiplier = num;
-
-            if (num >= 100) {
-                text = num + " ગ્રામ";
-                multiplier = num / 1000;
-            } else if (num < 1 && num > 0) {
-                text = (num * 1000) + " ગ્રામ";
-                multiplier = num;
-            } else {
-                text = num + (num === 1 ? " કિલો" : " કિલો");
-                multiplier = num;
-            }
-            return { text, multiplier };
-        }
-
-        function updateText(id, pricePerKg) {
-            const inputVal = document.getElementById('input-' + id).value;
-            const res = getWeightTextAndMultiplier(inputVal);
-            const total = Math.round(pricePerKg * res.multiplier);
-            document.getElementById('preview-' + id).innerText = `વજન: ${res.text} (₹${total})`;
-        }
-
-        function generateBill(productName, pricePerKg, inputId) {
-            const inputVal = document.getElementById(inputId).value;
-            const res = getWeightTextAndMultiplier(inputVal);
-            const totalAmount = Math.round(pricePerKg * res.multiplier);
-
-            currentOrder = {
-                name: productName,
-                qty: res.text,
-                total: totalAmount
-            };
-
-            document.getElementById('bill-date').innerText = new Date().toLocaleDateString('gu-IN');
-            document.getElementById('bill-item').innerText = productName;
-            document.getElementById('bill-qty').innerText = res.text;
-            document.getElementById('bill-price').innerText = "₹ " + totalAmount;
-            document.getElementById('bil
+          
