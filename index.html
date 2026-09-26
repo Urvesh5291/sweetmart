@@ -53,6 +53,78 @@
     </style>
 </head>
 <body>
+        <!-- LOGIN / SIGNUP OVERLAY SYSTEM -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            
+            <!-- 1. LOGIN FORM -->
+            <div id="login-box" class="form-box active">
+                <h2>પટેલ સ્વીટ માર્ટ - Login</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="auth-group">
+                        <label>Username / Email</label>
+                        <input type="text" id="login-user" required placeholder="Tamaru username nakho">
+                    </div>
+                    <div class="auth-group">
+                        <label>Password</label>
+                        <input type="password" id="login-pass" required placeholder="Password nakho">
+                    </div>
+                    <button type="submit" class="auth-btn">Login karo</button>
+                    <p id="login-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
+                </form>
+                <div class="auth-link">
+                    <p>Password bhuli gaya? <a href="#" onclick="switchForm('forgot-box')">Forget Password</a></p>
+                    <p style="margin-top: 5px;">Account nathi? <a href="#" onclick="switchForm('signup-box')">Signup karo</a></p>
+                </div>
+            </div>
+
+            <!-- 2. SIGNUP FORM -->
+            <div id="signup-box" class="form-box">
+                <h2>નવું Account બનાવો</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="auth-group">
+                        <label>Username</label>
+                        <input type="text" id="signup-username" required placeholder="Username banavo">
+                    </div>
+                    <div class="auth-group">
+                        <label>Email</label>
+                        <input type="email" id="signup-email" required placeholder="Email id nakho">
+                    </div>
+                    <div class="auth-group">
+                        <label>Password</label>
+                        <input type="password" id="signup-password" required placeholder="Strong password nakho">
+                    </div>
+                    <button type="submit" class="auth-btn">Signup karo</button>
+                    <p id="signup-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
+                </form>
+                <div class="auth-link">
+                    <p>Already account che? <a href="#" onclick="switchForm('login-box')">Login karo</a></p>
+                </div>
+            </div>
+
+            <!-- 3. FORGET PASSWORD FORM -->
+            <div id="forgot-box" class="form-box">
+                <h2>Password Reset કરો</h2>
+                <form onsubmit="handleForgot(event)">
+                    <div class="auth-group">
+                        <label>Registered Email</label>
+                        <input type="email" id="forgot-email" required placeholder="Tamaro registered email nakho">
+                    </div>
+                    <div class="auth-group">
+                        <label>Navo Password</label>
+                        <input type="password" id="forgot-newpass" required placeholder="Navo password nakho">
+                    </div>
+                    <button type="submit" class="auth-btn">Password Update કરો</button>
+                    <p id="forgot-error" style="color: red; font-size: 0.85rem; margin-top: 8px;"></p>
+                </form>
+                <div class="auth-link">
+                    <p><a href="#" onclick="switchForm('login-box')">Back to Login</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
         <header>
         <div class="logo-area">
             <img src="Logo.png" alt="Patel Sweet Mart Logo">
