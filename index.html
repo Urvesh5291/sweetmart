@@ -34,8 +34,8 @@
         .order-controls select { padding: 8px; margin: 5px 0; width: 90%; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background-color: #fff; text-align: center; }
         .preview-text { font-size: 0.9rem; color: #2e7d32; font-weight: bold; margin: 5px 0; }
         .highlight-tag { display: inline-block; background: #2e7d32; color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 8px; }
-        .about-section, .brandguide-section { background-color: #fff; padding: 40px 20px; margin-top: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-        .about-section h2, .brandguide-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; text-align: center; }
+        .about-section, .brandguide-section, .history-section { background-color: #fff; padding: 40px 20px; margin-top: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .about-section h2, .brandguide-section h2, .history-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; text-align: center; }
         .about-section p, .brandguide-section ul { max-width: 800px; margin: auto; font-size: 1.05rem; color: #555; line-height: 1.8; }
         .brandguide-section ul { list-style-type: square; padding-left: 20px; }
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.3); }
@@ -62,6 +62,7 @@
             <a href="#menu">મીઠાઈ અને નાસ્તા</a>
             <a href="#about">અમારા વિશે</a>
             <a href="#brandguide">બ્રાન્ડ ગાઇડ</a>
+            <a href="#history">હિસ્ટ્રી (History)</a>
             <a href="#cart" onclick="openCartModal()">કાર્ટ (Cart)</a>
         </nav>
     </header>
@@ -78,11 +79,11 @@
         <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
         <div class="grid">
             
-            <!-- 1. Toprapak (Updated name) -->
+            <!-- 1. ટોપરાપાક (Toprapak) -->
             <div class="card">
-                <img src="torapak.jpg" alt="ટોપ્રાપાક">
-                <h3>ટોપ્રાપાક</h3>
-                <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ ટોપ્રાપાક.</p>
+                <img src="torapak.jpg" alt="ટોપરાપાક">
+                <h3>ટોપરાપાક</h3>
+                <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ ટોપરાપાક.</p>
                 <div class="price-tag">₹ 500 / કિલો</div>
                 <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
                 <div class="order-controls">
@@ -90,7 +91,7 @@
                         <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
                     </select>
                     <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
-                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ટોપ્રાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ટોપરાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -152,8 +153,8 @@
                     <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
                     <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">🛒 કાર્ટમાં ઉમેરો</button>
                 </div>
-    </div>
-                <!-- 6. Jalebi -->
+            </div>
+                        <!-- 6. Jalebi -->
             <div class="card">
                 <img src="jalebi.jpg" alt="જલેબી">
                 <h3>ગરમાગરમ જલેબી</h3>
@@ -243,9 +244,32 @@
         <ul>
             <li><strong>બ્રાન્ડ નામ:</strong> પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)[span_1](start_span)[span_1](end_span)</li>
             <li><strong>સ્થાપના વર્ષ:</strong> ૧૯૯૫ (Est. 1995)[span_2](start_span)[span_2](end_span)</li>
-            <li><strong>મુખ્ય રંગો:</strong> મરૂન (Maroon - #8B0000), ગોલ્ડન યલો (#FFD700), અને લીલો રંગ (Toprapak mate #2e7d32).</li>
+            <li><strong>મુખ્ય રંગો:</strong> મરૂન (Maroon - #8B0000), ગોલ્ડન યલો (#FFD700), અને લીલો રંગ (ટોપરાપાક માટે #2e7d32).</li>
             <li><strong>લોગો ઓળખ:</strong> વર્તુળાકાર લોગો જેમાં 'શ્રીજી', ગુજરાતી અને અંગ્રેજી નામ દર્શાવેલ છે[span_3](start_span)[span_3](end_span).</li>
         </ul>
+    </section>
+
+    <!-- Order History Section (Database Connected View) -->
+    <section id="history" class="history-section container">
+        <h2>ઓર્ડર હિસ્ટ્રી (Order History - Database)</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: #666;">કોણે, ક્યારે અને કેટલો ઓર્ડર કર્યો તેની સંપૂર્ણ વિગત:</p>
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>ઓર્ડર ID</th>
+                    <th>ગ્રાહકનું નામ</th>
+                    <th>તારીખ & સમય</th>
+                    <th>ઓર્ડર વિગત (Bill Details)</th>
+                    <th>કુલ રકમ</th>
+                </tr>
+            </thead>
+            <tbody id="history-table-body">
+                <!-- PHP / Database Data will be loaded here -->
+                <tr>
+                    <td colspan="5" style="text-align: center;">કોઈ ઓર્ડર હિસ્ટ્રી ઉપલબ્ધ નથી અથવા ડેટાબેઝ કનેક્ટ કરો.</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
         <!-- Floating Cart Bar -->
     <div class="cart-bar">
@@ -392,37 +416,42 @@
                 modal.style.display = 'none';
             }
         }
-        </script>
-        <?php
-// PHP Database Connection Script for Patel Sweet Mart
+    </script>
+</body>
+</html>
+
+<?php
+/* 
+  ===================================================================
+  PHP DATABASE CONNECTION & ORDER HISTORY SCRIPT (Backend Backend)
+  ===================================================================
+  A code database sathe connect karva ane history mate order fetch karva mate chhe:
+*/
+/*
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "patel_sweet_mart";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
+$conn = new mysqli($servername,$username, $password,$dbname);
 if ($conn->connect_error) {
-    die("Database Connection Failed: " . $conn->connect_error);
+    // Handle connection error
 }
 
-// Example function to save orders into database
-if (isset($_POST['save_order'])) {
-    $customer_name = $_POST['customer_name'];
-    $total_amount = $_POST['total_amount'];
-    $order_details = $_POST['order_details'];
-
-    $sql = "INSERT INTO orders (customer_name, total_amount, order_details, order_date) VALUES ('$customer_name', '$total_amount', '$order_details', NOW())";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Order successfully saved to database!";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+// Fetching history data for display
+$sql = "SELECT id, customer_name, order_date, order_details, total_amount FROM orders ORDER BY id DESC";
+$result = $conn->query($sql);
+if ($result &&$result->num_rows > 0) {
+    while($row =$result->fetch_assoc()) {
+        echo "<tr>
+            <td>{$row['id']}</td>
+            <td>{$row['customer_name']}</td>
+            <td>{$row['order_date']}</td>
+            <td>{$row['order_details']}</td>
+            <td>₹{$row['total_amount']}</td>
+        </tr>";
     }
 }
-
 $conn->close();
+*/
 ?>
-    
