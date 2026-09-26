@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>પટેલ સ્વીટ માર્ટ - પરંપરાનો સ્વાદ</title>
+    <title>પટેલ સ્વીટ માર્ટ - Patel Sweet Mart</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -12,7 +12,7 @@
     <!-- Header / Navbar -->
     <header class="navbar">
         <div class="logo-container">
-            <img src="Patel Sweet Mart Logo.jpg" alt="Patel Sweet Mart Logo">
+            <img src="Patel Sweet Mart Logo.jpg" alt="Patel Sweet Mart Logo" class="logo-img">
         </div>
         <nav class="nav-links">
             <a href="#mithai">મીઠાઈ</a>
@@ -23,128 +23,147 @@
         </nav>
         <div class="nav-actions">
             <button class="lang-btn">EN</button>
-            <a href="https://wa.me/919173565466" class="wa-icon-top" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://wa.me/919173565466" class="whatsapp-icon-top" target="_blank"><i class="fab fa-whatsapp"></i></a>
         </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
-            <span class="badge">1995 થી વણઝટી એતિહાસ</span>
+            <span class="est-tag">1995 થી વણઝટી એતિહાસ</span>
             <h1>પરંપરાનો સ્વાદ.<br>નવી પેઢી માટે.</h1>
-            <p>ખેરાડા • અમદાવાદ — શ્રેષ્ઠ ગુજરાતી મીઠાઈ, નમકીન અને ભેટ.</p>
+            <p>ખેરાલુ • અમદાવાદ — શ્રેષ્ઠ ગુજરાતી મીઠાઈ, નમકીન અને ભેટ.</p>
             <div class="hero-buttons">
                 <a href="#mithai" class="btn-primary">મીઠાઈ જુઓ</a>
                 <a href="#story" class="btn-secondary">અમારી કહાની</a>
             </div>
         </div>
-        <div class="hero-images">
-            <div class="img-card"><img src="ladva.jpg" alt="લાડવા"></div>
-            <div class="img-card"><img src="jalebi.jpg" alt="જલેબી"></div>
-            <div class="img-card"><img src="penda.jpg" alt="પેંડા"></div>
-        </div>
     </section>
 
-    <!-- Products Section -->
-    <section id="mithai" class="products-section">
-        <div class="section-title">
-            <span class="sub-heading">શોધો</span>
-            <h2>અમારી ખ્યાતિ</h2>
-        </div>
-        
-        <div class="category-grid">
-            <!-- Mithai Category -->
-            <div class="cat-card">
-                <div class="cat-images-preview">
+    <!-- Products Showcase Section -->
+    <section id="mithai" class="products-showcase">
+        <h2>અમારી ખ્યાતિ</h2>
+        <div class="showcase-grid">
+            <div class="showcase-card">
+                <div class="card-img-group">
                     <img src="mohanthal.jpg" alt="મોહનથાળ">
                     <img src="torapak.jpg" alt="તોરાપાક">
-                    <img src="feni.jpg" alt="ફેણી">
+                    <img src="penda.jpg" alt="પેંડા">
+                    <img src="ladva.jpg" alt="લાડવા">
                 </div>
                 <h3>મીઠાઈ</h3>
-                <p>મોહનથાળ • તોરાપાક • લાડવા • જલેબી</p>
-                <a href="products.html?cat=mithai" class="explore-link">જુઓ →</a>
+                <p>મોહનથાળ · તોરાપાક · પેંડા · લાડવા અને વધુ →</p>
             </div>
-
-            <!-- Namkeen Category -->
-            <div class="cat-card" id="namkeen">
-                <div class="cat-images-preview">
+            <div class="showcase-card">
+                <div class="card-img-group">
                     <img src="ganthiya.jpg" alt="ગાંઠિયા">
                     <img src="chorafari.jpg" alt="ચોરાફળી">
                     <img src="chavanu.jpg" alt="ચવાણું">
+                    <img src="feni.jpg" alt="ફેણી">
                 </div>
                 <h3>નમકીન</h3>
-                <p>ગાંઠિયા • ચોરાફળી • ચવાણું • ફરસાણ</p>
-                <a href="products.html?cat=namkeen" class="explore-link">જુઓ →</a>
+                <p>ગાંઠિયા · ચોરાફળી · ચવાણું · ફેણી અને વધુ →</p>
             </div>
-
-            <!-- Gifting Category -->
-            <div class="cat-card" id="gifting">
-                <div class="cat-images-preview gift-preview">
-                    <img src="Patel Sweet Mart Logo.jpg" alt="ગિફ્ટ હેમ્પર્સ">
+            <div class="showcase-card">
+                <div class="card-img-group gift-single">
+                    <img src="Patel Sweet Mart Logo.jpg" alt="ગિફ્ટ હેમ્પરસ">
                 </div>
                 <h3>ગિફ્ટ હેમ્પર</h3>
-                <p>તહેવાર • લગ્ન • કોર્પોરેટ</p>
-                <a href="products.html?cat=gifting" class="explore-link">જુઓ →</a>
+                <p>તહેવાર · લગ્ન · કોર્પોરેટ →</p>
             </div>
         </div>
     </section>
 
-    <!-- Story Section -->
-    <section id="story" class="story-section">
-        <div class="story-img">
-            <img src="mohanthal.jpg" alt="Making Sweet">
-            <div class="estd-badge">ESTD.<br>1995</div>
-        </div>
-        <div class="story-content">
-            <span class="sub-heading">અમારી કહાની</span>
-            <h2>1995થી — ખેરાડાની એતિહાસ</h2>
-            <p>ખેરાડાના મુખ્ય બજારમાં, 1995માં, એક એતિહાસ શરૂ થઈ. શ્રેષ્ઠ ઘી, ગુણવત્તાયુક્ત સામગ્રી અને પ્રામાણિક હૃદયથી બનાવેલ દરેક મીઠાઈ — ગ્રાહકોના ઘર સુધી.</p>
-            
-            <div class="timeline-grid">
-                <div class="t-box"><h4>1995</h4><p>ખેરાડા ખાતે સ્થાપના</p></div>
-                <div class="t-box"><h4>2010</h4><p>અમદાવાદ ઉપલબ્ધ</p></div>
-                <div class="t-box"><h4>2024</h4><p>WhatsApp ઓર્ડર</p></div>
-                <div class="t-box"><h4>આજ</h4><p>હજારો ખુશ ગ્રાહક</p></div>
+    <!-- Heritage / Story Section -->
+    <section id="story" class="heritage-section">
+        <div class="heritage-container">
+            <div class="heritage-left-img">
+                <img src="mohanthal.jpg" alt="Making Sweets">
+                <div class="est-badge-circle">ESTD.<br>1995</div>
+            </div>
+            <div class="heritage-text">
+                <span class="sub-title">અમારી કહાની</span>
+                <h2>1995થી — ખેરાલુની એતિહાસ</h2>
+                <p>ખેરાલુના મુખ્ય બજારમાં, 1995માં, એક એતિહાસ શરૂ થઈ. શ્રેષ્ઠ ઘી, ગુણવત્તાયુક્ત સામગ્રી અને પ્રામાણિક હૃદયથી બનાવેલી દરેક મીઠાઈ — ગ્રાહકોના ઘર સુધી.</p>
+                <div class="timeline-grid">
+                    <div class="timeline-box">
+                        <h3>1995</h3>
+                        <p>ખેરાલુ ખાતે સ્થાપના</p>
+                    </div>
+                    <div class="timeline-box">
+                        <h3>2010</h3>
+                        <p>અમદાવાદ ઉપલબ્ધ</p>
+                    </div>
+                    <div class="timeline-box">
+                        <h3>2024</h3>
+                        <p>WhatsApp ઓર્ડર</p>
+                    </div>
+                    <div class="timeline-box">
+                        <h3>આજ</h3>
+                        <p>હજારો ખુશ ગ્રાહક</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Festival / Gifting Banner -->
-    <section class="festival-banner">
-        <div class="fest-text">
-            <span>ભેટ</span>
+    <!-- Gifting Banner Section -->
+    <section id="gifting" class="gifting-section">
+        <div class="gifting-content">
+            <span class="sub-title-light">ભેટ</span>
             <h2>ઉત્સવ, પ્રેમ અને ભેટ</h2>
             <p>દિવાળી, રક્ષાબંધન, ઉત્તરાયણ, લગ્ન, કોર્પોરેટ — દરેક ઉત્સવ માટે ખાસ ભેટ હેમ્પર. WhatsApp પર ઓર્ડર આપો.</p>
             <div class="fest-tags">
-                <span>Diwali</span><span>Wedding</span><span>Corporate</span><span>Festivals</span>
+                <span>Diwali</span>
+                <span>Wedding</span>
+                <span>Corporate</span>
+                <span>Festivals</span>
             </div>
-            <a href="https://wa.me/919173565466" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp પર ઓર્ડર</a>
+            <a href="https://wa.me/919173565466" class="btn-primary" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp પર ઓર્ડર</a>
         </div>
-        <div class="fest-image">
+        <div class="gifting-image">
             <img src="Patel Sweet Mart Logo.jpg" alt="Gift Box">
         </div>
     </section>
 
-    <!-- Contact & Footer Section -->
-    <footer id="contact" class="footer">
-        <div class="footer-top">
-            <div class="f-col brand-col">
-                <img src="Patel Sweet Mart Logo.jpg" alt="Logo">
-                <h3>પટેલ સ્વીટ માર્ટ</h3>
-                <p>પરંપરાનો સ્વાદ. નવી પેઢી માટે.</p>
+    <!-- Contact / WhatsApp Order Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-box">
+            <h3>WhatsApp પર ઝડપી ઓર્ડર કરો</h3>
+            <form class="whatsapp-form" onsubmit="sendToWhatsApp(event)">
+                <input type="text" id="custName" placeholder="તમારું નામ" required>
+                <input type="text" id="custItem" placeholder="પ્રોડક્ટનું નામ અને જથ્થો (જેવા કે મોહનથાળ, લાડવા...)" required>
+                <textarea id="custAddress" placeholder="ડિલિવરી સરનામું" rows="3" required></textarea>
+                <button type="submit" class="whatsapp-send-btn"><i class="fab fa-whatsapp"></i> WhatsApp પર મોકલો</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <img src="Patel Sweet Mart Logo.jpg" alt="Logo" class="footer-logo">
+                <p>પટેલ સ્વીટ માર્ટ</p>
+                <p class="footer-desc">પરંપરાનો સ્વાદ. નવી પેઢી માટે.</p>
             </div>
-            <div class="f-col">
+            <div class="footer-col">
                 <h4>ઝડપી લિંક</h4>
                 <a href="#mithai">મીઠાઈ</a>
                 <a href="#namkeen">નમકીન</a>
                 <a href="#gifting">ગિફ્ટ હેમ્પર</a>
                 <a href="#story">અમારી કહાની</a>
             </div>
-            <div class="f-col">
+            <div class="footer-col">
                 <h4>સ્ટોર</h4>
-                <p><i class="fas fa-map-marker-alt"></i> મુખ્ય બજાર, ખેરાડા</p>
+                <p><i class="fas fa-map-marker-alt"></i> મુખ્ય બજાર, ખેરાલુ</p>
                 <p><i class="fab fa-whatsapp"></i> અમદાવાદ (WhatsApp)</p>
                 <p><i class="fas fa-phone"></i> 91735 65466</p>
+            </div>
+            <div class="footer-col">
+                <h4>ભાષા</h4>
+                <button class="lang-option active-lang">ગુજરાતી</button>
+                <button class="lang-option">English</button>
             </div>
         </div>
         <div class="footer-bottom">
@@ -154,7 +173,10 @@
     </footer>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/919173565466" class="floating-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://wa.me/919173565466" class="floating-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
+    <script src="script.js"></script>
 </body>
 </html>
