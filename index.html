@@ -8,8 +8,10 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
         body { background-color: #fff9f4; color: #333; line-height: 1.6; }
-        header { background-color: #8B0000; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); flex-wrap: wrap; position: sticky; top: 0; z-index: 1001; }
-        header h1 { font-size: 1.8rem; }
+        header { background-color: #8B0000; color: #fff; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); flex-wrap: wrap; position: sticky; top: 0; z-index: 1001; }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-area img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700; }
+        header h1 { font-size: 1.6rem; color: #fff; }
         nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 600; }
         nav a:hover { color: #FFD700; }
         .hero { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1599785209707-a456fc1337bb?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center; color: white; text-align: center; padding: 100px 20px; }
@@ -32,17 +34,11 @@
         .order-controls select { padding: 8px; margin: 5px 0; width: 90%; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; background-color: #fff; text-align: center; }
         .preview-text { font-size: 0.9rem; color: #2e7d32; font-weight: bold; margin: 5px 0; }
         .highlight-tag { display: inline-block; background: #2e7d32; color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 8px; }
-        
-        /* About Section */
         .about-section { background-color: #fff; padding: 50px 20px; text-align: center; margin-top: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
         .about-section h2 { color: #8B0000; margin-bottom: 20px; font-size: 2rem; }
         .about-section p { max-width: 800px; margin: auto; font-size: 1.1rem; color: #555; line-height: 1.8; }
-
-        /* Floating Cart Bar */
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.3); }
         .cart-bar span { font-size: 1.2rem; font-weight: bold; color: #FFD700; }
-
-        /* Modal Styling */
         #invoice-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; overflow-y: auto; }
         .invoice-box { background: white; padding: 25px; width: 90%; max-width: 450px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: left; max-height: 90vh; overflow-y: auto; }
         .invoice-box h2 { text-align: center; color: #8B0000; margin-bottom: 5px; }
@@ -56,7 +52,10 @@
 </head>
 <body>
         <header>
-        <h1>પટેલ સ્વીટ માર્ટ</h1>
+        <div class="logo-area">
+            <img src="23997.png" alt="Patel Sweet Mart Logo">
+            <h1>પટેલ સ્વીટ માર્ટ</h1>
+        </div>
         <nav>
             <a href="#home">હોમ</a>
             <a href="#menu">મીઠાઈ અને નાસ્તા</a>
@@ -77,11 +76,11 @@
         <h2 class="section-title">અમારી બધી જ ખાસિયતો અને મેનુ</h2>
         <div class="grid">
             
-            <!-- 1. Toprapak -->
+            <!-- 1. Toprapak (Updated name from Khas Torapak) -->
             <div class="card">
-                <img src="torapak.jpg" alt="તોપરાપાક">
-                <h3>ખાસ તોપરાપાક</h3>
-                <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ તોપરાપાક.</p>
+                <img src="torapak.jpg" alt="ટોપ્રાપાક">
+                <h3>ટોપ્રાપાક</h3>
+                <p>શુદ્ધ દેશી ઘીનો પરંપરાગત સ્વાદિષ્ટ અને સ્પેશિયલ ટોપ્રાપાક.</p>
                 <div class="price-tag">₹ 500 / કિલો</div>
                 <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
                 <div class="order-controls">
@@ -89,7 +88,7 @@
                         <option value="0.01">10 ગ્રામ</option><option value="0.02">20 ગ્રામ</option><option value="0.05">50 ગ્રામ</option><option value="0.1">100 ગ્રામ</option><option value="0.25">250 ગ્રામ</option><option value="0.5">500 ગ્રામ</option><option value="1" selected>1 કિલો</option><option value="2">2 કિલો</option><option value="5">5 કિલો</option><option value="10">10 કિલો</option><option value="50">50 કિલો</option><option value="100">100 કિલો</option>
                     </select>
                     <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
-                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ખાસ તોરાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
+                    <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('ટોપ્રાપાક', 500, 'select-torapak')">🛒 કાર્ટમાં ઉમેરો</button>
                 </div>
             </div>
 
@@ -151,9 +150,8 @@
                     <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
                     <button type="button" class="btn" style="background-color: #8B0000; width: 90%; font-size: 0.9rem;" onclick="addToCart('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">🛒 કાર્ટમાં ઉમેરો</button>
                 </div>
-            </div>
-
-            <!-- 6. Jalebi -->
+                                          </div>
+                <!-- 6. Jalebi -->
             <div class="card">
                 <img src="jalebi.jpg" alt="જલેબી">
                 <h3>ગરમાગરમ જલેબી</h3>
@@ -229,13 +227,14 @@
             </div>
 
         </div>
-               <!-- About Us Section -->
+    </div>
+
+    <!-- About Us Section -->
     <section id="about" class="about-section container">
         <h2>અમારા વિશે (About Us)</h2>
-        <p>પટેલ સ્વીટ માર્ટ, મુખ્ય બજાર ખેરવા ખાતે આવેલી એક પરંપરાગત અને વિશ્વાસપાત્ર દુકાન છે. અમે શુદ્ધ દેશી ઘી અને ગુણવત્તાયુક્ત સામગ્રીથી બનેલી સ્વાદિષ્ટ મીઠાઈઓ અને ફરસાણ પ્રદાન કરીએ છીએ. હવે ખેરવા ઉપરાંત અમદાવાદ ખાતે પણ અમારા ગ્રાહકો ઘર બેઠા ઓર્ડર કરી શકે છે.</p>
-    </section>
-
-    <!-- Floating Cart Bar -->
+        <p>પટેલ સ્વીટ માર્ટ, મુખ્ય બજાર ખેરવા (Est. 1995) ખાતે આવેલી એક પરંપરાગત અને વિશ્વાસપાત્ર દુકાન છે[span_0](start_span)[span_0](end_span). અમે શુદ્ધ દેશી ઘી અને ગુણવત્તાયુક્ત સામગ્રીથી બનેલી સ્વાદિષ્ટ મીઠાઈઓ અને ફરસાણ પ્રદાન કરીએ છીએ. હવે ખેરવા ઉપરાંત અમદાવાદ ખાતે પણ અમારા ગ્રાહકો ઘર બેઠા ઓર્ડર કરી શકે છે.</p>
+                        </section>
+                           <!-- Floating Cart Bar -->
     <div class="cart-bar">
         <div>કાર્ટમાં આઈટમ્સ: <span id="cart-count">0</span> | કુલ: <span id="cart-total">₹0</span></div>
         <button type="button" class="btn whatsapp-btn" style="margin: 0;" onclick="openCartModal()">📄 બિલ બનાવો & મોકલો</button>
@@ -276,12 +275,13 @@
             </div>
         </div>
     </div>
+
     <footer>
         <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા અને અમદાવાદ. સર્વાધિકાર સુરક્ષિત.</p>
         <p>શુદ્ધતા અને પરંપરાનો ભરોસો</p>
     </footer>
-    
-        <script>
+
+    <script>
         let cart = [];
 
         function updatePrice(id, ratePerKg) {
@@ -349,11 +349,9 @@
             const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
             document.getElementById('bill-date').innerText = dateStr;
 
-            // WhatsApp Link
             const message = `નમસ્તે, મારે પટેલ સ્વીટ માર્ટમાંથી નીચે મુજબનો ઓર્ડર આપવો છે:%0A%0A${orderTextSummary}%0A*કુલ રકમ:* ₹${totalPrice}%0A%0Aકૃપા કરીને ઓર્ડર કન્ફર્મ કરો.`;
             document.getElementById('whatsapp-link').href = `https://wa.me/919173565466?text=${message}`;
 
-            // Fixed SMS Link formatting for mobile/desktop messaging app
             const smsText = `Patel Sweet Mart Order:%0A` + orderTextSummary.replace(/%0A/g, '\n') + `Total: Rs.${totalPrice}`;
             document.getElementById('sms-link').href = `sms:9173565466?body=${encodeURIComponent(smsText)}`;
 
@@ -385,5 +383,28 @@
     </script>
 </body>
 </html>
+# 🎨 પટેલ સ્વીટ માર્ટ - બ્રાન્ડ ગાઇડ (Brand Guide)
 
-                        
+## ૧. બ્રાન્ડ પરિચય (Brand Overview)
+* **નામ:** પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)[span_1](start_span)[span_1](end_span)
+* **સ્થાપના વર્ષ:** ૧૯૯૫ (Est. 1995)[span_2](start_span)[span_2](end_span)
+* **સ્થળ:** મુખ્ય બજાર, ખેરવા (અને અમદાવાદ શાખા)[span_3](start_span)[span_3](end_span)
+* **ટેગલાઇન:** "શુદ્ધતા અને પરંપરાનો સાચો સ્વાદ"
+
+## ૨. લોગો અને પ્રતીક (Logo & Identity)
+* **લોગો ડિઝાઇન:** વર્તુળાકાર (Circular) વેરિઅન્ટ જેમાં ઉપર "• શ્રીજી •", મધ્યમાં ગુજરાતીમાં "પટેલ સ્વીટ માર્ટ" અને નીચે અંગ્રેજીમાં "PATEL SWEET MART EST. 1995" દર્શાવેલ છે[span_4](start_span)[span_4](end_span).
+* **પ્રિન્ટ અને વેબસાઇટ:** લોગો હંમેશાં હેડરના ડાબા ખૂણે અથવા પોસ્ટરની મધ્યમાં સ્પષ્ટ દેખાય તે રીતે ઉપયોગ કરવો.
+
+## ૩. કલર પેલેટ (Color Palette)
+* **મેરૂન / મરૂન રેડ (Maroon - #8B0000):** મુખ્ય હેડર, બ્રાન્ડ પ્રાઇમરી કલર અને બોક્સ બેકગ્રાઉન્ડ માટે. પરંપરા અને શુદ્ધતા દર્શાવે છે.
+* **ગોલ્ડન યલો (Golden Yellow - #FFD700):** હાઇલાઇટ્સ, ઓફર્સ અને પ્રાઇસ ટેગ માટે.
+* **લીલો રંગ (Green - #2e7d32):** ખાસ ટોપ્રાપાક (Toprapak) ની ઓળખ તથા વોટ્સએપ બટન/સક્સેસ ટેગ માટે.
+* **ક્રીમ બેકગ્રાઉન્ડ (Off-White/Cream - #fff9f4):** વેબસાઇટનું મુખ્ય બેકગ્રાઉન્ડ રંગ.
+
+## ૪. ટાઇપોગ્રાફી (Typography & Language)
+* **પ્રાયમરી ભાષા:** ગુજરાતી (શુદ્ધ અને પારંપારિક શબ્દો જેમ કે ટોપ્રાપાક, મોહનથાળ, પેંડા).
+* **ફોન્ટ ફેમિલી:** 'Segoe UI', Tahoma, Geneva, Verdana (મોબાઇલ અને લેપટોપ બંનેમાં એકસરખા દેખાય તેવા સચોટ ફોન્ટ).
+
+## ૫. પેકેજિંગ અને માર્કેટિંગ ગાઇડલાઇન્સ
+* **મિઠાઈ પેકેજિંગ:** સ્ટેન્ડ-અપ ઝિપલોક પાઉચ અને ઓટોમેટેડ મશીનરી પેકેજિંગ.
+* **સોશિયલ મીડિયા (Instagram: urvesh_5291):** 9:16 શોર્ટ-ફોર્મ વિડિઓઝ અને અમદાવાદ/ખેરવા લોકેશન ટેગ સાથે પ્રમોશન.
