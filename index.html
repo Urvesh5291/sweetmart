@@ -165,6 +165,61 @@
         footer p {
             margin-bottom: 10px;
         }
+
+        /* Modal Popup Styling */
+        #invoice-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .invoice-box {
+            background: white;
+            padding: 25px;
+            width: 90%;
+            max-width: 380px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            text-align: left;
+        }
+        .invoice-box h2 {
+            text-align: center;
+            color: #8B0000;
+            margin-bottom: 5px;
+        }
+        .invoice-box p {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        .invoice-table th {
+            background-color: #8B0000;
+            color: white;
+        }
+        .total-row {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 <body>
@@ -209,7 +264,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-torapak" class="preview-text">કિંમત: ₹500</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('ખાસ તોરાપાક', 500, 'select-torapak')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('ખાસ તોરાપાક', 500, 'select-torapak')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -229,7 +284,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-mohanthal" class="preview-text">કિંમત: ₹480</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('મોહનથાળ', 480, 'select-mohanthal')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('મોહનથાળ', 480, 'select-mohanthal')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -249,7 +304,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-penda" class="preview-text">કિંમત: ₹520</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('માવા પેંડા', 520, 'select-penda')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('માવા પેંડા', 520, 'select-penda')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -269,7 +324,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-ladva" class="preview-text">કિંમત: ₹400</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('સ્પેશિયલ લાડવા', 400, 'select-ladva')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('સ્પેશિયલ લાડવા', 400, 'select-ladva')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -289,7 +344,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-feni" class="preview-text">કિંમત: ₹450</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('સ્વાદિષ્ટ ફેણી', 450, 'select-feni')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -309,7 +364,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-jalebi" class="preview-text">કિંમત: ₹380</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('ગરમાગરમ જલેબી', 380, 'select-jalebi')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('ગરમાગરમ જલેબી', 380, 'select-jalebi')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -329,7 +384,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-ganthiya" class="preview-text">કિંમત: ₹340</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('ચટાકેદાર ગાંઠિયા', 340, 'select-ganthiya')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('ચટાકેદાર ગાંઠિયા', 340, 'select-ganthiya')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -349,7 +404,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-chorafari" class="preview-text">કિંમત: ₹360</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('ચોરાફળી', 360, 'select-chorafari')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('ચોરાફળી', 360, 'select-chorafari')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -369,7 +424,7 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-chavanu" class="preview-text">કિંમત: ₹350</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('મિક્સ ચવાણું', 350, 'select-chavanu')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('મિક્સ ચવાણું', 350, 'select-chavanu')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -389,47 +444,37 @@
                         <option value="5">5 કિલો</option>
                     </select>
                     <div id="preview-faradi" class="preview-text">કિંમત: ₹400</div>
-                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="processOrder('ફરાળી નાસ્તો', 400, 'select-faradi')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%;" onclick="openBillModal('ફરાળી નાસ્તો', 400, 'select-faradi')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <div class="container" id="about" style="background: #fff; border-radius: 8px; padding: 40px; margin-bottom: 40px;">
-        <h2 class="section-title" style="margin-bottom: 20px;">પટેલ સ્વીટ માર્ટ વિશે</h2>
-        <p style="text-align: center; max-width: 800px; margin: auto; color: #555;">
-            અમારી દુકાન <strong>મુખ્ય બજાર, ખેરવા</strong> ખાતે આવેલી છે. અમે ગ્રાહકોને શુદ્ધતા અને ગુણવત્તાયુક્ત પરંપરાગત ગુજરાતી મીઠાઈઓ અને નાસ્તા પૂરા પાડીએ છીએ. હવે ખેરવા ઉપરાંત <strong>અમદાવાદ</strong> ખાતે પણ હોમ ડિલિવરીની સુવિધા ઉપલબ્ધ છે. સ્ટેન્ડ-અપ ઝિપલોક પેકિંગ દ્વારા મીઠાઈઓની તાજગી લાંબા સમય સુધી જળવાઈ રહે છે.
-        </p>
-    </div>
-
-    <div class="container" id="contact">
-        <h2 class="section-title">સંપર્ક કરો</h2>
-        <p style="text-align: center; margin-bottom: 20px;">ઓર્ડર કરવા અથવા વધુ માહિતી માટે અમારો સંપર્ક કરો:</p>
-        <div style="text-align: center; font-size: 1.1rem; color: #444;">
-            <p>📍 <strong>સરનામું:</strong> મુખ્ય બજાર, ખેરવા, ગુજરાત</p>
-            <p>🚚 <strong>ડિલિવરી સ્થળો:</strong> ખેરવા અને અમદાવાદ</p>
-            <p>📞 <strong>ફોન / વોટ્સએપ:</strong> <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." target="_blank" style="color: #25D366; font-weight: bold; text-decoration: none;">+91 91735 65466 (વોટ્સએપ કરો)</a></p>
-            <div style="margin-top: 25px;">
-                <a href="https://wa.me/919173565466?text=નમસ્તે,%20મારે%20પટેલ%20સ્વીટ%20માર્ટમાંથી%20ઓર્ડર%20આપવો%20છે." class="btn whatsapp-btn" style="font-size: 1.1rem; padding: 12px 30px;" target="_blank">💬 સીધા વોટ્સએપ પર ઓર્ડર આપો</a>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 પટેલ સ્વીટ માર્ટ, ખેરવા. સર્વાધિકાર સુરક્ષિત.</p>
-        <p>Designed for Pure Traditional Taste</p>
-    </footer>
-
-    <script>
-        function updatePrice(id, pricePerKg) {
-            const selectElement = document.getElementById('select-' + id);
-            const multiplier = parseFloat(selectElement.value);
-            const total = Math.round(pricePerKg * multiplier);
-            document.getElementById('preview-' + id).innerText = `કિંમત: ₹${total}`;
-        }
-
-        function processOrder(productName, pricePerKg, selectId) {
-            const selectElement = document.getElementById(selectId);
-            const multiplier = parseFloat(selectElement.value);
-            const 
+    <!-- Bill Modal Popup -->
+    <div id="invoice-modal">
+        <div class="invoice-box">
+            <h2>પટેલ સ્વીટ માર્ટ</h2>
+            <p>મુખ્ય બજાર, ખેરવા | ફોન: 9173565466</p>
+            <hr style="border: 0.5px solid #ddd; margin: 10px 0;">
+            <p style="text-align: left; margin: 5px 0; font-size: 0.9rem;">તારીખ: <span id="bill-date"></span></p>
+            <table class="invoice-table">
+                <tr>
+                    <th>આઈટમ</th>
+                    <th>વજન</th>
+                    <th>કિંમત</th>
+                </tr>
+                <tr>
+                    <td id="bill-item"></td>
+                    <td id="bill-qty"></td>
+                    <td id="bill-price"></td>
+                </tr>
+            </table>
+            <div class="total-row" id="bill-total"></div>
+            <hr style="border: 0.5px solid #ddd; margin: 15px 0;">
+            <div style="text-align: center;">
+                <button class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px; font-size: 0.95rem;" onclick="printBill()">📥 બિલ પ્રિન્ટ / PDF સેવ કરો</button>
+                <br>
+                <a id="whatsapp-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box; margin-bottom: 8px; font-size: 0.95rem;">💬 WhatsApp પર ઓર્ડર મોકલો</a>
+                <br>
+       
