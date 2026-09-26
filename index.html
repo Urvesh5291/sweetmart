@@ -505,6 +505,103 @@
                 modal.style.display = 'none';
             }
         }
+            // Form Switch Karva Mate (Login <-> Signup <-> Forgot)
+function switchForm(boxId) {
+    document.querySelectorAll('.form-box').forEach(box => {
+        box.classList.remove('active');
+    });
+    document.getElementById(boxId).classList.add('active');
+    
+    // Clear error messages
+    document.getElementById('login-error').innerText = '';
+    document.getElementById('signup-error').innerText = '';
+    document.getElementById('forgot-error').innerText = '';
+}
+
+// 1. SIGNUP LOGIC
+function handleSignup(e) {
+    e.preventDefault();
+    const username = document.getElementById('signup-username').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    const errorMsg = document.getElementById('signup-error');
+
+    let users = JSON.parse(localStorage.getItem('sweetMartUsers')) || [];
+
+    // Check if email already exists
+    const existing = users.find(u => u.email === email);
+    if(existing) {
+        errorMsg.style.color = "red";
+        errorMsg.innerText = "Aa email pela thi registered che!";
+        return;
+    }
+
+    users.push({ username, email, password });
+    localStorage.setItem('sweetMartUsers', JSON.stringify(users));
+
+    errorMsg.style.color = "green";
+    errorMsg.innerText = "Signup successful! Have login karo.";
+    setTimeout(() => {
+        switchForm('login-box');
+    }, 1500);
+}
+
+// 2. LOGIN LOGIC
+function handleLogin(e) {
+    e.preventDefault();
+    const userInput = document.getElementById('login-user').value;
+    const passInput = document.getElementById('login-pass').value;
+    const errorMsg = document.getElementById('login-error');
+
+    let users = JSON.parse(localStorage.getItem('sweetMartUsers')) || [];
+
+    const validUser = users.find(u => (u.username === userInput || u.email === userInput) && u.password === passInput);
+
+    if(validUser) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('currentUsername', validUser.username);
+        
+        // Hide Login Overlay & Show Website
+        document.getElementById('auth-overlay').style.display = 'none';
+    } else {
+        errorMsg.style.color = "red";
+        errorMsg.innerText = "Username ya Password khoto che!";
+    }
+}
+
+// 3. FORGET PASSWORD LOGIC
+function handleForgot(e) {
+    e.preventDefault();
+    const email = document.getElementById('forgot-email').value;
+    const newPass = document.getElementById('forgot-newpass').value;
+    const errorMsg = document.getElementById('forgot-error');
+
+    let users = JSON.parse(localStorage.getItem('sweetMartUsers')) || [];
+    let userIndex = users.findIndex(u => u.email === email);
+
+    if(userIndex !== -1) {
+        users[userIndex].password = newPass;
+        localStorage.setItem('sweetMartUsers', JSON.stringify(users));
+        
+        errorMsg.style.color = "green";
+        errorMsg.innerText = "Password successfully update thai gayo!";
+        setTimeout(() => {
+            switchForm('login-box');
+        }, 1500);
+    } else {
+        errorMsg.style.color = "red";
+        errorMsg.innerText = "Aa email malyo nathi!";
+    }
+}
+
+// Check on Page Load if already logged in
+window.addEventListener('DOMContentLoaded', () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if(isLoggedIn === 'true') {
+        document.getElementById('auth-overlay').style.display = 'none';
+    }
+});
+            
                 </script>
                 <?php
 /* 
