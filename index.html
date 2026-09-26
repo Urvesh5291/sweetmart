@@ -166,7 +166,7 @@
             margin-bottom: 10px;
         }
 
-        /* Bill Modal Style Fixed */
+        /* Bill Modal Style */
         #invoice-modal {
             display: none;
             position: fixed;
@@ -472,4 +472,9 @@
             </table>
             <div class="total-row" id="bill-total"></div>
             <hr style="margin: 15px 0;">
-          
+            <div style="text-align: center;" id="modal-actions">
+                <button class="btn" style="background-color: #2e7d32; width: 100%; margin-bottom: 8px;" onclick="printBill()">📥 PDF / બિલ પ્રિન્ટ કરો</button>
+                <br>
+                <a id="whatsapp-direct-link" href="#" target="_blank" class="btn whatsapp-btn" style="width: 100%; text-decoration: none; display: inline-block; text-align: center; box-sizing: border-box; margin-bottom: 8px;">💬 હવે WhatsApp પર ઓર્ડર મોકલો</a>
+                <br>
+                <button class="btn" style="background-color: #555; width: 100%; padding: 8px; font-
