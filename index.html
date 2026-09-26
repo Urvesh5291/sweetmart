@@ -444,9 +444,7 @@
             let text = "";
             let multiplier = num;
 
-            // Smart formatting: if value is < 1, assume grams if user typed numbers like 250, 500, etc.
             if (num >= 100) {
-                // Treated as grams
                 text = num + " ગ્રામ";
                 multiplier = num / 1000;
             } else if (num < 1 && num > 0) {
@@ -479,4 +477,6 @@
 
             document.getElementById('bill-date').innerText = new Date().toLocaleDateString('gu-IN');
             document.getElementById('bill-item').innerText = productName;
-            document.getElementById('bill-qty').inn
+            document.getElementById('bill-qty').innerText = res.text;
+            document.getElementById('bill-price').innerText = "₹ " + totalAmount;
+            document.getElementById('bil
