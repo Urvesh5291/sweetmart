@@ -132,13 +132,14 @@
             padding: 0 15px;
             margin-top: 10px;
         }
-        .order-controls select, .order-controls input {
-            padding: 6px;
+        .order-controls input {
+            padding: 8px;
             margin: 5px 0;
             width: 90%;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            text-align: center;
         }
         .highlight-tag {
             display: inline-block;
@@ -194,14 +195,8 @@
                 <div class="price-tag">₹ 500 / કિલો</div>
                 <span class="highlight-tag">લીલો રંગ (સ્પેશિયલ)</span>
                 <div class="order-controls">
-                    <select id="qty-torapak">
-                        <option value="0.25">250 ગ્રામ (₹125)</option>
-                        <option value="0.5">500 ગ્રામ (₹250)</option>
-                        <option value="1" selected>1 કિલો (₹500)</option>
-                        <option value="2">2 કિલો (₹1000)</option>
-                        <option value="5">5 કિલો (₹2500)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('ખાસ તોરાપાક', 500, 'qty-torapak')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-torapak" placeholder="વજન લખો (દા.ત. 500 ગ્રામ અથવા 1.5 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('ખાસ તોરાપાક', 500, 'qty-torapak')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -212,14 +207,8 @@
                 <p>મોંમાં ઓગળી જાય તેવો એકદમ દાણાદાર અને શુદ્ધ ઘીનો મોહનથાળ.</p>
                 <div class="price-tag">₹ 480 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-mohanthal">
-                        <option value="0.25">250 ગ્રામ (₹120)</option>
-                        <option value="0.5">500 ગ્રામ (₹240)</option>
-                        <option value="1" selected>1 કિલો (₹480)</option>
-                        <option value="2">2 કિલો (₹960)</option>
-                        <option value="5">5 કિલો (₹2400)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('મોહનથાળ', 480, 'qty-mohanthal')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-mohanthal" placeholder="વજન લખો (દા.ત. 500 ગ્રામ અથવા 2 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('મોહનથાળ', 480, 'qty-mohanthal')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -230,14 +219,8 @@
                 <p>શુદ્ધ માવા અને દૂધમાંથી બનાવેલા સ્વાદિષ્ટ અને તાજા પેંડા.</p>
                 <div class="price-tag">₹ 520 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-penda">
-                        <option value="0.25">250 ગ્રામ (₹130)</option>
-                        <option value="0.5">500 ગ્રામ (₹260)</option>
-                        <option value="1" selected>1 કિલો (₹520)</option>
-                        <option value="2">2 કિલો (₹1040)</option>
-                        <option value="5">5 કિલો (₹2600)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('માવા પેંડા', 520, 'qty-penda')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-penda" placeholder="વજન લખો (દા.ત. 250 ગ્રામ અથવા 1 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('માવા પેંડા', 520, 'qty-penda')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -248,14 +231,8 @@
                 <p>તહેવારો અને પ્રસંગો માટે ખાસ બૂંદી અને મોતીચૂરના લાડવા.</p>
                 <div class="price-tag">₹ 400 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-ladva">
-                        <option value="0.25">250 ગ્રામ (₹100)</option>
-                        <option value="0.5">500 ગ્રામ (₹200)</option>
-                        <option value="1" selected>1 કિલો (₹400)</option>
-                        <option value="2">2 કિલો (₹800)</option>
-                        <option value="5">5 કિલો (₹2000)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('સ્પેશિયલ લાડવા', 400, 'qty-ladva')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-ladva" placeholder="વજન લખો (દા.ત. 1 કિલો અથવા 3 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('સ્પેશિયલ લાડવા', 400, 'qty-ladva')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -266,14 +243,8 @@
                 <p>એકદમ ક્રિસ્પી અને મોંમાં ભીંજાઈ જાય તેવી પરંપરાગત ફેણી.</p>
                 <div class="price-tag">₹ 450 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-feni">
-                        <option value="0.25">250 ગ્રામ (₹113)</option>
-                        <option value="0.5">500 ગ્રામ (₹225)</option>
-                        <option value="1" selected>1 કિલો (₹450)</option>
-                        <option value="2">2 કિલો (₹900)</option>
-                        <option value="5">5 કિલો (₹2250)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('સ્વાદિષ્ટ ફેણી', 450, 'qty-feni')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-feni" placeholder="વજન લખો (દા.ત. 500 ગ્રામ અથવા 1 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('સ્વાદિષ્ટ ફેણી', 450, 'qty-feni')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -284,14 +255,8 @@
                 <p>રસ ભરેલી અને ક્રિસ્પી ગરમાગરમ દેશી ઘીની જલેબી.</p>
                 <div class="price-tag">₹ 380 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-jalebi">
-                        <option value="0.25">250 ગ્રામ (₹95)</option>
-                        <option value="0.5">500 ગ્રામ (₹190)</option>
-                        <option value="1" selected>1 કિલો (₹380)</option>
-                        <option value="2">2 કિલો (₹760)</option>
-                        <option value="5">5 કિલો (₹1900)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('ગરમાગરમ જલેબી', 380, 'qty-jalebi')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-jalebi" placeholder="વજન લખો (દા.ત. 500 ગ્રામ)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('ગરમાગરમ જલેબી', 380, 'qty-jalebi')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -302,14 +267,8 @@
                 <p>ચા સાથે માણવા માટેના એકદમ નરમ અને તાજા ગાંઠિયા.</p>
                 <div class="price-tag">₹ 340 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-ganthiya">
-                        <option value="0.25">250 ગ્રામ (₹85)</option>
-                        <option value="0.5">500 ગ્રામ (₹170)</option>
-                        <option value="1" selected>1 કિલો (₹340)</option>
-                        <option value="2">2 કિલો (₹680)</option>
-                        <option value="5">5 કિલો (₹1700)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('ચટાકેદાર ગાંઠિયા', 340, 'qty-ganthiya')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-ganthiya" placeholder="વજન લખો (દા.ત. 1 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('ચટાકેદાર ગાંઠિયા', 340, 'qty-ganthiya')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -320,14 +279,8 @@
                 <p>સ્પેશિયલ મસાલા સાથેની ચટાકેદાર અને કરકરી ચોરાફળી.</p>
                 <div class="price-tag">₹ 360 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-chorafari">
-                        <option value="0.25">250 ગ્રામ (₹90)</option>
-                        <option value="0.5">500 ગ્રામ (₹180)</option>
-                        <option value="1" selected>1 કિલો (₹360)</option>
-                        <option value="2">2 કિલો (₹720)</option>
-                        <option value="5">5 કિલો (₹1800)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('ચોરાફળી', 360, 'qty-chorafari')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-chorafari" placeholder="વજન લખો (દા.ત. 500 ગ્રામ)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('ચોરાફળી', 360, 'qty-chorafari')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -338,14 +291,8 @@
                 <p>વિવિધ સેવ, ગાંઠિયા અને મસાલાનું સ્વાદિષ્ટ મિક્સ ચવાણું.</p>
                 <div class="price-tag">₹ 350 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-chavanu">
-                        <option value="0.25">250 ગ્રામ (₹88)</option>
-                        <option value="0.5">500 ગ્રામ (₹175)</option>
-                        <option value="1" selected>1 કિલો (₹350)</option>
-                        <option value="2">2 કિલો (₹700)</option>
-                        <option value="5">5 કિલો (₹1750)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('મિક્સ ચવાણું', 350, 'qty-chavanu')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-chavanu" placeholder="વજન લખો (દા.ત. 1 કિલો)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('મિક્સ ચવાણું', 350, 'qty-chavanu')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -356,14 +303,8 @@
                 <p>ઉપવાસ કે વ્રત માટે ખાસ શુદ્ધ અને ટેસ્ટી ફરાળી આઈટમ્સ.</p>
                 <div class="price-tag">₹ 400 / કિલો</div>
                 <div class="order-controls">
-                    <select id="qty-faradi">
-                        <option value="0.25">250 ગ્રામ (₹100)</option>
-                        <option value="0.5">500 ગ્રામ (₹200)</option>
-                        <option value="1" selected>1 કિલો (₹400)</option>
-                        <option value="2">2 કિલો (₹800)</option>
-                        <option value="5">5 કિલો (₹2000)</option>
-                    </select>
-                    <button class="btn whatsapp-btn" style="padding: 6px 15px; font-size: 0.9rem; width: 90%;" onclick="orderProduct('ફરાળી નાસ્તો', 400, 'qty-faradi')">📄 બિલ બનાવો & WhatsApp કરો</button>
+                    <input type="text" id="qty-faradi" placeholder="વજન લખો (દા.ત. 500 ગ્રામ)" value="1 કિલો">
+                    <button class="btn whatsapp-btn" style="padding: 8px 15px; font-size: 0.9rem; width: 90%; margin-top: 5px;" onclick="orderCustomProduct('ફરાળી નાસ્તો', 400, 'qty-faradi')">📄 બિલ બનાવો & WhatsApp કરો</button>
                 </div>
             </div>
 
@@ -396,11 +337,29 @@
     </footer>
 
     <script>
-        function orderProduct(productName, pricePerKg, selectId) {
-            const selectElement = document.getElementById(selectId);
-            const qtyKg = parseFloat(selectElement.value);
-            const qtyText = selectElement.options[selectElement.selectedIndex].text;
-            const totalAmount = Math.round(pricePerKg * qtyKg);
+        function orderCustomProduct(productName, pricePerKg, inputId) {
+            const inputElement = document.getElementById(inputId);
+            const qtyText = inputElement.value.trim() || "1 કિલો";
+            
+            // Calculate approximate amount based on text input (smart number extraction)
+            let multiplier = 1;
+            let lowerQty = qtyText.toLowerCase();
+            let numMatch = parseFloat(qtyText);
+
+            if (!isNaN(numMatch)) {
+                if (lowerQty.includes('ગ્રામ') || lowerQty.includes('gram') || lowerQty.includes('gm')) {
+                    if (lowerQty.includes('250')) multiplier = 0.25;
+                    else if (lowerQty.includes('500')) multiplier = 0.5;
+                    else if (lowerQty.includes('100')) multiplier = 0.1;
+                    else multiplier = numMatch / 1000;
+                } else if (lowerQty.includes('કિલો') || lowerQty.includes('kg') || lowerQty.includes('kg.')) {
+                    multiplier = numMatch;
+                } else {
+                    multiplier = numMatch; // Default numeric as kg
+                }
+            }
+
+            const totalAmount = Math.round(pricePerKg * multiplier);
 
             // 1. Generate PDF Bill
             const { jsPDF } = window.jspdf;
@@ -454,8 +413,15 @@
 
             // 2. Redirect to WhatsApp with order details
             const whatsappNumber = "919173565466";
-            const message = `નમસ્તે પટેલ સ્વીટ માર્ટ,\nમારે નીચે મુજબની મીઠાઈનો ઓર્ડર આપવો છે:\n\n*આઈટમ:* ${productName}\n*વજન:* ${qtyText}\n*કુલ રકમ:* ₹${totalAmount}\n\nકૃપા કરીને ઓર્ડર કન્ફર્મ કરો. (બિલ PDF ડાઉનલોડ થઈ ગયું છે)`;
+            const message = `નમસ્તે પટેલ સ્વીટ માર્ટ,\nમારે નીચે મુજબની મીઠાઈનો ઓર્ડર આપવો છે:\n\n*આઈટમ:* ${productName}\n*વજન:* ${qtyText}\n*અંદાજિત રકમ:* ₹${totalAmount}\n\nકૃપા કરીને ઓર્ડર કન્ફર્મ કરો. (બિલ PDF ડાઉનલોડ થઈ ગયું છે)`;
             
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
             
-      
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+            }, 1000);
+        }
+    </script>
+</body>
+    </html>
+    
