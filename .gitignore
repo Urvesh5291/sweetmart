@@ -1,0 +1,13 @@
+# Sensitive credentials (protected from public exposure)
+Github Token
+Github_Token
+*.token
+
+# Local scratch and test scripts
+verify*.cjs
+preview.cjs
+*.log
+
+# Temporary preview screenshots
+final-*.png
+responsive-*.png

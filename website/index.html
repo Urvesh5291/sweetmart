@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="gu-IN" data-lang="gu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>પટેલ સ્વીટ માર્ટ — શુદ્ધ સ્વાદ, પરંપરાની વિરાસત | Patel Sweet Mart</title>
+  <meta name="description" content="1995થી ખેરવા અને અમદાવાદમાં શ્રેષ્ઠ ગુજરાતી મીઠાઈ, નમકીન અને ભેટ. Authentic Gujarati sweets, namkeen and gifting since 1995." />
+  <meta property="og:title" content="પટેલ સ્વીટ માર્ટ — Patel Sweet Mart" />
+  <meta property="og:description" content="Authentic Gujarati sweets and namkeen since 1995. Kherwa and Ahmedabad." />
+  <meta property="og:image" content="https://sweetmart-dun.vercel.app/images/hero-desktop.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#173F8A" />
+  <link rel="canonical" href="https://sweetmart-dun.vercel.app/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="polish.css" />
+  <link rel="stylesheet" href="mobile.css" />
+</head>
+<body>
+<a class="skip-link" href="#main-content"><span class="gu-text">મુખ્ય સામગ્રી પર જાઓ</span><span class="en-text">Skip to content</span></a>
+
+<!-- OWNER COMMAND BAR (Visible when Owner is Logged In) -->
+<aside class="owner-top-bar" id="owner-top-bar" aria-label="Owner Command Center">
+  <div class="owner-badge-tag">
+    <span class="owner-status-dot"></span>
+    <span>👑 <span class="gu-text">ઓનર કમાન્ડ મોડ</span><span class="en-text" style="display:none">Owner Command Mode</span></span>
+  </div>
+  <div class="owner-quick-tools">
+    <button type="button" class="btn-owner-chip highlight" onclick="openSingleAdminHub('bulk')">
+      ⚡ <span class="gu-text">બલ્ક પ્રાઇસિંગ</span><span class="en-text" style="display:none">Bulk Price</span>
+    </button>
+    <button type="button" class="btn-owner-chip" onclick="openSingleAdminHub('add')">
+      &#10010; <span class="gu-text">નવું ઉત્પાદન</span><span class="en-text" style="display:none">Add Product</span>
+    </button>
+    <button type="button" class="btn-owner-chip" onclick="openSingleAdminHub('orders')">
+      📦 <span class="gu-text">ઓર્ડર્સ</span><span class="en-text" style="display:none">Orders</span> <strong id="owner-orders-counter-chip">(0)</strong>
+    </button>
+    <button type="button" class="btn-owner-chip" onclick="openSingleAdminHub('backup')">
+      🛡️ <span class="gu-text">બેકઅપ</span><span class="en-text" style="display:none">Backup</span>
+    </button>
+    <a href="admin.html" target="_blank" class="btn-owner-chip" title="સંપૂર્ણ એનાલિટિક્સ અને કિચન પ્લાનર ખોલો">
+      📊 <span class="gu-text">ફૂલ ડેશબોર્ડ &rarr;</span><span class="en-text" style="display:none">Full Suite &rarr;</span>
+    </a>
+    <button type="button" class="btn-owner-chip btn-owner-logout" onclick="ownerLogout()" title="ઓનર મોડ બંધ કરો">
+      🚪 <span class="gu-text">લોગઆઉટ</span><span class="en-text" style="display:none">Logout</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar" id="announce-bar">
+  <div class="announce-inner">
+    <span class="gu-text">&#127881; ખેરવા અને અમદાવાદ &#8212; WhatsApp પર ઓર્ડર: <a href="https://wa.me/919173565466" class="announce-link">+91 91735 65466</a></span>
+    <span class="en-text" style="display:none">&#127881; Kherwa &amp; Ahmedabad &#8212; WhatsApp Order: <a href="https://wa.me/919173565466" class="announce-link">+91 91735 65466</a></span>
+    <button class="announce-close" aria-label="Close" onclick="this.parentElement.parentElement.remove()">&#10005;</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header" role="banner">
+  <div class="header-inner">
+    <a href="#home" class="brand-logo" aria-label="Patel Sweet Mart Home">
+      <img src="images/brand-logo-full.png" alt="પટેલ સ્વીટ માર્ટ — Patel Sweet Mart" class="brand-logo-img" width="180" height="60" />
+    </a>
+
+    <nav class="main-nav" role="navigation" aria-label="Primary navigation">
+      <a href="#mithai" class="nav-link"><span class="gu-text">મીઠાઈ</span><span class="en-text" style="display:none">Mithai</span></a>
+      <a href="#namkeen" class="nav-link"><span class="gu-text">નમકીન</span><span class="en-text" style="display:none">Namkeen</span></a>
+      <a href="#gifting" class="nav-link"><span class="gu-text">ગિફ્ટિંગ</span><span class="en-text" style="display:none">Gifting</span></a>
+      <a href="#story" class="nav-link"><span class="gu-text">અમારી કહાની</span><span class="en-text" style="display:none">Our Story</span></a>
+      <a href="#contact" class="nav-link"><span class="gu-text">સંપર્ક</span><span class="en-text" style="display:none">Contact</span></a>
+    </nav>
+
+    <div class="header-actions">
+      <!-- Admin Login Button -->
+      <button class="btn-admin-login-nav" id="btn-admin-trigger" onclick="openAdminLoginModal()" aria-label="Admin Login" title="Owner Admin Login">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span class="admin-nav-text"><span class="gu-text">ઓનર લોગિન</span><span class="en-text" style="display:none">Admin</span></span>
+      </button>
+
+      <button class="cart-toggle-btn" id="cart-toggle-btn" aria-label="View Shopping Cart" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+      <button class="lang-toggle" id="lang-toggle" aria-label="Switch language" onclick="toggleLang()">
+        <span class="gu-text">EN</span><span class="en-text" style="display:none">GU</span>
+      </button>
+      <a href="https://wa.me/919173565466" class="btn-wa-header" aria-label="WhatsApp" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav class="mobile-nav">
+      <button class="mobile-cart-btn" onclick="closeMenu();openCart()">
+        <span class="mobile-cart-title">&#128722; <span class="gu-text">મારું કાર્ટ</span><span class="en-text" style="display:none">My Cart</span></span>
+        <span class="mobile-cart-badge" id="mobile-cart-badge">0 items</span>
+      </button>
+      <a href="#mithai" class="mobile-nav-link" onclick="closeMenu()"><span class="gu-text">&#127852; મીઠાઈ</span><span class="en-text" style="display:none">&#127852; Mithai</span></a>
+      <a href="#namkeen" class="mobile-nav-link" onclick="closeMenu()"><span class="gu-text">&#127841; નમકીન</span><span class="en-text" style="display:none">&#127841; Namkeen</span></a>
+      <a href="#gifting" class="mobile-nav-link" onclick="closeMenu()"><span class="gu-text">&#127873; ગિફ્ટિંગ</span><span class="en-text" style="display:none">&#127873; Gifting</span></a>
+      <a href="#story" class="mobile-nav-link" onclick="closeMenu()"><span class="gu-text">&#128218; અમારી કહાની</span><span class="en-text" style="display:none">&#128218; Our Story</span></a>
+      <a href="#contact" class="mobile-nav-link" onclick="closeMenu()"><span class="gu-text">&#128222; સંપર્ક</span><span class="en-text" style="display:none">&#128222; Contact</span></a>
+      <button type="button" class="mobile-nav-link" style="text-align:left;background:rgba(23,63,138,0.06);border:1px solid rgba(212,175,55,0.4);color:var(--cobalt);margin:8px 0;width:100%;cursor:pointer;display:flex;align-items:center;gap:8px;" onclick="closeMenu();openAdminLoginModal()">
+        &#128274; <strong><span class="gu-text">ઓનર / એડમિન પોર્ટલ</span><span class="en-text" style="display:none">Owner / Admin Portal</span></strong>
+      </button>
+      <div class="mobile-lang-row">
+        <button class="lang-toggle-mobile" onclick="toggleLang();closeMenu()">
+          <span class="gu-text">Switch to English</span>
+          <span class="en-text" style="display:none">ગુજરાતીમાં</span>
+        </button>
+      </div>
+      <a href="https://wa.me/919173565466" class="btn-wa-mobile" target="_blank" rel="noopener" onclick="closeMenu()">
+        &#128172; WhatsApp: +91 91735 65466
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" tabindex="-1">
+<!-- HERO -->
+<section id="home" class="hero" aria-label="Hero">
+  <div class="hero-bg">
+    <picture>
+      <source media="(max-width: 767px)" srcset="images/hero-mobile.webp" />
+      <img width="1376" height="768" src="images/hero-desktop.webp" alt="Patel Sweet Mart premium Gujarati mithai" class="hero-img" fetchpriority="high" />
+    </picture>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-badge"><span class="gu-text">ખેરવાથી, પ્રેમ સાથે · 1995થી</span><span class="en-text" style="display:none">From Kherwa, with love · Since 1995</span></p>
+    <h1 class="hero-title gu-text">પરંપરાનો સ્વાદ.<br/><em>નવી પેઢી માટે.</em></h1>
+    <h1 class="hero-title en-text" style="display:none">A little sweet.<br/>A lot of <em>tradition.</em></h1>
+    <p class="hero-sub"><span class="gu-text">ખેરવા &#183; અમદાવાદ &#8212; શ્રેષ્ઠ ગુજરાતી મીઠાઈ, નમકીન અને ભેટ.</span><span class="en-text" style="display:none">Kherwa &#183; Ahmedabad &#8212; Authentic Gujarati sweets, namkeen &amp; gifting.</span></p>
+    <div class="hero-ctas">
+      <a href="#mithai" class="btn-primary"><span class="gu-text">મીઠાઈ જુઓ</span><span class="en-text" style="display:none">Explore Mithai</span></a>
+      <a href="#story" class="btn-outline"><span class="gu-text">અમારી કહાની</span><span class="en-text" style="display:none">Our Story</span></a>
+    </div>
+    <div class="hero-footnote"><span aria-hidden="true"></span><span class="gu-text">ગુજરાતનો સ્વાદ. પેઢીઓનો પ્રેમ.</span><span class="en-text" style="display:none">The taste of Gujarat. The love of generations.</span></div>
+  </div>
+  <div class="hero-image-caption"><span>પટેલ સ્વીટ માર્ટ</span><span>EST. 1995 · GUJARAT</span></div>
+  <a class="hero-discover" href="#discover"><span class="gu-text">સ્વાદની સફર</span><span class="en-text" style="display:none">A taste of our world</span><span aria-hidden="true">↓</span></a>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar" role="complementary" aria-label="Brand promises">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+      <span><span class="gu-text">શુદ્ધ ઘી</span><span class="en-text" style="display:none">Pure Ghee</span></span>
+    </div>
+    <div class="trust-sep" aria-hidden="true">&#183;</div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span><span class="gu-text">રોજ તાજું</span><span class="en-text" style="display:none">Fresh Daily</span></span>
+    </div>
+    <div class="trust-sep" aria-hidden="true">&#183;</div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+      <span><span class="gu-text">30+ વર્ષ વિશ્વાસ</span><span class="en-text" style="display:none">30+ Years Trust</span></span>
+    </div>
+    <div class="trust-sep" aria-hidden="true">&#183;</div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"/></svg>
+      <span><span class="gu-text">100+ વ્યંજન</span><span class="en-text" style="display:none">100+ Varieties</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORY DISCOVERY -->
+<section class="categories-section" id="discover" aria-label="Collections">
+  <div class="section-container">
+    <div class="section-header centered">
+      <p class="section-eyebrow"><span class="gu-text">શોધો</span><span class="en-text" style="display:none">Discover</span></p>
+      <h2 class="section-title"><span class="gu-text">અમારી ખ્યાતિ</span><span class="en-text" style="display:none">Our Collections</span></h2>
+      <p class="collection-intro"><span class="gu-text">રોજની નાની ખુશીઓથી લઈને મોટા ઉત્સવો સુધી — દરેક પળ માટે કંઈક ખાસ.</span><span class="en-text" style="display:none">From everyday little joys to the biggest celebrations. Something special for every moment.</span></p>
+    </div>
+    <div class="cat-grid">
+      <a href="#mithai" class="cat-card" aria-label="Explore Mithai">
+        <div class="cat-img-wrap">
+          <img decoding="async" width="717" height="960" src="images/category-mithai.webp" alt="Gujarati Mithai collection" class="cat-img" loading="lazy" />
+          <div class="cat-overlay"></div>
+        </div>
+        <div class="cat-content">
+          <h3 class="cat-title"><span class="gu-text">મીઠાઈ</span><span class="en-text" style="display:none">Mithai</span></h3>
+          <p class="cat-sub"><span class="gu-text">મોહનથાળ &#183; ટોપરાપાક &#183; પેંડા &#183; લાડવા</span><span class="en-text" style="display:none">Mohanthal &#183; Toprapak &#183; Peda &#183; Ladva</span></p>
+          <span class="cat-cta"><span class="gu-text">જુઓ &#8594;</span><span class="en-text" style="display:none">Explore &#8594;</span></span>
+        </div>
+      </a>
+      <a href="#namkeen" class="cat-card" aria-label="Explore Namkeen">
+        <div class="cat-img-wrap">
+          <img decoding="async" width="717" height="960" src="images/category-namkeen.webp" alt="Gujarati Namkeen collection" class="cat-img" loading="lazy" />
+          <div class="cat-overlay"></div>
+        </div>
+        <div class="cat-content">
+          <h3 class="cat-title"><span class="gu-text">નમકીન</span><span class="en-text" style="display:none">Namkeen</span></h3>
+          <p class="cat-sub"><span class="gu-text">ગાંઠિયા &#183; ચોરાફળી &#183; ચવાણું &#183; ફેણી</span><span class="en-text" style="display:none">Ganthiya &#183; Chorafari &#183; Chavanu &#183; Feni</span></p>
+          <span class="cat-cta"><span class="gu-text">જુઓ &#8594;</span><span class="en-text" style="display:none">Explore &#8594;</span></span>
+        </div>
+      </a>
+      <a href="#gifting" class="cat-card" aria-label="Explore Gifting">
+        <div class="cat-img-wrap">
+          <img decoding="async" width="717" height="960" src="images/category-gifting.webp" alt="Premium Gift Hampers" class="cat-img" loading="lazy" />
+          <div class="cat-overlay"></div>
+        </div>
+        <div class="cat-content">
+          <h3 class="cat-title"><span class="gu-text">ગિફ્ટ હેમ્પર</span><span class="en-text" style="display:none">Gift Hampers</span></h3>
+          <p class="cat-sub"><span class="gu-text">તહેવાર &#183; લગ્ન &#183; કોર્પોરેટ</span><span class="en-text" style="display:none">Festival &#183; Wedding &#183; Corporate</span></p>
+          <span class="cat-cta"><span class="gu-text">જુઓ &#8594;</span><span class="en-text" style="display:none">Explore &#8594;</span></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MITHAI PRODUCTS -->
+<section id="mithai" class="products-section" aria-label="Mithai products">
+  <div class="section-container">
+    <div class="section-header">
+      <p class="section-eyebrow"><span class="gu-text">અમારી ખ્યાતિ</span><span class="en-text" style="display:none">Our Specialties</span></p>
+      <h2 class="section-title"><span class="gu-text">સ્પેશિયલ મીઠાઈ</span><span class="en-text" style="display:none">Signature Mithai</span></h2>
+      <p class="section-desc"><span class="gu-text">શ્રેષ્ઠ સામગ્રી, શુદ્ધ ઘી અને પ્રેમ સાથે બનાવેલ.</span><span class="en-text" style="display:none">Crafted with the finest ingredients, pure ghee &amp; love.</span></p>
+    </div>
+    <div class="products-grid">
+
+      <article class="product-card" id="card-toprapak">
+        <div class="product-img-wrap">
+          <span class="product-badge"><span class="gu-text">સ્પેશિયલ</span><span class="en-text" style="display:none">Special</span></span>
+          <img decoding="async" width="960" height="960" src="images/product-toprapak.webp" alt="ટોપરાપાક — Toprapak" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">ટોપરાપાક</span><span class="en-text" style="display:none">Toprapak</span></h3>
+          <p class="product-desc"><span class="gu-text">શુદ્ધ દેશી ઘીનો પ્રેમ ભર્યો નારિયેળ સ્વાદ</span><span class="en-text" style="display:none">Pure desi ghee coconut sweet, a beloved classic</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-toprapak">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('toprapak', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('toprapak', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('toprapak', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('toprapak', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('toprapak', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('toprapak')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-toprapak" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-toprapak">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('toprapak', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-toprapak" class="custom-weight-input" value="1.00" oninput="onCustomInput('toprapak')" onchange="onCustomInput('toprapak')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('toprapak', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-toprapak">&#8377;500</span>
+              <span class="product-unit" id="unit-toprapak">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-toprapak" onclick="addCurrentProductToCart('toprapak')" aria-label="Add Toprapak to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-mohanthal">
+        <div class="product-img-wrap">
+          <img decoding="async" width="960" height="960" src="images/product-mohanthal.webp" alt="મોહનથાળ — Mohanthal" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">મોહનથાળ</span><span class="en-text" style="display:none">Mohanthal</span></h3>
+          <p class="product-desc"><span class="gu-text">મોંમાં ઓગળી જાય, દાણાદાર શ્રેષ્ઠ ઘી</span><span class="en-text" style="display:none">Melt-in-your-mouth besan fudge with pure ghee</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-mohanthal">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('mohanthal', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('mohanthal', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('mohanthal', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('mohanthal', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('mohanthal', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('mohanthal')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-mohanthal" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-mohanthal">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('mohanthal', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-mohanthal" class="custom-weight-input" value="1.00" oninput="onCustomInput('mohanthal')" onchange="onCustomInput('mohanthal')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('mohanthal', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-mohanthal">&#8377;480</span>
+              <span class="product-unit" id="unit-mohanthal">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-mohanthal" onclick="addCurrentProductToCart('mohanthal')" aria-label="Add Mohanthal to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-penda">
+        <div class="product-img-wrap">
+          <img decoding="async" width="960" height="960" src="images/product-penda.webp" alt="માવા પેંડા — Mava Penda" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">માવા પેંડા</span><span class="en-text" style="display:none">Mava Penda</span></h3>
+          <p class="product-desc"><span class="gu-text">શ્રેષ્ઠ માવા-દૂધથી બનેલ તાજા સ્વાદિષ્ટ પેંડા</span><span class="en-text" style="display:none">Fresh peda crafted from pure mava and milk</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-penda">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('penda', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('penda', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('penda', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('penda', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('penda', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('penda')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-penda" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-penda">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('penda', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-penda" class="custom-weight-input" value="1.00" oninput="onCustomInput('penda')" onchange="onCustomInput('penda')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('penda', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-penda">&#8377;520</span>
+              <span class="product-unit" id="unit-penda">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-penda" onclick="addCurrentProductToCart('penda')" aria-label="Add Mava Penda to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-ladva">
+        <div class="product-img-wrap">
+          <span class="product-badge badge-orange"><span class="gu-text">લોકપ્રિય</span><span class="en-text" style="display:none">Popular</span></span>
+          <img decoding="async" width="960" height="960" src="images/product-ladva.webp" alt="સ્પેશિયલ લાડવા — Special Ladva" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">સ્પેશિયલ લાડવા</span><span class="en-text" style="display:none">Special Ladva</span></h3>
+          <p class="product-desc"><span class="gu-text">બૂંદી-મોતીચૂર &#8212; ઉત્સવ માટે ખાસ</span><span class="en-text" style="display:none">Bundi and motichoor for every celebration</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-ladva">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('ladva', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('ladva', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('ladva', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('ladva', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('ladva', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('ladva')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-ladva" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-ladva">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('ladva', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-ladva" class="custom-weight-input" value="1.00" oninput="onCustomInput('ladva')" onchange="onCustomInput('ladva')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('ladva', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-ladva">&#8377;400</span>
+              <span class="product-unit" id="unit-ladva">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-ladva" onclick="addCurrentProductToCart('ladva')" aria-label="Add Special Ladva to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-jalebi">
+        <div class="product-img-wrap">
+          <img decoding="async" width="960" height="960" src="images/product-jalebi.webp" alt="ગરમ જલેબી — Hot Jalebi" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">ગરમ જલેબી</span><span class="en-text" style="display:none">Hot Jalebi</span></h3>
+          <p class="product-desc"><span class="gu-text">ક્રિસ્પી, રસ ભરેલ, દેશી ઘીની તાજી</span><span class="en-text" style="display:none">Crispy, syrup-drenched desi ghee jalebi</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-jalebi">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('jalebi', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('jalebi', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('jalebi', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('jalebi', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('jalebi', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('jalebi')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-jalebi" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-jalebi">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('jalebi', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-jalebi" class="custom-weight-input" value="1.00" oninput="onCustomInput('jalebi')" onchange="onCustomInput('jalebi')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('jalebi', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-jalebi">&#8377;380</span>
+              <span class="product-unit" id="unit-jalebi">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-jalebi" onclick="addCurrentProductToCart('jalebi')" aria-label="Add Hot Jalebi to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-feni">
+        <div class="product-img-wrap">
+          <img decoding="async" width="960" height="960" src="images/product-feni.webp" alt="સ્વાદિષ્ટ ફેણી — Feni" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">સ્વાદિષ્ટ ફેણી</span><span class="en-text" style="display:none">Feni</span></h3>
+          <p class="product-desc"><span class="gu-text">ક્રિસ્પી, ભીંજાઈ જાય, પ્રિય ઘઉં ફેણી</span><span class="en-text" style="display:none">Crispy traditional feni, a classic Gujarati treat</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-feni">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('feni', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('feni', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('feni', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('feni', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('feni', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('feni')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-feni" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-feni">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('feni', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-feni" class="custom-weight-input" value="1.00" oninput="onCustomInput('feni')" onchange="onCustomInput('feni')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('feni', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-feni">&#8377;450</span>
+              <span class="product-unit" id="unit-feni">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-feni" onclick="addCurrentProductToCart('feni')" aria-label="Add Feni to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- NAMKEEN PRODUCTS -->
+<section id="namkeen" class="products-section namkeen-section" aria-label="Namkeen products">
+  <div class="section-container">
+    <div class="section-header">
+      <p class="section-eyebrow"><span class="gu-text">ચટાકેદાર</span><span class="en-text" style="display:none">Savoury Delights</span></p>
+      <h2 class="section-title"><span class="gu-text">ગુજરાતી નમકીન</span><span class="en-text" style="display:none">Gujarati Namkeen</span></h2>
+      <p class="section-desc"><span class="gu-text">ચા સાથે, ઘર સાથે &#8212; અમારો ચટાકો.</span><span class="en-text" style="display:none">The perfect companion for chai &#8212; our savoury staples.</span></p>
+    </div>
+    <div class="products-grid">
+
+      <article class="product-card" id="card-ganthiya">
+        <div class="product-img-wrap">
+          <span class="product-badge badge-blue"><span class="gu-text">બેસ્ટ સેલર</span><span class="en-text" style="display:none">Best Seller</span></span>
+          <img decoding="async" width="960" height="960" src="images/product-ganthiya.webp" alt="ચટાકેદાર ગાંઠિયા — Ganthiya" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">ચટાકેદાર ગાંઠિયા</span><span class="en-text" style="display:none">Ganthiya</span></h3>
+          <p class="product-desc"><span class="gu-text">નરમ, સ્વાદિષ્ટ, ચા સાથે ખાસ</span><span class="en-text" style="display:none">Soft, delicious — perfect with chai</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-ganthiya">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('ganthiya', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('ganthiya', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('ganthiya', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('ganthiya', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('ganthiya', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('ganthiya')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-ganthiya" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-ganthiya">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('ganthiya', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-ganthiya" class="custom-weight-input" value="1.00" oninput="onCustomInput('ganthiya')" onchange="onCustomInput('ganthiya')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('ganthiya', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-ganthiya">&#8377;340</span>
+              <span class="product-unit" id="unit-ganthiya">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-ganthiya" onclick="addCurrentProductToCart('ganthiya')" aria-label="Add Ganthiya to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-chorafari">
+        <div class="product-img-wrap">
+          <img decoding="async" width="600" height="600" src="images/product-chorafari.webp" alt="ચોરાફળી — Chorafari" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">ચોરાફળી</span><span class="en-text" style="display:none">Chorafari</span></h3>
+          <p class="product-desc"><span class="gu-text">સ્પેશિયલ મસાલા, ચટાકો અને ક્રંચ</span><span class="en-text" style="display:none">Special spiced, crunchy snack</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-chorafari">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('chorafari', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('chorafari', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('chorafari', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('chorafari', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('chorafari', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('chorafari')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-chorafari" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-chorafari">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('chorafari', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-chorafari" class="custom-weight-input" value="1.00" oninput="onCustomInput('chorafari')" onchange="onCustomInput('chorafari')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('chorafari', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-chorafari">&#8377;360</span>
+              <span class="product-unit" id="unit-chorafari">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-chorafari" onclick="addCurrentProductToCart('chorafari')" aria-label="Add Chorafari to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-chavanu">
+        <div class="product-img-wrap">
+          <img decoding="async" width="600" height="600" src="images/product-chavanu.webp" alt="મિક્સ ચવાણું — Mix Chavanu" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">મિક્સ ચવાણું</span><span class="en-text" style="display:none">Mix Chavanu</span></h3>
+          <p class="product-desc"><span class="gu-text">સેવ, ગાંઠિયા, મસાલો &#8212; ક્લાસિક</span><span class="en-text" style="display:none">Sev, ganthiya, spices — our classic mix</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-chavanu">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('chavanu', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('chavanu', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('chavanu', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('chavanu', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('chavanu', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('chavanu')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-chavanu" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-chavanu">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('chavanu', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-chavanu" class="custom-weight-input" value="1.00" oninput="onCustomInput('chavanu')" onchange="onCustomInput('chavanu')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('chavanu', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-chavanu">&#8377;350</span>
+              <span class="product-unit" id="unit-chavanu">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-chavanu" onclick="addCurrentProductToCart('chavanu')" aria-label="Add Mix Chavanu to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card" id="card-farali">
+        <div class="product-img-wrap">
+          <img decoding="async" width="600" height="600" src="images/product-farali.webp" alt="ફરાળી નાસ્તો — Farali Snacks" class="product-img" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <h3 class="product-name"><span class="gu-text">ફરાળી નાસ્તો</span><span class="en-text" style="display:none">Farali Snacks</span></h3>
+          <p class="product-desc"><span class="gu-text">ઉપવાસ-વ્રત માટે ખાસ &#8212; શ્રેષ્ઠ</span><span class="en-text" style="display:none">Pure and special for fasting occasions</span></p>
+          <div class="product-weight-selector" id="weight-ctrl-farali">
+            <span class="weight-label"><span class="gu-text">વજન પસંદ કરો:</span><span class="en-text" style="display:none">Select Weight:</span></span>
+            <div class="weight-pills">
+              <button type="button" class="weight-pill" data-weight="250g" onclick="selectProductWeight('farali', '250g', 0.25, '250g (પા કિલો)')">250g</button>
+              <button type="button" class="weight-pill" data-weight="500g" onclick="selectProductWeight('farali', '500g', 0.5, '500g (અડધો કિલો)')">500g</button>
+              <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectProductWeight('farali', '1kg', 1, '1kg')">1kg</button>
+              <button type="button" class="weight-pill" data-weight="2kg" onclick="selectProductWeight('farali', '2kg', 2, '2kg')">2kg</button>
+              <button type="button" class="weight-pill" data-weight="5kg" onclick="selectProductWeight('farali', '5kg', 5, '5kg')">5kg</button>
+              <button type="button" class="weight-pill weight-pill-custom" data-weight="custom" onclick="toggleCustomWeight('farali')">
+                <span class="gu-text">+ કસ્ટમ</span><span class="en-text" style="display:none">+ Custom</span>
+              </button>
+            </div>
+            <div class="custom-weight-row" id="custom-row-farali" style="display: none;">
+              <div class="custom-stepper-header">
+                <span class="custom-stepper-prompt"><span class="gu-text">કસ્ટમ વજન (±250g):</span><span class="en-text" style="display:none">Custom Weight (±250g):</span></span>
+                <span class="custom-badge" id="custom-badge-farali">1 kg</span>
+              </div>
+              <div class="custom-stepper-box">
+                <button type="button" class="btn-step-weight btn-step-minus" onclick="stepCustomWeight('farali', -0.25)" aria-label="Decrease 250g" title="ઓછું કરો (-250g)">&#8722; 250g</button>
+                <div class="custom-input-wrap">
+                  <input type="text" inputmode="decimal" id="custom-val-farali" class="custom-weight-input" value="1.00" oninput="onCustomInput('farali')" onchange="onCustomInput('farali')" aria-label="Custom weight in kilograms" />
+                  <span class="custom-weight-unit">kg</span>
+                </div>
+                <button type="button" class="btn-step-weight btn-step-plus" onclick="stepCustomWeight('farali', 0.25)" aria-label="Increase 250g" title="વધારો (+250g)">&#43; 250g</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-footer">
+            <div class="product-price-box">
+              <span class="product-price" id="price-farali">&#8377;400</span>
+              <span class="product-unit" id="unit-farali">/ 1kg</span>
+            </div>
+            <button class="btn-add-cart" id="btn-add-farali" onclick="addCurrentProductToCart('farali')" aria-label="Add Farali Snacks to cart">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span class="btn-cart-text"><span class="gu-text">+ કાર્ટ</span><span class="en-text" style="display:none">+ Cart</span></span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- HERITAGE STORY -->
+<section id="story" class="heritage-section" aria-label="Our heritage">
+  <div class="section-container">
+    <div class="heritage-inner">
+      <div class="heritage-img-col">
+        <div class="heritage-img-wrap">
+          <img decoding="async" width="1100" height="738" src="images/heritage-craft.webp" alt="Traditional Gujarati sweet making craft since 1995" class="heritage-img" loading="lazy" />
+        </div>
+        <div class="heritage-year-badge">
+          <span class="hb-label">ESTD.</span>
+          <strong class="hb-year">1995</strong>
+        </div>
+      </div>
+      <div class="heritage-text-col">
+        <p class="section-eyebrow"><span class="gu-text">અમારી કહાની</span><span class="en-text" style="display:none">Our Story</span></p>
+        <h2 class="heritage-title"><span class="gu-text">1995થી &#8212; ખેરવાની <em>ઐતિહ્ય</em></span><span class="en-text" style="display:none">Since 1995 &#8212; A Heritage from <em>Kherwa</em></span></h2>
+        <p class="heritage-desc"><span class="gu-text">ખેરવાના મુખ્ય બજારમાં, 1995માં, એક ઐતિહ્ય શરૂ થઈ. શ્રેષ્ઠ ઘી, ગુણવત્તાયુક્ત સામગ્રી અને પ્રામાણિક હૃદયથી બનાવેલ દરેક મીઠાઈ &#8212; ગ્રાહકોના ઘર સુધી.</span><span class="en-text" style="display:none">In Kherwa's main market, in 1995, a tradition began. Every sweet crafted with the finest ghee, quality ingredients and an honest heart &#8212; delivered to families across Kherwa and Ahmedabad.</span></p>
+        <div class="heritage-milestones">
+          <div class="milestone">
+            <span class="milestone-year">1995</span>
+            <p><span class="gu-text">ખેરવા ખાતે સ્થાપના</span><span class="en-text" style="display:none">Founded in Kherwa</span></p>
+          </div>
+          <div class="milestone">
+            <span class="milestone-year">2010</span>
+            <p><span class="gu-text">અમદાવાદ ઉપલબ્ધ</span><span class="en-text" style="display:none">Serving Ahmedabad</span></p>
+          </div>
+          <div class="milestone">
+            <span class="milestone-year">2024</span>
+            <p><span class="gu-text">WhatsApp ઓર્ડર</span><span class="en-text" style="display:none">Digital Ordering</span></p>
+          </div>
+          <div class="milestone">
+            <span class="milestone-year"><span class="gu-text">આજ</span><span class="en-text" style="display:none">Today</span></span>
+            <p><span class="gu-text">હજારો ખુશ ગ્રાહક</span><span class="en-text" style="display:none">Thousands of happy families</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GIFTING -->
+<section id="gifting" class="gifting-section" aria-label="Premium gifting">
+  <div class="section-container">
+    <div class="gifting-grid">
+      <div class="gifting-text">
+        <p class="section-eyebrow light"><span class="gu-text">ભેટ</span><span class="en-text" style="display:none">Gifting</span></p>
+        <h2 class="gifting-title"><span class="gu-text">ઉત્સવ, પ્રેમ<br/>અને ભેટ</span><span class="en-text" style="display:none">Celebrations,<br/>Love &amp; Gifting</span></h2>
+        <p class="gifting-desc"><span class="gu-text">દિવાળી, રક્ષાબંધન, ઉત્તરાયણ, લગ્ન, કોર્પોરેટ &#8212; દરેક ઉત્સવ માટે ખાસ ભેટ હેમ્પર. WhatsApp પર ઓર્ડર આપો.</span><span class="en-text" style="display:none">Diwali, Rakshabandhan, Uttarayan, Weddings, Corporate &#8212; premium gift hampers for every occasion. Order via WhatsApp.</span></p>
+        <div class="gifting-occasions">
+          <span class="occasion-tag">&#129742; Diwali</span>
+          <span class="occasion-tag">&#127882; Wedding</span>
+          <span class="occasion-tag">&#127970; Corporate</span>
+          <span class="occasion-tag">&#127872; Festivals</span>
+        </div>
+        <div class="gifting-box-selector">
+          <span class="weight-label light"><span class="gu-text">બોક્સ પસંદગી:</span><span class="en-text" style="display:none">Select Size:</span></span>
+          <div class="weight-pills">
+            <button type="button" class="weight-pill" data-weight="500g" onclick="selectHamperBox('500g', 450, '500g Classic Box')">500g (&#8377;450)</button>
+            <button type="button" class="weight-pill active" data-weight="1kg" onclick="selectHamperBox('1kg', 850, '1kg Royal Box')">1kg (&#8377;850)</button>
+            <button type="button" class="weight-pill" data-weight="2kg" onclick="selectHamperBox('2kg', 1600, '2kg Grand Hamper')">2kg (&#8377;1,600)</button>
+          </div>
+        </div>
+        <div class="gifting-actions-row">
+          <button class="btn-gold btn-add-cart-gold" id="btn-add-hamper" onclick="addCurrentProductToCart('hamper')" aria-label="Add Royal Gift Box to cart">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            <span class="btn-cart-text"><span class="gu-text" id="btn-text-hamper">+ ગિફ્ટ બોક્સ કાર્ટ (&#8377;850)</span><span class="en-text" style="display:none" id="btn-text-hamper-en">+ Add Gift Box (&#8377;850)</span></span>
+          </button>
+          <a href="https://wa.me/919173565466?text=Gift%20hamper%20custom%20order%20please" class="btn-outline-gold" target="_blank" rel="noopener">
+            <span class="gu-text">કસ્ટમ હેમ્પર ઓર્ડર</span>
+            <span class="en-text" style="display:none">Custom Enquiries</span>
+          </a>
+        </div>
+      </div>
+      <div class="gifting-img-col">
+        <img decoding="async" width="717" height="960" src="images/category-gifting.webp" alt="Premium Indian sweet gift hamper" class="gifting-img" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section" aria-label="Contact">
+  <div class="section-container">
+    <div class="section-header centered">
+      <p class="section-eyebrow"><span class="gu-text">સંપર્ક</span><span class="en-text" style="display:none">Get In Touch</span></p>
+      <h2 class="section-title"><span class="gu-text">અમારી સાથે વાત કરો</span><span class="en-text" style="display:none">Connect With Us</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="store-card">
+        <div class="store-icon">&#128205;</div>
+        <h3><span class="gu-text">ખેરવા &#8212; મુખ્ય સ્ટોર</span><span class="en-text" style="display:none">Kherwa &#8212; Main Store</span></h3>
+        <p><span class="gu-text">મુખ્ય બજાર, ખેરવા, ગુજરાત</span><span class="en-text" style="display:none">Main Bazar, Kherwa, Gujarat</span></p>
+        <a href="https://maps.google.com/?q=Kherwa+Gujarat" class="store-link" target="_blank" rel="noopener"><span class="gu-text">દિશા મળો &#8594;</span><span class="en-text" style="display:none">Get Directions &#8594;</span></a>
+      </div>
+      <div class="store-card">
+        <div class="store-icon">&#127961;&#65039;</div>
+        <h3><span class="gu-text">અમદાવાદ</span><span class="en-text" style="display:none">Ahmedabad</span></h3>
+        <p><span class="gu-text">WhatsApp ઓર્ડર ઉપલબ્ધ</span><span class="en-text" style="display:none">WhatsApp orders available</span></p>
+        <a href="https://wa.me/919173565466" class="store-link" target="_blank" rel="noopener"><span class="gu-text">ઓર્ડર આપો &#8594;</span><span class="en-text" style="display:none">Place Order &#8594;</span></a>
+      </div>
+      <div class="store-card store-cta-card">
+        <div class="store-icon">&#128172;</div>
+        <h3><span class="gu-text">WhatsApp ઓર્ડર</span><span class="en-text" style="display:none">WhatsApp Order</span></h3>
+        <p><span class="gu-text">તમારી પ્રિય મીઠાઈ, ઘર સુધી</span><span class="en-text" style="display:none">Your favourite sweets delivered</span></p>
+        <a href="https://wa.me/919173565466" class="btn-whatsapp" target="_blank" rel="noopener" id="whatsapp-main-cta">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          +91 91735 65466
+        </a>
+        <a href="tel:+919173565466" class="btn-call" id="phone-main-cta">
+          &#128222; <span class="gu-text">ફોન કરો</span><span class="en-text" style="display:none">Call Us</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENQUIRY FORM -->
+<section class="enquiry-section" aria-label="Enquiry form">
+  <div class="section-container">
+    <div class="enquiry-grid">
+      <div class="enquiry-intro">
+        <p class="section-eyebrow light"><span class="gu-text">પ્રશ્ન</span><span class="en-text" style="display:none">Enquiry</span></p>
+        <h2 class="enquiry-title"><span class="gu-text">ઓર્ડર કે ભેટ<br/>માટે પૂછો</span><span class="en-text" style="display:none">Enquire for<br/>Orders &amp; Gifts</span></h2>
+        <p class="enquiry-sub"><span class="gu-text">ફોર્મ ભરો &#8212; WhatsApp પર સંદેશ તપાસીને મોકલો.</span><span class="en-text" style="display:none">Fill the form &#8212; review your message in WhatsApp, then tap Send.</span></p>
+      </div>
+      <form class="enquiry-form" id="enquiry-form" onsubmit="submitEnquiry(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-name"><span class="gu-text">નામ *</span><span class="en-text" style="display:none">Name *</span></label>
+            <input type="text" id="f-name" name="name" required autocomplete="name" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="f-phone"><span class="gu-text">ફોન *</span><span class="en-text" style="display:none">Phone *</span></label>
+            <input type="tel" id="f-phone" name="phone" required autocomplete="tel" class="form-input" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="f-occasion"><span class="gu-text">પ્રસંગ</span><span class="en-text" style="display:none">Occasion</span></label>
+          <select id="f-occasion" name="occasion" class="form-input">
+            <option value="">-- Select --</option>
+            <option value="Diwali">Diwali</option>
+            <option value="Wedding"><span class="gu-text">લગ્ન</span> / Wedding</option>
+            <option value="Corporate"><span class="gu-text">કોર્પોરેટ</span> / Corporate</option>
+            <option value="General Order"><span class="gu-text">સામાન્ય ઓર્ડર</span> / General Order</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-message"><span class="gu-text">સંદેશ</span><span class="en-text" style="display:none">Message</span></label>
+          <textarea id="f-message" name="message" rows="4" class="form-input" placeholder="Your order or question..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span class="gu-text">&#128172; WhatsApp પર મોકલો</span>
+          <span class="en-text" style="display:none">&#128172; Send via WhatsApp</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+<!-- FOOTER -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-signoff"><span class="gu-text">ખુશીઓમાં મીઠાશ.</span><span class="en-text" style="display:none">Life is sweeter together.</span><a href="#home" aria-label="Back to top">↑</a></div>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <a href="#home" class="footer-brand-lockup" aria-label="Patel Sweet Mart Home">
+        <img src="images/brand-logo-full.png" alt="પટેલ સ્વીટ માર્ટ — Patel Sweet Mart" class="footer-logo-img" loading="lazy" width="220" height="73" />
+      </a>
+      <p class="footer-tagline"><span class="gu-text">પરંપરાનો સ્વાદ. નવી પેઢી માટે.</span><span class="en-text" style="display:none">Tradition, made for a new generation.</span></p>
+    </div>
+    <div class="footer-col">
+      <h4><span class="gu-text">ઝડપી લિંક</span><span class="en-text" style="display:none">Quick Links</span></h4>
+      <a href="#mithai" class="footer-link"><span class="gu-text">મીઠાઈ</span><span class="en-text" style="display:none">Mithai</span></a>
+      <a href="#namkeen" class="footer-link"><span class="gu-text">નમકીન</span><span class="en-text" style="display:none">Namkeen</span></a>
+      <a href="#gifting" class="footer-link"><span class="gu-text">ગિફ્ટ હેમ્પર</span><span class="en-text" style="display:none">Gift Hampers</span></a>
+      <a href="#story" class="footer-link"><span class="gu-text">અમારી કહાની</span><span class="en-text" style="display:none">Our Story</span></a>
+    </div>
+    <div class="footer-col">
+      <h4><span class="gu-text">સ્ટોર</span><span class="en-text" style="display:none">Stores</span></h4>
+      <p class="footer-store"><span class="gu-text">&#128205; મુખ્ય બજાર, ખેરવા</span><span class="en-text" style="display:none">&#128205; Main Bazar, Kherwa</span></p>
+      <p class="footer-store"><span class="gu-text">&#127961;&#65039; અમદાવાદ (WhatsApp)</span><span class="en-text" style="display:none">&#127961;&#65039; Ahmedabad (WhatsApp)</span></p>
+      <a href="tel:+919173565466" class="footer-link">&#128222; 91735 65466</a>
+      <a href="https://wa.me/919173565466" class="footer-link" target="_blank" rel="noopener">&#128172; WhatsApp</a>
+      <a href="admin.html" class="footer-link" target="_blank" title="Owner Command Center">&#128274; એડમિન પોર્ટલ (Admin)</a>
+    </div>
+    <div class="footer-col">
+      <h4><span class="gu-text">ભાષા</span><span class="en-text" style="display:none">Language</span></h4>
+      <button class="footer-lang-btn active-lang" id="btn-gu" onclick="setLang('gu')">ગુજરાતી</button>
+      <button class="footer-lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p><span class="gu-text">&#169; 2026 પટેલ સ્વીટ માર્ટ. સર્વ અધિકાર સુરક્ષિત.</span><span class="en-text" style="display:none">&#169; 2026 Patel Sweet Mart. All rights reserved.</span></p>
+    <p class="footer-bottom-sub"><span class="gu-text">શુદ્ધતા અને પરંપરાનો ભરોસો &#8212; 1995થી</span><span class="en-text" style="display:none">Trust, purity &amp; tradition since 1995</span></p>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp FAB -->
+<a href="https://wa.me/919173565466" class="fab-whatsapp" aria-label="Chat on WhatsApp" target="_blank" rel="noopener" id="fab-wa">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- Floating Cart Bar (Appears when cart has items) -->
+<aside class="cart-floating-bar" id="cart-floating-bar" onclick="openCart()" aria-label="Open Cart Drawer">
+  <div class="cart-floating-inner">
+    <div class="cart-floating-icon-wrap">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <span class="cart-floating-count" id="cart-floating-count">0</span>
+    </div>
+    <div class="cart-floating-text">
+      <span class="cart-floating-label"><span class="gu-text">કાર્ટ કન્ફર્મ કરો</span><span class="en-text" style="display:none">View Cart</span></span>
+      <strong class="cart-floating-total" id="cart-floating-total">&#8377;0</strong>
+    </div>
+    <span class="cart-floating-arrow">&#8594;</span>
+  </div>
+</aside>
+
+<!-- CART DRAWER & BACKDROP -->
+<div class="cart-backdrop" id="cart-backdrop" onclick="closeCart()" aria-hidden="true"></div>
+<aside class="cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+  <div class="cart-header">
+    <div class="cart-header-title">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <div>
+        <h3 id="cart-title">
+          <span class="gu-text">તમારું કાર્ટ</span>
+          <span class="en-text" style="display:none">Your Shopping Cart</span>
+        </h3>
+        <span class="cart-items-counter" id="cart-items-counter">0 વસ્તુઓ (Items)</span>
+      </div>
+    </div>
+    <button class="cart-close-btn" onclick="closeCart()" aria-label="Close cart drawer">&#10005;</button>
+  </div>
+
+  <!-- Cart Body (Items list or empty state) -->
+  <div class="cart-body" id="cart-body">
+    <!-- Populated by JavaScript -->
+  </div>
+
+  <!-- Cart Footer with Delivery Form & WhatsApp Checkout -->
+  <div class="cart-footer" id="cart-footer">
+    <div class="cart-total-box">
+      <div class="cart-total-row">
+        <span><span class="gu-text">કુલ રકમ (Subtotal):</span><span class="en-text" style="display:none">Subtotal:</span></span>
+        <strong class="cart-subtotal-val" id="cart-subtotal-val">&#8377;0</strong>
+      </div>
+      <div class="cart-delivery-badge">
+        <span>&#128666; <span class="gu-text">ખેરવા &amp; અમદાવાદમાં ઝડપી ડિલિવરી</span><span class="en-text" style="display:none">Fast Delivery in Kherwa &amp; Ahmedabad</span></span>
+      </div>
+    </div>
+
+    <!-- Delivery Details Form -->
+    <div class="cart-delivery-panel">
+      <h4 class="delivery-panel-title">
+        <span class="gu-text">&#128205; ડિલિવરી વિગતો (Delivery Details)</span>
+        <span class="en-text" style="display:none">&#128205; Delivery Information</span>
+      </h4>
+      <div class="cart-field-row">
+        <input type="text" id="cart-cust-name" class="cart-field" placeholder="તમારું પૂરું નામ (Full Name) *" required autocomplete="name" />
+      </div>
+      <div class="cart-field-row">
+        <input type="tel" id="cart-cust-phone" class="cart-field" placeholder="મોબાઇલ / WhatsApp નંબર *" required autocomplete="tel" />
+      </div>
+      <div class="cart-field-row">
+        <select id="cart-cust-city" class="cart-field">
+          <option value="ખેરવા (Kherwa)">ખેરવા (Kherwa)</option>
+          <option value="અમદાવાદ (Ahmedabad)">અમદાવાદ (Ahmedabad)</option>
+          <option value="અન્ય (Other Gujarat)">અન્ય સ્થળ (Other Location)</option>
+        </select>
+      </div>
+      <div class="cart-field-row">
+        <textarea id="cart-cust-address" class="cart-field cart-field-address" rows="2" placeholder="પૂરું સરનામું: સોસાયટી / ઘર નંબર, વિસ્તાર (Delivery Address) *" required></textarea>
+      </div>
+      <div class="cart-field-row">
+        <input type="text" id="cart-cust-notes" class="cart-field" placeholder="ઓર્ડર નોંધ: તહેવાર, સમય (Order Note e.g. Diwali)" />
+      </div>
+    </div>
+
+    <!-- Confirm and Order on WhatsApp Button -->
+    <button class="btn-cart-checkout" id="btn-cart-checkout" onclick="confirmAndSendWhatsAppOrder()">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span class="btn-checkout-label">
+        <span class="gu-text">ઓર્ડર કન્ફર્મ કરો અને WhatsApp પર મોકલો</span>
+        <span class="en-text" style="display:none">Confirm Order &amp; Send to WhatsApp</span>
+      </span>
+    </button>
+  </div>
+</aside>
+
+<!-- PROPER OWNER & ADMIN LOGIN MODAL -->
+<div class="single-login-modal-overlay" id="admin-login-modal" role="dialog" aria-modal="true" aria-labelledby="single-login-heading" aria-hidden="true">
+  <div class="single-login-card">
+    <div class="single-login-top-banner">
+      <button type="button" class="single-login-close-btn" onclick="closeAdminLoginModal()" aria-label="Close modal">&times;</button>
+      <img src="images/brand-logo-full.png" alt="Patel Sweet Mart Emblem" class="single-login-logo" />
+      <h3 class="single-login-title" id="single-login-heading">
+        <span class="gu-text">ઓનર અને એડમિન પોર્ટલ</span>
+        <span class="en-text" style="display:none">Owner &amp; Admin Portal</span>
+      </h3>
+      <p class="single-login-sub">
+        <span class="gu-text">સિંગલ પ્લેસ બિઝનેસ કમાન્ડ અને લાઈવ મેનેજમેન્ટ</span>
+        <span class="en-text" style="display:none">Single-Place Live Store Management</span>
+      </p>
+    </div>
+
+    <div class="single-login-body">
+      <form id="single-admin-login-form" onsubmit="handleSingleAdminLogin(event)">
+        <div class="single-input-wrap">
+          <label class="single-input-label" for="admin-email-field">
+            <span class="gu-text">ઇમેઇલ અથવા યુઝરનેમ</span>
+            <span class="en-text" style="display:none">Email or Username</span>
+          </label>
+          <div class="single-input-field-box">
+            <span class="single-input-icon">&#9993;</span>
+            <input type="text" id="admin-email-field" class="single-input-text" value="admin@patelsweetmart.com" required autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="single-input-wrap">
+          <label class="single-input-label" for="admin-pass-field">
+            <span class="gu-text">પાસવર્ડ (Password)</span>
+            <span class="en-text" style="display:none">Password</span>
+          </label>
+          <div class="single-input-field-box">
+            <span class="single-input-icon">&#128274;</span>
+            <input type="password" id="admin-pass-field" class="single-input-text" placeholder="••••••••" required autocomplete="current-password" />
+            <button type="button" class="single-eye-toggle" onclick="togglePasswordVisibility('admin-pass-field', this)" aria-label="Toggle password visibility" title="પાસવર્ડ જુઓ">&#128065;</button>
+          </div>
+        </div>
+
+        <div class="single-remember-row">
+          <label class="single-remember-label">
+            <input type="checkbox" id="admin-remember-me" checked />
+            <span class="gu-text">મને યાદ રાખો (Remember Me)</span>
+            <span class="en-text" style="display:none">Remember Me</span>
+          </label>
+          <small style="color:var(--text-muted);font-size:0.75rem;">ડિફોલ્ટ પાસવર્ડ: <strong>patel1995</strong></small>
+        </div>
+
+        <button type="submit" class="btn-single-submit" id="btn-single-login-submit">
+          &#128275; <span class="gu-text">સુરક્ષિત લોગિન કરો (Secure Login)</span>
+          <span class="en-text" style="display:none">Secure Login &rarr;</span>
+        </button>
+      </form>
+
+      <div class="single-divider">
+        <span>અથવા (OR)</span>
+      </div>
+
+      <button type="button" class="btn-single-demo" onclick="bypassSingleOwnerLogin()">
+        ⚡ <span class="gu-text">૧-ક્લિક ઓનર ડેમો એક્સેસ (Instant Owner Access)</span>
+        <span class="en-text" style="display:none">1-Click Instant Owner Access</span>
+      </button>
+
+      <div class="single-security-badge">
+        <span>🔒 256-bit Encrypted Private Owner Session</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SINGLE-PAGE ADMIN COMMAND HUB MODAL -->
+<div class="single-hub-modal-overlay" id="single-admin-hub-modal" role="dialog" aria-modal="true" aria-labelledby="single-hub-heading" aria-hidden="true">
+  <div class="single-hub-card">
+    <div class="single-hub-header">
+      <div class="single-hub-title" id="single-hub-heading">
+        <span>👑</span>
+        <span><span class="gu-text">ઓનર કમાન્ડ હબ (Single-Place Store Manager)</span><span class="en-text" style="display:none">Owner Command Hub</span></span>
+      </div>
+      <button type="button" class="single-login-close-btn" onclick="closeSingleAdminHub()" aria-label="Close">&times;</button>
+    </div>
+
+    <!-- Navigation Tabs inside the Single Place -->
+    <div class="single-hub-nav-tabs">
+      <button type="button" class="single-hub-tab-btn active" data-tab="bulk" onclick="switchSingleHubTab('bulk')">
+        ⚡ <span class="gu-text">બલ્ક પ્રાઇસિંગ</span><span class="en-text" style="display:none">Bulk Price</span>
+      </button>
+      <button type="button" class="single-hub-tab-btn" data-tab="add" onclick="switchSingleHubTab('add')">
+        &#10010; <span class="gu-text">નવું ઉત્પાદન ઉમેરો</span><span class="en-text" style="display:none">Add Product</span>
+      </button>
+      <button type="button" class="single-hub-tab-btn" data-tab="orders" onclick="switchSingleHubTab('orders')">
+        📦 <span class="gu-text">લાઈવ ઓર્ડર્સ</span><span class="en-text" style="display:none">Live Orders</span>
+      </button>
+      <button type="button" class="single-hub-tab-btn" data-tab="backup" onclick="switchSingleHubTab('backup')">
+        🛡️ <span class="gu-text">ડેટા સલામતી &amp; વૉલ્ટ</span><span class="en-text" style="display:none">Data Vault</span>
+      </button>
+      <a href="admin.html" target="_blank" class="single-hub-tab-btn" style="color:var(--cobalt);background:rgba(212,175,55,0.2);margin-left:auto;">
+        📊 <span class="gu-text">સંપૂર્ણ પોર્ટલ ખોલો &rarr;</span><span class="en-text" style="display:none">Full Suite &rarr;</span>
+      </a>
+    </div>
+
+    <div class="single-hub-body">
+      <!-- TAB 1: BULK PRICING -->
+      <div class="single-hub-tab-pane active" id="single-pane-bulk">
+        <div class="bulk-pricing-panel" style="margin-bottom:0;">
+          <div class="bulk-header-row">
+            <div class="bulk-title-wrap">
+              <span style="font-size:1.3rem;">⚡</span>
+              <div>
+                <div class="bulk-title"><span class="gu-text">૧-ક્લિક બલ્ક પ્રાઇસિંગ અપડેટ</span><span class="en-text" style="display:none">1-Click Bulk Price Adjuster</span></div>
+                <div class="bulk-sub"><span class="gu-text">તહેવાર કે બજાર પ્રમાણે એક ક્લિકમાં આખી સાઈટના ભાવ બદલો</span><span class="en-text" style="display:none">Adjust all prices across the site in 1 click</span></div>
+              </div>
+            </div>
+            <div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);" id="single-bulk-target-summary">તમામ ઉત્પાદનો સક્રિય</div>
+          </div>
+
+          <div class="bulk-tool-row">
+            <label style="font-size:0.8rem;font-weight:700;color:var(--charcoal);">કેટેગરી:</label>
+            <select id="single-bulk-category" class="bulk-target-select" onchange="updateSingleBulkSummary()">
+              <option value="all">બધા ઉત્પાદનો (All Products)</option>
+              <option value="mithai">ફક્ત મીઠાઈ (Mithai Only)</option>
+              <option value="namkeen">ફક્ત નમકીન (Namkeen Only)</option>
+            </select>
+
+            <button type="button" class="btn-bulk-chip" onclick="applySingleQuickBulk(10, 'flat')">+ ₹10 વધારો</button>
+            <button type="button" class="btn-bulk-chip" onclick="applySingleQuickBulk(20, 'flat')">+ ₹20 વધારો</button>
+            <button type="button" class="btn-bulk-chip" onclick="applySingleQuickBulk(50, 'flat')">+ ₹50 વધારો</button>
+            <button type="button" class="btn-bulk-chip chip-discount" onclick="applySingleQuickBulk(-10, 'flat')">- ₹10 ઘટાડો</button>
+            <button type="button" class="btn-bulk-chip chip-discount" onclick="applySingleQuickBulk(-20, 'flat')">- ₹20 ઘટાડો</button>
+            <button type="button" class="btn-bulk-chip" onclick="applySingleQuickBulk(5, 'pct')">+ 5%</button>
+            <button type="button" class="btn-bulk-chip chip-discount" onclick="applySingleQuickBulk(-5, 'pct')">- 5% તહેવાર ઓફર</button>
+
+            <div class="bulk-custom-box">
+              <select id="single-bulk-custom-dir" class="bulk-type-select">
+                <option value="add">+</option>
+                <option value="sub">-</option>
+              </select>
+              <input type="number" id="single-bulk-custom-amount" class="bulk-custom-input" placeholder="0" min="1" step="1" />
+              <select id="single-bulk-custom-unit" class="bulk-type-select">
+                <option value="flat">₹</option>
+                <option value="pct">%</option>
+              </select>
+              <button type="button" class="btn-bulk-apply" onclick="applySingleCustomBulk()">લાગુ કરો</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: ADD PRODUCT -->
+      <div class="single-hub-tab-pane" id="single-pane-add">
+        <form id="single-add-product-form" onsubmit="handleSingleAddProduct(event)">
+          <div class="single-form-pair" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div class="admin-input-group">
+              <label class="admin-label" for="s-prod-name-gu">ગુજરાતી નામ (દા.ત. કાજુ કતરી) *</label>
+              <input type="text" id="s-prod-name-gu" class="admin-input" required oninput="updateSingleNewProdPreview()" />
+            </div>
+            <div class="admin-input-group">
+              <label class="admin-label" for="s-prod-name-en">English Name (e.g. Kaju Katli) *</label>
+              <input type="text" id="s-prod-name-en" class="admin-input" required oninput="updateSingleNewProdPreview()" />
+            </div>
+          </div>
+
+          <div class="single-form-pair" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div class="admin-input-group">
+              <label class="admin-label" for="s-prod-category">કેટેગરી (Category) *</label>
+              <select id="s-prod-category" class="admin-input" required onchange="updateSingleNewProdPreview()">
+                <option value="mithai">મીઠાઈ (Mithai - Sweets)</option>
+                <option value="namkeen">નમકીન (Namkeen - Snacks)</option>
+              </select>
+            </div>
+            <div class="admin-input-group">
+              <label class="admin-label" for="s-prod-price">1kg નો બેઝ ભાવ (Base Price ₹) *</label>
+              <input type="number" id="s-prod-price" class="admin-input" placeholder="500" min="50" step="10" required oninput="updateSingleNewProdPreview()" />
+            </div>
+          </div>
+
+          <div class="admin-input-group" style="margin-bottom:12px;">
+            <label class="admin-label" for="s-prod-preset-img">ફોટો પ્રીસેટ (Image Preset)</label>
+            <select id="s-prod-preset-img" class="admin-input" onchange="onSingleNewProdPresetChange()">
+              <option value="images/product-toprapak.webp">ટોપરાપાક / બરફી (Toprapak / Barfi)</option>
+              <option value="images/product-mohanthal.webp">મોહનથાળ / બેસન (Mohanthal)</option>
+              <option value="images/product-penda.webp">માવા પેંડા (Mava Penda)</option>
+              <option value="images/product-ladva.webp">ચુરમા લાડવા (Ladva)</option>
+              <option value="images/product-jalebi.webp">કેસર જલેબી (Hot Jalebi)</option>
+              <option value="images/product-feni.webp">સુતરફેણી (Feni)</option>
+              <option value="images/product-ganthiya.webp">ગાંઠિયા (Ganthiya)</option>
+              <option value="images/product-chorafari.webp">ચોરાફળી (Chorafari)</option>
+              <option value="images/product-chavanu.webp">મિક્સ ચવાણું (Chavanu)</option>
+              <option value="images/product-farali.webp">ફરાળી ચેવડો (Farali)</option>
+              <option value="images/category-gifting.webp">ગિફ્ટ બોક્સ (Gift Box)</option>
+              <option value="custom">-- કસ્ટમ ઇમેજ URL --</option>
+            </select>
+          </div>
+
+          <div class="admin-input-group" id="s-prod-custom-group" style="display:none;margin-bottom:12px;">
+            <label class="admin-label" for="s-prod-custom-img">કસ્ટમ ઇમેજ લિંક (Custom Image URL)</label>
+            <input type="text" id="s-prod-custom-img" class="admin-input" placeholder="images/your-sweet.jpg" oninput="updateSingleNewProdPreview()" />
+          </div>
+
+          <div style="background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:8px;padding:12px;display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+            <img width="960" height="960" id="s-prod-preview-img" src="images/product-toprapak.webp" alt="Preview" style="width:54px;height:54px;object-fit:cover;border-radius:6px;" />
+            <div>
+              <strong id="s-prod-preview-title" style="font-size:0.95rem;">નવું ઉત્પાદન</strong>
+              <div id="s-prod-preview-en" style="font-size:0.8rem;color:#64748B;">New Product</div>
+              <div style="font-size:0.85rem;font-weight:800;color:var(--cobalt);margin-top:2px;">
+                <span id="s-prod-preview-price">₹500</span> / 1kg
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-single-submit" style="background:#10B981;">
+            &#10003; સાઈટ પર લાઈવ ઉમેરો (+ Add to Store)
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB 3: LIVE ORDERS -->
+      <div class="single-hub-tab-pane" id="single-pane-orders">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h4 style="margin:0;font-size:0.95rem;color:var(--cobalt);">તાજા ગ્રાહક ઓર્ડર્સ (Recent Customer Orders)</h4>
+          <button type="button" class="btn-owner-chip" onclick="refreshSingleHubOrders()">&#8635; રિફ્રેશ</button>
+        </div>
+        <div id="single-hub-orders-container" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Dynamically loaded -->
+        </div>
+      </div>
+
+      <!-- TAB 4: DATA SAFETY & VAULT -->
+      <div class="single-hub-tab-pane" id="single-pane-backup">
+        <div class="backup-safety-strip" style="margin-top:0;">
+          <div class="safety-info">
+            <div class="safety-icon">🛡️</div>
+            <div class="safety-text">
+              <h4>સંપૂર્ણ ડેટા સલામતી વૉલ્ટ (Data Safety &amp; Vault)</h4>
+              <p>તમામ ઓર્ડર, કસ્ટમ ઉત્પાદનો અને ભાવનું ૧-ક્લિક સુરક્ષિત JSON બેકઅપ</p>
+            </div>
+          </div>
+          <div class="safety-actions">
+            <button type="button" class="btn-safety-export" onclick="exportFullBackup()">
+              &#128229; સુરક્ષિત બેકઅપ ડાઉનલોડ
+            </button>
+            <button type="button" class="btn-safety-restore" onclick="triggerRestoreBackup()">
+              &#128228; રિસ્ટોર કરો
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Print Slip Area for Single Page -->
+<div id="single-print-slip-area" style="display:none;"></div>
+
+<!-- Toast Notification -->
+<div class="cart-toast" id="cart-toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
+<script src="polish.js"></script>
+</body>
+</html>
