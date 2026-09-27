@@ -1590,6 +1590,13 @@ function printSingleOrderSlip(orderId) {
       <div style="display:flex;justify-content:space-between;font-size:1.1rem;font-weight:bold;border-top:2px solid #000;padding-top:8px;">
         <span>કુલ રકમ:</span>
         <span>₹${o.totalAmount}</span>
+        // Customer jab order submit kare tyare aa function call karvu
+function submitCustomerOrder(customerDetails) {
+    let existingOrders = JSON.parse(localStorage.getItem("customerOrders")) || [];
+    existingOrders.push(customerDetails);
+    localStorage.setItem("customerOrders", JSON.stringify(existingOrders));
+}
+
       </div>
     </div>
   `;
