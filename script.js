@@ -1,820 +1,587 @@
-/* ================================================================
-   CONFIRM + SAVE ORDER + WHATSAPP CHECKOUT
-   IMPORTANT:
-   1. Order is saved to localStorage FIRST
-   2. Then Supabase sync is attempted
-   3. Then WhatsApp opens
-   4. Admin panel can immediately read psm_orders
-   ================================================================ */
+// ============================================================
+// ADD TO CART - FIXED VERSION
+// ============================================================
 
-function confirmAndSendWhatsAppOrder() {
-  if (cart.length === 0) {
-    showToast(currentLang === 'gu'
-      ? 'કાર્ટ ખાલી છે!'
-      : 'Your cart is empty!');
-    return;
-  }
-
-  const nameInput = document.getElementById('cart-cust-name');
-  const phoneInput = document.getElementById('cart-cust-phone');
-  const citySelect = document.getElementById('cart-cust-city');
-  const addressInput = document.getElementById('cart-cust-address');
-  const notesInput = document.getElementById('cart-cust-notes');
-
-  const name = nameInput ? nameInput.value.trim() : '';
-  const phone = phoneInput ? phoneInput.value.trim() : '';
-  const city = citySelect ? citySelect.value : 'Kherwa';
-  const address = addressInput ? addressInput.value.trim() : '';
-  const notes = notesInput ? notesInput.value.trim() : '';
-
-  /* ---------------- VALIDATION ---------------- */
-
-  [nameInput, phoneInput, addressInput].forEach(function (inp) {
-    if (inp) inp.classList.remove('error');
-  });
-
-  if (!name) {
-    if (nameInput) {
-      nameInput.classList.add('error');
-      nameInput.focus();
-    }
-
-    showToast(currentLang === 'gu'
-      ? 'કૃપા કરીને તમારું નામ લખો'
-      : 'Please enter your name');
-
-    return;
-  }
-
-  const cleanPhone = phone.replace(/\D/g, '');
-
-  if (!cleanPhone || cleanPhone.length < 8) {
-    if (phoneInput) {
-      phoneInput.classList.add('error');
-      phoneInput.focus();
-    }
-
-    showToast(currentLang === 'gu'
-      ? 'કૃપા કરીને સાચો WhatsApp નંબર લખો'
-      : 'Please enter a valid phone number');
-
-    return;
-  }
-
-  if (!address) {
-    if (addressInput) {
-      addressInput.classList.add('error');
-      addressInput.focus();
-    }
-
-    showToast(currentLang === 'gu'
-      ? 'કૃપા કરીને ડિલિવરી સરનામું લખો'
-      : 'Please enter delivery address');
-
-    return;
-  }
-
-  /* ---------------- SAVE CUSTOMER INFO ---------------- */
-
-  try {
-    localStorage.setItem(
-      'psm-cust',
-      JSON.stringify({
-        name: name,
-        phone: phone,
-        city: city,
-        address: address
-      })
-    );
-  } catch (e) {
-    console.warn('Customer info save failed:', e);
-  }
-
-  /* ---------------- UNIQUE ORDER ID ---------------- */
-
-  const orderId =
-    'PSM-' +
-    Date.now().toString().slice(-8) +
-    '-' +
-    Math.floor(100 + Math.random() * 900);
-
-  const now = new Date();
-
-  const dateStr = now.toLocaleString('gu-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-
-  /* ---------------- CALCULATE TOTAL ---------------- */
-
-  const totalAmount = cart.reduce(function (sum, item) {
-    return sum + (item.qty * item.price);
-  }, 0);
-
-  const totalUnits = cart.reduce(function (sum, item) {
-    return sum + item.qty;
-  }, 0);
-
-  /* ---------------- CREATE ORDER OBJECT ---------------- */
-
-  const completedOrder = {
-    id: orderId,
-
-    date: now.toISOString(),
-
-    customerName: name,
-    phone: phone,
-    city: city,
-    address: address,
-    notes: notes,
-
-    status: 'new',
-
-    totalAmount: totalAmount,
-
-    totalItems: totalUnits,
-
-    totalKg: cart.reduce(function (sum, item) {
-      return sum + ((item.multiplier || 1) * item.qty);
-    }, 0),
-
-    items: cart.map(function (item) {
-      return {
-        productId: item.productId,
-
-        nameGu: item.nameGu,
-        nameEn: item.nameEn,
-
-        weightLabel:
-          item.weightLabelGu ||
-          item.weightLabel ||
-          '1kg',
-
-        weightKg:
-          item.multiplier ||
-          1,
-
-        unitPrice:
-          Number(item.price) || 0,
-
-        qty:
-          Number(item.qty) || 1,
-
-        subtotal:
-          (Number(item.price) || 0) *
-          (Number(item.qty) || 1)
-      };
-    }),
-
-    source: 'website',
-    whatsappSent: false,
-    supabaseSynced: false
-  };
-
-  /* ================================================================
-     IMPORTANT:
-     SAVE ORDER TO LOCALSTORAGE BEFORE OPENING WHATSAPP
-     ================================================================ */
-
-  let savedSuccessfully = false;
-
-  try {
-    let existingOrders = [];
-
-    const storedOrders =
-      localStorage.getItem('psm_orders');
-
-    if (storedOrders) {
-      try {
-        const parsedOrders = JSON.parse(storedOrders);
-
-        if (Array.isArray(parsedOrders)) {
-          existingOrders = parsedOrders;
-        }
-      } catch (parseError) {
-        console.warn(
-          'Old psm_orders data was invalid. Starting fresh.',
-          parseError
-        );
-      }
-    }
-
-    /* Prevent accidental duplicate order IDs */
-
-    existingOrders =
-      existingOrders.filter(function (order) {
-        return order && order.id !== orderId;
-      });
-
-    existingOrders.unshift(completedOrder);
-
-    localStorage.setItem(
-      'psm_orders',
-      JSON.stringify(existingOrders)
-    );
-
-    /* Verify that browser actually saved it */
-
-    const verifyOrders =
-      JSON.parse(
-        localStorage.getItem('psm_orders') || '[]'
-      );
-
-    const verifyOrder =
-      verifyOrders.find(function (order) {
-        return order.id === orderId;
-      });
-
-    if (verifyOrder) {
-      savedSuccessfully = true;
-    }
-
-  } catch (error) {
-
-    console.error(
-      'ORDER LOCAL STORAGE SAVE ERROR:',
-      error
-    );
-
-    showToast(
-      currentLang === 'gu'
-        ? '❌ ઓર્ડર સેવ કરવામાં સમસ્યા આવી.'
-        : '❌ Failed to save order.'
-    );
-
-    return;
-  }
-
-  /* ---------------- UPDATE ADMIN COUNTER ---------------- */
-
-  if (savedSuccessfully) {
+function addToCart(productId, weightKg = 1, qty = 1) {
 
     try {
 
-      const allOrders =
-        JSON.parse(
-          localStorage.getItem('psm_orders') || '[]'
-        );
-
-      const counterChip =
-        document.getElementById(
-          'owner-orders-counter-chip'
-        );
-
-      if (counterChip) {
-        counterChip.textContent =
-          '(' + allOrders.length + ')';
-      }
-
-      /* If admin orders panel is currently open,
-         refresh it immediately */
-
-      if (
-        typeof refreshSingleHubOrders === 'function'
-      ) {
-        refreshSingleHubOrders();
-      }
-
-    } catch (e) {
-      console.warn(
-        'Admin order counter update failed:',
-        e
-      );
-    }
-  }
-
-  /* ================================================================
-     CREATE WHATSAPP MESSAGE
-     ================================================================ */
-
-  const lines = [];
-
-  lines.push(
-    '*🛍️ પટેલ સ્વીટ માર્ટ — નવો ઓર્ડર / NEW ORDER*'
-  );
-
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
-
-  lines.push(
-    '*ઓર્ડર ક્રમાંક (Order ID):* #' +
-    orderId
-  );
-
-  lines.push(
-    '*તારીખ (Date):* ' +
-    dateStr
-  );
-
-  lines.push('');
-
-  lines.push(
-    '*👤 ગ્રાહકની વિગત / Customer Details:*'
-  );
-
-  lines.push(
-    '• *નામ:* ' + name
-  );
-
-  lines.push(
-    '• *ફોન:* ' + phone
-  );
-
-  lines.push(
-    '• *શહેર:* ' + city
-  );
-
-  lines.push(
-    '• *સરનામું:* ' + address
-  );
-
-  if (notes) {
-    lines.push(
-      '• *ઓર્ડર નોંધ:* ' + notes
-    );
-  }
-
-  lines.push('');
-
-  lines.push(
-    '*📦 ઓર્ડર કરેલી વસ્તુઓ:*'
-  );
-
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
-
-  completedOrder.items.forEach(
-    function (item, index) {
-
-      lines.push(
-        (index + 1) +
-        '. *' +
-        item.nameGu +
-        ' (' +
-        item.nameEn +
-        ')*'
-      );
-
-      lines.push(
-        '   ▸ વજન: *' +
-        item.weightLabel +
-        '* | જથ્થો: *' +
-        item.qty +
-        ' પેક* (₹' +
-        item.unitPrice.toLocaleString('en-IN') +
-        '/પેક) = *₹' +
-        item.subtotal.toLocaleString('en-IN') +
-        '*'
-      );
-    }
-  );
-
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
-
-  lines.push(
-    '*કુલ પેક (Total Packs):* ' +
-    totalUnits
-  );
-
-  lines.push(
-    '*કુલ રકમ (Grand Total):* *₹' +
-    totalAmount.toLocaleString('en-IN') +
-    '*'
-  );
-
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
-
-  lines.push(
-    '📍 *ડિલિવરી:* ખેરવા / અમદાવાદ'
-  );
-
-  lines.push('');
-
-  lines.push(
-    'કૃપા કરીને આ ઓર્ડર કન્ફર્મ કરો અને ડિલિવરી સમય જણાવો. આભાર!'
-  );
-
-  lines.push(
-    '_Please confirm this customized order and advise delivery time. Thank you!_'
-  );
-
-  const waUrl =
-    'https://wa.me/919173565466?text=' +
-    encodeURIComponent(
-      lines.join('\n')
-    );
-
-  /* ---------------- BUTTON STATE ---------------- */
-
-  const btn =
-    document.getElementById(
-      'btn-cart-checkout'
-    );
-
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML =
-      '&#9203; Sending to WhatsApp...';
-  }
-
-  /* ================================================================
-     SUPABASE SAVE
-     ================================================================ */
-
-  saveOrderToSupabase(completedOrder)
-    .then(function (success) {
-
-      if (success) {
+        // Cart load કરો
+        let cart = [];
 
         try {
+            const savedCart = localStorage.getItem("psm_cart");
 
-          const orders =
-            JSON.parse(
-              localStorage.getItem(
-                'psm_orders'
-              ) || '[]'
-            );
+            if (savedCart) {
+                const parsedCart = JSON.parse(savedCart);
 
-          const index =
-            orders.findIndex(
-              function (order) {
-                return order.id === orderId;
-              }
-            );
-
-          if (index !== -1) {
-            orders[index].supabaseSynced = true;
-
-            localStorage.setItem(
-              'psm_orders',
-              JSON.stringify(orders)
-            );
-          }
-
-        } catch (e) {
-          console.warn(
-            'Supabase sync flag update failed:',
-            e
-          );
+                if (Array.isArray(parsedCart)) {
+                    cart = parsedCart;
+                }
+            }
+        } catch (error) {
+            console.warn("Cart load error:", error);
+            cart = [];
         }
 
-      }
 
-    })
-    .catch(function (error) {
+        // Product શોધો
+        let product = null;
 
-      console.warn(
-        'Supabase sync failed, but local order is safe:',
-        error
-      );
-
-    })
-    .finally(function () {
-
-      /* ============================================================
-         OPEN WHATSAPP ONLY AFTER LOCAL ORDER IS ALREADY SAVED
-         ============================================================ */
-
-      try {
-
-        window.open(
-          waUrl,
-          '_blank',
-          'noopener,noreferrer'
-        );
-
-      } catch (error) {
-
-        console.warn(
-          'WhatsApp open failed:',
-          error
-        );
-
-      }
-
-      /* ---------------- SUCCESS SCREEN ---------------- */
-
-      const body =
-        document.getElementById(
-          'cart-body'
-        );
-
-      if (body) {
-
-        body.innerHTML = `
-          <div class="cart-empty" style="padding:30px 10px;">
-
-            <div
-              class="cart-empty-icon"
-              style="
-                background:rgba(37,211,102,0.1);
-                color:#25D366;
-              "
-            >
-              &#10003;
-            </div>
-
-            <h4 class="cart-empty-title">
-
-              <span class="gu-text">
-                ઓર્ડર સફળતાપૂર્વક સેવ થયો!
-              </span>
-
-              <span
-                class="en-text"
-                style="display:none"
-              >
-                Order Saved Successfully!
-              </span>
-
-            </h4>
-
-            <p class="cart-empty-desc">
-
-              <span class="gu-text">
-                ઓર્ડર ક્રમાંક #${orderId}
-                website માં સેવ થઈ ગયો છે
-                અને WhatsApp ખોલવામાં આવ્યું છે.
-              </span>
-
-              <span
-                class="en-text"
-                style="display:none"
-              >
-                Order #${orderId} has been saved
-                to the website and WhatsApp has
-                been opened.
-              </span>
-
-            </p>
-
-            <button
-              class="btn-browse-sweets"
-              onclick="closeCart()"
-            >
-              <span class="gu-text">
-                પૂર્ણ / Done
-              </span>
-
-              <span
-                class="en-text"
-                style="display:none"
-              >
-                Done
-              </span>
-            </button>
-
-          </div>
-        `;
-
-        applyLang(currentLang);
-      }
-
-      /* ---------------- CLEAR CART ---------------- */
-
-      cart = [];
-
-      saveCart();
-
-      /* ---------------- RESET BUTTON ---------------- */
-
-      if (btn) {
-
-        btn.disabled = false;
-
-        btn.innerHTML =
-          currentLang === 'gu'
-            ? '&#128172; WhatsApp પર મોકલો'
-            : '&#128172; Send via WhatsApp';
-
-      }
-
-      /* ---------------- FINAL ADMIN REFRESH ---------------- */
-
-      if (
-        typeof refreshSingleHubOrders === 'function'
-      ) {
-        refreshSingleHubOrders();
-      }
-
-    });
-}
-
-
-/* ================================================================
-   SUPABASE ORDER SAVE
-   ================================================================ */
-
-async function saveOrderToSupabase(orderData) {
-
-  const url =
-    localStorage.getItem(
-      'psm_supabase_url'
-    );
-
-  const key =
-    localStorage.getItem(
-      'psm_supabase_key'
-    );
-
-  /* Supabase is optional.
-     LocalStorage remains the main website order storage. */
-
-  if (!url || !key) {
-    console.log(
-      'Supabase not configured. Order saved locally.'
-    );
-
-    return false;
-  }
-
-  try {
-
-    /* ---------------- CREATE MAIN ORDER ---------------- */
-
-    const orderResponse =
-      await fetch(
-        `${url}/rest/v1/orders`,
-        {
-          method: 'POST',
-
-          headers: {
-            'apikey': key,
-            'Authorization': `Bearer ${key}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
-          },
-
-          body: JSON.stringify({
-            order_number: orderData.id,
-
-            customer_name:
-              orderData.customerName,
-
-            customer_phone:
-              orderData.phone,
-
-            delivery_city:
-              orderData.city,
-
-            delivery_address:
-              orderData.address,
-
-            order_notes:
-              orderData.notes || '',
-
-            total_amount:
-              Number(orderData.totalAmount) || 0,
-
-            total_items:
-              Number(orderData.totalItems) ||
-              orderData.items.reduce(
-                (sum, item) =>
-                  sum + Number(item.qty || 0),
-                0
-              ),
-
-            status: 'new'
-          })
+        // allProducts array હોય તો
+        if (typeof allProducts !== "undefined" && Array.isArray(allProducts)) {
+            product = allProducts.find(function (p) {
+                return String(p.id) === String(productId);
+            });
         }
-      );
 
-    if (!orderResponse.ok) {
+        // products array હોય તો
+        if (!product && typeof products !== "undefined" && Array.isArray(products)) {
+            product = products.find(function (p) {
+                return String(p.id) === String(productId);
+            });
+        }
 
-      const errorText =
-        await orderResponse.text();
+        // DEFAULT_PRODUCTS object હોય તો
+        if (
+            !product &&
+            typeof DEFAULT_PRODUCTS !== "undefined" &&
+            DEFAULT_PRODUCTS
+        ) {
+            product = DEFAULT_PRODUCTS[productId];
 
-      console.error(
-        'Supabase orders INSERT failed:',
-        orderResponse.status,
-        errorText
-      );
+            if (!product) {
+                product = Object.values(DEFAULT_PRODUCTS).find(function (p) {
+                    return String(p.id) === String(productId);
+                });
+            }
+        }
 
-      return false;
-    }
 
-    const orderResult =
-      await orderResponse.json();
+        // Product ન મળે તો
+        if (!product) {
+            console.error("Product not found:", productId);
 
-    if (
-      !Array.isArray(orderResult) ||
-      !orderResult[0] ||
-      !orderResult[0].id
-    ) {
+            alert("Product મળી શક્યું નથી. Page refresh કરો અને ફરી પ્રયાસ કરો.");
 
-      console.warn(
-        'Supabase returned no order ID.'
-      );
+            return false;
+        }
 
-      return false;
-    }
 
-    const orderDbId =
-      orderResult[0].id;
+        // Weight validate
+        weightKg = Number(weightKg);
 
-    /* ---------------- CREATE ORDER ITEMS ---------------- */
+        if (!weightKg || weightKg <= 0) {
+            weightKg = 1;
+        }
 
-    const itemsPayload =
-      orderData.items.map(
-        function (item) {
 
-          return {
+        // Quantity validate
+        qty = Number(qty);
 
-            order_id:
-              orderDbId,
+        if (!qty || qty <= 0) {
+            qty = 1;
+        }
 
-            product_id:
-              item.productId,
 
-            product_name_gu:
-              item.nameGu,
+        // Product price શોધો
+        let basePrice = Number(
+            product.price ??
+            product.basePrice ??
+            product.base_price ??
+            product.pricePerKg ??
+            product.price_per_kg ??
+            0
+        );
 
-            product_name_en:
-              item.nameEn,
+        if (!basePrice || basePrice < 0) {
+            basePrice = 0;
+        }
 
-            weight_label:
-              item.weightLabel,
 
-            weight_kg:
-              Number(item.weightKg) || 1,
+        // Weight પ્રમાણે price
+        let unitPrice = Math.round(basePrice * weightKg);
 
-            unit_price:
-              Number(item.unitPrice) || 0,
 
-            quantity:
-              Number(item.qty) || 1,
+        // Product name
+        const nameGu =
+            product.nameGu ??
+            product.name_gu ??
+            product.name ??
+            product.title ??
+            "ઉત્પાદન";
 
-            subtotal:
-              Number(item.subtotal) || 0
 
-          };
+        const nameEn =
+            product.nameEn ??
+            product.name_en ??
+            product.name ??
+            product.title ??
+            "Product";
+
+
+        // Existing cart item શોધો
+        const existingIndex = cart.findIndex(function (item) {
+
+            return (
+                String(item.productId) === String(productId) &&
+                Number(item.weightKg) === Number(weightKg)
+            );
+
+        });
+
+
+        // Existing item હોય તો quantity વધારો
+        if (existingIndex !== -1) {
+
+            cart[existingIndex].qty =
+                Number(cart[existingIndex].qty || 0) + qty;
+
+            cart[existingIndex].quantity =
+                cart[existingIndex].qty;
+
+            cart[existingIndex].subtotal =
+                Number(cart[existingIndex].unitPrice || unitPrice) *
+                cart[existingIndex].qty;
 
         }
-      );
 
-    if (itemsPayload.length > 0) {
+        // New item
+        else {
 
-      const itemsResponse =
-        await fetch(
-          `${url}/rest/v1/order_items`,
-          {
-            method: 'POST',
+            cart.push({
 
-            headers: {
-              'apikey': key,
-              'Authorization': `Bearer ${key}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=minimal'
-            },
+                id:
+                    String(productId) +
+                    "_" +
+                    String(weightKg),
 
-            body:
-              JSON.stringify(itemsPayload)
-          }
+                productId: String(productId),
+
+                product_id: String(productId),
+
+                nameGu: nameGu,
+
+                name_gu: nameGu,
+
+                nameEn: nameEn,
+
+                name_en: nameEn,
+
+                weightKg: weightKg,
+
+                weight_kg: weightKg,
+
+                weightLabel:
+                    getCartWeightLabel(weightKg),
+
+                weight_label:
+                    getCartWeightLabel(weightKg),
+
+                qty: qty,
+
+                quantity: qty,
+
+                unitPrice: unitPrice,
+
+                unit_price: unitPrice,
+
+                subtotal: unitPrice * qty
+
+            });
+
+        }
+
+
+        // LocalStorageમાં save
+        localStorage.setItem(
+            "psm_cart",
+            JSON.stringify(cart)
         );
 
-      if (!itemsResponse.ok) {
 
-        const itemsError =
-          await itemsResponse.text();
+        // Global cart variable હોય તો update
+        if (typeof window.cart !== "undefined") {
+            window.cart = cart;
+        }
+
+
+        // Cart render
+        updateCartUI();
+
+
+        // Cart count
+        updateCartCount();
+
+
+        // Cart drawer open કરો જો function હોય
+        if (typeof openCart === "function") {
+            openCart();
+        }
+
+        else if (typeof toggleCart === "function") {
+            toggleCart(true);
+        }
+
+
+        console.log("Cart updated:", cart);
+
+        return true;
+
+    } catch (error) {
 
         console.error(
-          'Supabase order_items INSERT failed:',
-          itemsResponse.status,
-          itemsError
+            "ADD TO CART ERROR:",
+            error
         );
 
-        /*
-         * Main order was already created.
-         * Do not mark complete sync.
-         */
+        alert(
+            "Cartમાં product add કરવામાં error આવ્યો. Browser console check કરો."
+        );
 
         return false;
-      }
+    }
+}
+
+
+// ============================================================
+// WEIGHT LABEL
+// ============================================================
+
+function getCartWeightLabel(weightKg) {
+
+    weightKg = Number(weightKg);
+
+    if (weightKg === 0.25) {
+        return "250 ગ્રામ";
     }
 
-    console.log(
-      'Order successfully saved to Supabase:',
-      orderData.id
-    );
+    if (weightKg === 0.5) {
+        return "500 ગ્રામ";
+    }
 
-    return true;
+    if (weightKg === 0.75) {
+        return "750 ગ્રામ";
+    }
 
-  } catch (error) {
+    if (weightKg === 1) {
+        return "1 કિલો";
+    }
 
-    console.error(
-      'Supabase connection error:',
-      error
-    );
+    if (weightKg === 1.25) {
+        return "1.25 કિલો";
+    }
 
-    return false;
-  }
+    if (weightKg === 1.5) {
+        return "1.5 કિલો";
+    }
+
+    if (weightKg === 2) {
+        return "2 કિલો";
+    }
+
+    return weightKg + " કિલો";
 }
+
+
+// ============================================================
+// CART COUNT
+// ============================================================
+
+function updateCartCount() {
+
+    let cart = [];
+
+    try {
+
+        const saved = localStorage.getItem("psm_cart");
+
+        if (saved) {
+            cart = JSON.parse(saved);
+        }
+
+    } catch (error) {
+        cart = [];
+    }
+
+
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+
+
+    const count = cart.reduce(function (total, item) {
+
+        return total + Number(
+            item.qty ??
+            item.quantity ??
+            0
+        );
+
+    }, 0);
+
+
+    // બધા common cart count IDs
+    const selectors = [
+        "#cart-count",
+        "#cart-badge",
+        "#cart-item-count",
+        ".cart-count",
+        ".cart-badge"
+    ];
+
+
+    selectors.forEach(function (selector) {
+
+        document
+            .querySelectorAll(selector)
+            .forEach(function (element) {
+
+                element.textContent = count;
+
+                element.style.display =
+                    count > 0 ? "" : "none";
+
+            });
+
+    });
+
+
+    return count;
+}
+
+
+// ============================================================
+// CART UI UPDATE
+// ============================================================
+
+function updateCartUI() {
+
+    // Existing project function હોય તો તેનો ઉપયોગ કરો
+    if (typeof renderCart === "function") {
+
+        try {
+            renderCart();
+        } catch (error) {
+            console.warn(
+                "renderCart error:",
+                error
+            );
+        }
+
+    }
+
+
+    if (typeof updateCart === "function") {
+
+        try {
+            updateCart();
+        } catch (error) {
+            console.warn(
+                "updateCart error:",
+                error
+            );
+        }
+
+    }
+
+
+    updateCartCount();
+
+    // Custom cart renderer
+    const cartContainer =
+        document.querySelector("#cart-items");
+
+    if (!cartContainer) {
+        return;
+    }
+
+
+    let cart = [];
+
+    try {
+
+        const saved =
+            localStorage.getItem("psm_cart");
+
+        if (saved) {
+            cart = JSON.parse(saved);
+        }
+
+    } catch (error) {
+        cart = [];
+    }
+
+
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+
+
+    if (cart.length === 0) {
+
+        cartContainer.innerHTML =
+            '<div class="empty-cart">તમારો કાર્ટ ખાલી છે.</div>';
+
+        return;
+    }
+
+
+    cartContainer.innerHTML =
+        cart.map(function (item, index) {
+
+            const name =
+                item.nameGu ||
+                item.name_gu ||
+                item.nameEn ||
+                "Product";
+
+            const weight =
+                item.weightLabel ||
+                item.weight_label ||
+                getCartWeightLabel(item.weightKg);
+
+            const qty =
+                Number(item.qty || item.quantity || 1);
+
+            const subtotal =
+                Number(
+                    item.subtotal ||
+                    (
+                        Number(item.unitPrice || 0) *
+                        qty
+                    )
+                );
+
+
+            return `
+                <div class="cart-item">
+
+                    <div class="cart-item-info">
+
+                        <strong>
+                            ${escapeCartHTML(name)}
+                        </strong>
+
+                        <small>
+                            ${escapeCartHTML(weight)}
+                        </small>
+
+                    </div>
+
+                    <div class="cart-item-qty">
+                        ${qty}
+                    </div>
+
+                    <div class="cart-item-price">
+                        ₹${subtotal.toLocaleString("en-IN")}
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="removeFromCart(${index})"
+                        class="cart-remove-btn"
+                    >
+                        ×
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+// ============================================================
+// REMOVE FROM CART
+// ============================================================
+
+function removeFromCart(index) {
+
+    let cart = [];
+
+    try {
+
+        const saved =
+            localStorage.getItem("psm_cart");
+
+        if (saved) {
+            cart = JSON.parse(saved);
+        }
+
+    } catch (error) {
+        cart = [];
+    }
+
+
+    if (!Array.isArray(cart)) {
+        cart = [];
+    }
+
+
+    cart.splice(index, 1);
+
+
+    localStorage.setItem(
+        "psm_cart",
+        JSON.stringify(cart)
+    );
+
+
+    updateCartUI();
+
+    updateCartCount();
+
+}
+
+
+// ============================================================
+// CLEAR CART
+// ============================================================
+
+function clearCart() {
+
+    localStorage.removeItem("psm_cart");
+
+    if (typeof window.cart !== "undefined") {
+        window.cart = [];
+    }
+
+    updateCartUI();
+
+    updateCartCount();
+
+}
+
+
+// ============================================================
+// HTML SAFETY
+// ============================================================
+
+function escapeCartHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+// ============================================================
+// LOAD CART WHEN WEBSITE OPENS
+// ============================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        updateCartCount();
+
+        updateCartUI();
+
+    }
+);
