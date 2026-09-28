@@ -1,246 +1,187 @@
 // ============================================================
-// ADD TO CART - FIXED VERSION
+// PATEL SWEET MART
+// CART SYSTEM - FINAL FIXED VERSION
 // ============================================================
 
-function addToCart(productId, weightKg = 1, qty = 1) {
+'use strict';
+
+
+// ============================================================
+// CART STORAGE KEY
+// IMPORTANT: Existing website uses "psm-cart"
+// ============================================================
+
+const PSM_CART_KEY = 'psm-cart';
+
+
+// ============================================================
+// GET CART
+// ============================================================
+
+function getPSMCart() {
+    try {
+        const saved = localStorage.getItem(PSM_CART_KEY);
+
+        if (!saved) return [];
+
+        const parsed = JSON.parse(saved);
+
+        return Array.isArray(parsed) ? parsed : [];
+
+    } catch (error) {
+        console.warn('Cart load error:', error);
+        return [];
+    }
+}
+
+
+// ============================================================
+// SAVE CART
+// ============================================================
+
+function savePSMCart(cartData) {
+
+    if (!Array.isArray(cartData)) {
+        cartData = [];
+    }
 
     try {
 
-        // Cart load કરો
-        let cart = [];
-
-        try {
-            const savedCart = localStorage.getItem("psm_cart");
-
-            if (savedCart) {
-                const parsedCart = JSON.parse(savedCart);
-
-                if (Array.isArray(parsedCart)) {
-                    cart = parsedCart;
-                }
-            }
-        } catch (error) {
-            console.warn("Cart load error:", error);
-            cart = [];
-        }
-
-
-        // Product શોધો
-        let product = null;
-
-        // allProducts array હોય તો
-        if (typeof allProducts !== "undefined" && Array.isArray(allProducts)) {
-            product = allProducts.find(function (p) {
-                return String(p.id) === String(productId);
-            });
-        }
-
-        // products array હોય તો
-        if (!product && typeof products !== "undefined" && Array.isArray(products)) {
-            product = products.find(function (p) {
-                return String(p.id) === String(productId);
-            });
-        }
-
-        // DEFAULT_PRODUCTS object હોય તો
-        if (
-            !product &&
-            typeof DEFAULT_PRODUCTS !== "undefined" &&
-            DEFAULT_PRODUCTS
-        ) {
-            product = DEFAULT_PRODUCTS[productId];
-
-            if (!product) {
-                product = Object.values(DEFAULT_PRODUCTS).find(function (p) {
-                    return String(p.id) === String(productId);
-                });
-            }
-        }
-
-
-        // Product ન મળે તો
-        if (!product) {
-            console.error("Product not found:", productId);
-
-            alert("Product મળી શક્યું નથી. Page refresh કરો અને ફરી પ્રયાસ કરો.");
-
-            return false;
-        }
-
-
-        // Weight validate
-        weightKg = Number(weightKg);
-
-        if (!weightKg || weightKg <= 0) {
-            weightKg = 1;
-        }
-
-
-        // Quantity validate
-        qty = Number(qty);
-
-        if (!qty || qty <= 0) {
-            qty = 1;
-        }
-
-
-        // Product price શોધો
-        let basePrice = Number(
-            product.price ??
-            product.basePrice ??
-            product.base_price ??
-            product.pricePerKg ??
-            product.price_per_kg ??
-            0
-        );
-
-        if (!basePrice || basePrice < 0) {
-            basePrice = 0;
-        }
-
-
-        // Weight પ્રમાણે price
-        let unitPrice = Math.round(basePrice * weightKg);
-
-
-        // Product name
-        const nameGu =
-            product.nameGu ??
-            product.name_gu ??
-            product.name ??
-            product.title ??
-            "ઉત્પાદન";
-
-
-        const nameEn =
-            product.nameEn ??
-            product.name_en ??
-            product.name ??
-            product.title ??
-            "Product";
-
-
-        // Existing cart item શોધો
-        const existingIndex = cart.findIndex(function (item) {
-
-            return (
-                String(item.productId) === String(productId) &&
-                Number(item.weightKg) === Number(weightKg)
-            );
-
-        });
-
-
-        // Existing item હોય તો quantity વધારો
-        if (existingIndex !== -1) {
-
-            cart[existingIndex].qty =
-                Number(cart[existingIndex].qty || 0) + qty;
-
-            cart[existingIndex].quantity =
-                cart[existingIndex].qty;
-
-            cart[existingIndex].subtotal =
-                Number(cart[existingIndex].unitPrice || unitPrice) *
-                cart[existingIndex].qty;
-
-        }
-
-        // New item
-        else {
-
-            cart.push({
-
-                id:
-                    String(productId) +
-                    "_" +
-                    String(weightKg),
-
-                productId: String(productId),
-
-                product_id: String(productId),
-
-                nameGu: nameGu,
-
-                name_gu: nameGu,
-
-                nameEn: nameEn,
-
-                name_en: nameEn,
-
-                weightKg: weightKg,
-
-                weight_kg: weightKg,
-
-                weightLabel:
-                    getCartWeightLabel(weightKg),
-
-                weight_label:
-                    getCartWeightLabel(weightKg),
-
-                qty: qty,
-
-                quantity: qty,
-
-                unitPrice: unitPrice,
-
-                unit_price: unitPrice,
-
-                subtotal: unitPrice * qty
-
-            });
-
-        }
-
-
-        // LocalStorageમાં save
         localStorage.setItem(
-            "psm_cart",
-            JSON.stringify(cart)
+            PSM_CART_KEY,
+            JSON.stringify(cartData)
         );
 
-
-        // Global cart variable હોય તો update
-        if (typeof window.cart !== "undefined") {
-            window.cart = cart;
+        // Existing global cart variable update
+        if (typeof window.cart !== 'undefined') {
+            window.cart = cartData;
         }
 
+        // Existing website functions
+        if (typeof updateCartBadges === 'function') {
+            updateCartBadges();
+        }
 
-        // Cart render
-        updateCartUI();
+        if (typeof renderCartBody === 'function') {
+            renderCartBody();
+        }
 
-
-        // Cart count
         updateCartCount();
-
-
-        // Cart drawer open કરો જો function હોય
-        if (typeof openCart === "function") {
-            openCart();
-        }
-
-        else if (typeof toggleCart === "function") {
-            toggleCart(true);
-        }
-
-
-        console.log("Cart updated:", cart);
-
-        return true;
 
     } catch (error) {
 
-        console.error(
-            "ADD TO CART ERROR:",
-            error
-        );
+        console.error('Cart save error:', error);
 
         alert(
-            "Cartમાં product add કરવામાં error આવ્યો. Browser console check કરો."
+            'કાર્ટ સેવ કરવામાં સમસ્યા આવી. Browser storage check કરો.'
         );
-
-        return false;
     }
+}
+
+
+// ============================================================
+// GET PRODUCT
+// ============================================================
+
+function getPSMProduct(productId) {
+
+    let product = null;
+
+    // ----------------------------------------------------------
+    // 1. Existing PRODUCTS object
+    // ----------------------------------------------------------
+
+    if (
+        typeof PRODUCTS !== 'undefined' &&
+        PRODUCTS
+    ) {
+
+        product = PRODUCTS[productId];
+
+        if (!product) {
+
+            const productList =
+                Object.values(PRODUCTS);
+
+            product =
+                productList.find(function (p) {
+
+                    return String(p.id) ===
+                        String(productId);
+
+                }) || null;
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    // 2. allProducts fallback
+    // ----------------------------------------------------------
+
+    if (
+        !product &&
+        typeof allProducts !== 'undefined' &&
+        Array.isArray(allProducts)
+    ) {
+
+        product =
+            allProducts.find(function (p) {
+
+                return String(p.id) ===
+                    String(productId);
+
+            }) || null;
+    }
+
+
+    // ----------------------------------------------------------
+    // 3. products fallback
+    // ----------------------------------------------------------
+
+    if (
+        !product &&
+        typeof products !== 'undefined' &&
+        Array.isArray(products)
+    ) {
+
+        product =
+            products.find(function (p) {
+
+                return String(p.id) ===
+                    String(productId);
+
+            }) || null;
+    }
+
+
+    // ----------------------------------------------------------
+    // 4. DEFAULT_PRODUCTS fallback
+    // ----------------------------------------------------------
+
+    if (
+        !product &&
+        typeof DEFAULT_PRODUCTS !== 'undefined' &&
+        DEFAULT_PRODUCTS
+    ) {
+
+        product =
+            DEFAULT_PRODUCTS[productId] || null;
+
+        if (!product) {
+
+            product =
+                Object.values(DEFAULT_PRODUCTS)
+                    .find(function (p) {
+
+                        return String(p.id) ===
+                            String(productId);
+
+                    }) || null;
+        }
+    }
+
+
+    return product;
 }
 
 
@@ -252,35 +193,497 @@ function getCartWeightLabel(weightKg) {
 
     weightKg = Number(weightKg);
 
-    if (weightKg === 0.25) {
-        return "250 ગ્રામ";
+    if (!isFinite(weightKg) || weightKg <= 0) {
+        weightKg = 1;
     }
 
-    if (weightKg === 0.5) {
-        return "500 ગ્રામ";
-    }
+    const grams = Math.round(weightKg * 1000);
 
-    if (weightKg === 0.75) {
-        return "750 ગ્રામ";
+    if (grams < 1000) {
+        return grams + ' ગ્રામ';
     }
 
     if (weightKg === 1) {
-        return "1 કિલો";
+        return '1 કિલો';
     }
 
-    if (weightKg === 1.25) {
-        return "1.25 કિલો";
-    }
+    // Remove unnecessary decimal
+    const clean =
+        Number(weightKg.toFixed(2));
 
-    if (weightKg === 1.5) {
-        return "1.5 કિલો";
-    }
+    return clean + ' કિલો';
+}
 
-    if (weightKg === 2) {
-        return "2 કિલો";
-    }
 
-    return weightKg + " કિલો";
+// ============================================================
+// ADD TO CART
+// ============================================================
+
+function addToCart(productId, weightKg = 1, qty = 1) {
+
+    try {
+
+        // ------------------------------------------------------
+        // Product
+        // ------------------------------------------------------
+
+        const product =
+            getPSMProduct(productId);
+
+        if (!product) {
+
+            console.error(
+                'Product not found:',
+                productId
+            );
+
+            alert(
+                'Product મળી શક્યું નથી. Page refresh કરો અને ફરી પ્રયાસ કરો.'
+            );
+
+            return false;
+        }
+
+
+        // ------------------------------------------------------
+        // Weight
+        // ------------------------------------------------------
+
+        weightKg = Number(weightKg);
+
+        if (
+            !isFinite(weightKg) ||
+            weightKg <= 0
+        ) {
+            weightKg = 1;
+        }
+
+
+        // ------------------------------------------------------
+        // Quantity
+        // ------------------------------------------------------
+
+        qty = Number(qty);
+
+        if (
+            !isFinite(qty) ||
+            qty <= 0
+        ) {
+            qty = 1;
+        }
+
+        qty = Math.floor(qty);
+
+
+        // ------------------------------------------------------
+        // Base price
+        // ------------------------------------------------------
+
+        let basePrice = Number(
+            product.basePrice ??
+            product.price ??
+            product.base_price ??
+            product.pricePerKg ??
+            product.price_per_kg ??
+            0
+        );
+
+
+        if (
+            !isFinite(basePrice) ||
+            basePrice < 0
+        ) {
+            basePrice = 0;
+        }
+
+
+        // ------------------------------------------------------
+        // Product names
+        // ------------------------------------------------------
+
+        const nameGu =
+            product.nameGu ??
+            product.name_gu ??
+            product.name ??
+            product.title ??
+            'ઉત્પાદન';
+
+        const nameEn =
+            product.nameEn ??
+            product.name_en ??
+            product.name ??
+            product.title ??
+            'Product';
+
+
+        // ------------------------------------------------------
+        // Image
+        // ------------------------------------------------------
+
+        const image =
+            product.img ||
+            product.image ||
+            product.imageUrl ||
+            'images/product-toprapak.webp';
+
+
+        // ------------------------------------------------------
+        // Weight based price
+        // ------------------------------------------------------
+
+        const unitPrice =
+            Math.round(
+                basePrice * weightKg
+            );
+
+
+        // ------------------------------------------------------
+        // Current cart
+        // ------------------------------------------------------
+
+        const cart =
+            getPSMCart();
+
+
+        // ------------------------------------------------------
+        // Existing item
+        // ------------------------------------------------------
+
+        const existingIndex =
+            cart.findIndex(function (item) {
+
+                return (
+                    String(item.productId) ===
+                    String(productId)
+                    &&
+                    Math.abs(
+                        Number(item.multiplier ?? item.weightKg ?? 1) -
+                        weightKg
+                    ) < 0.001
+                );
+
+            });
+
+
+        // ------------------------------------------------------
+        // Update existing item
+        // ------------------------------------------------------
+
+        if (existingIndex !== -1) {
+
+            const item =
+                cart[existingIndex];
+
+            item.qty =
+                Number(item.qty || item.quantity || 0) +
+                qty;
+
+            item.quantity =
+                item.qty;
+
+            item.price =
+                Number(item.price || unitPrice);
+
+            item.unitPrice =
+                Number(item.unitPrice || unitPrice);
+
+            item.unit_price =
+                item.unitPrice;
+
+            item.subtotal =
+                item.unitPrice * item.qty;
+
+            cart[existingIndex] =
+                item;
+
+        }
+
+
+        // ------------------------------------------------------
+        // Add new item
+        // ------------------------------------------------------
+
+        else {
+
+            const weightLabel =
+                getCartWeightLabel(weightKg);
+
+            cart.push({
+
+                id:
+                    String(productId) +
+                    '_' +
+                    String(weightKg),
+
+                productId:
+                    String(productId),
+
+                product_id:
+                    String(productId),
+
+                nameGu:
+                    nameGu,
+
+                name_gu:
+                    nameGu,
+
+                nameEn:
+                    nameEn,
+
+                name_en:
+                    nameEn,
+
+                weightKey:
+                    weightKg === 0.25 ? '250g' :
+                    weightKg === 0.5 ? '500g' :
+                    weightKg === 0.75 ? '750g' :
+                    weightKg === 1 ? '1kg' :
+                    weightKg === 1.25 ? '1.25kg' :
+                    weightKg === 1.5 ? '1.5kg' :
+                    weightKg === 2 ? '2kg' :
+                    String(weightKg) + 'kg',
+
+                weightKg:
+                    weightKg,
+
+                weight_kg:
+                    weightKg,
+
+                multiplier:
+                    weightKg,
+
+                weightLabel:
+                    weightLabel,
+
+                weight_label:
+                    weightLabel,
+
+                weightLabelGu:
+                    weightLabel,
+
+                weightLabelEn:
+                    weightKg + ' kg',
+
+                basePrice:
+                    basePrice,
+
+                price:
+                    unitPrice,
+
+                unitPrice:
+                    unitPrice,
+
+                unit_price:
+                    unitPrice,
+
+                qty:
+                    qty,
+
+                quantity:
+                    qty,
+
+                subtotal:
+                    unitPrice * qty,
+
+                img:
+                    image
+
+            });
+
+        }
+
+
+        // ------------------------------------------------------
+        // SAVE
+        // ------------------------------------------------------
+
+        savePSMCart(cart);
+
+
+        // ------------------------------------------------------
+        // Existing website cart variable
+        // ------------------------------------------------------
+
+        if (typeof window.cart !== 'undefined') {
+            window.cart = cart;
+        }
+
+
+        // ------------------------------------------------------
+        // Existing cart UI
+        // ------------------------------------------------------
+
+        if (
+            typeof updateCartBadges ===
+            'function'
+        ) {
+            updateCartBadges();
+        }
+
+
+        if (
+            typeof renderCartBody ===
+            'function'
+        ) {
+            renderCartBody();
+        }
+
+
+        updateCartCount();
+
+
+        // ------------------------------------------------------
+        // Button animation
+        // ------------------------------------------------------
+
+        const addButton =
+            document.getElementById(
+                'btn-add-' + productId
+            );
+
+        if (addButton) {
+
+            const oldHTML =
+                addButton.innerHTML;
+
+            addButton.innerHTML =
+                '✓ <span class="gu-text">કાર્ટમાં ઉમેર્યું</span>' +
+                '<span class="en-text" style="display:none">Added</span>';
+
+            addButton.classList.add(
+                'added'
+            );
+
+            setTimeout(function () {
+
+                addButton.innerHTML =
+                    oldHTML;
+
+                addButton.classList.remove(
+                    'added'
+                );
+
+                if (
+                    typeof applyLang ===
+                    'function'
+                ) {
+                    applyLang(
+                        typeof currentLang !== 'undefined'
+                            ? currentLang
+                            : 'gu'
+                    );
+                }
+
+            }, 1200);
+        }
+
+
+        // ------------------------------------------------------
+        // Toast
+        // ------------------------------------------------------
+
+        if (
+            typeof showToast ===
+            'function'
+        ) {
+
+            showToast(
+                '✓ <strong>' +
+                escapeCartHTML(nameGu) +
+                '</strong> કાર્ટમાં ઉમેરાયું.'
+            );
+
+        }
+
+
+        console.log(
+            'ADD TO CART SUCCESS:',
+            cart
+        );
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            'ADD TO CART ERROR:',
+            error
+        );
+
+        alert(
+            'Cartમાં product add કરવામાં error આવ્યો.'
+        );
+
+        return false;
+    }
+}
+
+
+// ============================================================
+// EXISTING WEBSITE FUNCTION
+// IMPORTANT:
+// index.html માં onclick="addCurrentProductToCart(...)"
+// છે, એટલે આ function જરૂરી છે.
+// ============================================================
+
+function addCurrentProductToCart(productId) {
+
+    try {
+
+        const product =
+            getPSMProduct(productId);
+
+        if (!product) {
+
+            alert(
+                'Product મળી શક્યું નથી.'
+            );
+
+            return false;
+        }
+
+
+        // Existing selected weight system
+        let selected = null;
+
+        if (
+            typeof selectedWeights !==
+            'undefined' &&
+            selectedWeights &&
+            selectedWeights[productId]
+        ) {
+
+            selected =
+                selectedWeights[productId];
+
+        }
+
+
+        // Default 1kg
+        let weightKg =
+            selected &&
+            Number(selected.multiplier) > 0
+                ? Number(selected.multiplier)
+                : 1;
+
+
+        // Add
+        return addToCart(
+            productId,
+            weightKg,
+            1
+        );
+
+    } catch (error) {
+
+        console.error(
+            'addCurrentProductToCart error:',
+            error
+        );
+
+        return false;
+    }
 }
 
 
@@ -290,61 +693,89 @@ function getCartWeightLabel(weightKg) {
 
 function updateCartCount() {
 
-    let cart = [];
+    const cart =
+        getPSMCart();
 
-    try {
+    const count =
+        cart.reduce(function (
+            total,
+            item
+        ) {
 
-        const saved = localStorage.getItem("psm_cart");
+            return total +
+                Number(
+                    item.qty ??
+                    item.quantity ??
+                    0
+                );
 
-        if (saved) {
-            cart = JSON.parse(saved);
-        }
-
-    } catch (error) {
-        cart = [];
-    }
-
-
-    if (!Array.isArray(cart)) {
-        cart = [];
-    }
+        }, 0);
 
 
-    const count = cart.reduce(function (total, item) {
-
-        return total + Number(
-            item.qty ??
-            item.quantity ??
-            0
+    // Main cart badge
+    const cartBadge =
+        document.getElementById(
+            'cart-badge'
         );
 
-    }, 0);
+    if (cartBadge) {
+        cartBadge.textContent =
+            count;
+    }
 
 
-    // બધા common cart count IDs
-    const selectors = [
-        "#cart-count",
-        "#cart-badge",
-        "#cart-item-count",
-        ".cart-count",
-        ".cart-badge"
-    ];
+    // Mobile badge
+    const mobileBadge =
+        document.getElementById(
+            'mobile-cart-badge'
+        );
+
+    if (mobileBadge) {
+        mobileBadge.textContent =
+            count;
+    }
 
 
-    selectors.forEach(function (selector) {
+    // Floating cart
+    const floatingCount =
+        document.getElementById(
+            'cart-floating-count'
+        );
 
-        document
-            .querySelectorAll(selector)
-            .forEach(function (element) {
+    if (floatingCount) {
+        floatingCount.textContent =
+            count;
+    }
 
-                element.textContent = count;
 
-                element.style.display =
-                    count > 0 ? "" : "none";
+    const floatingBar =
+        document.getElementById(
+            'cart-floating-bar'
+        );
 
-            });
+    if (floatingBar) {
 
-    });
+        floatingBar.style.display =
+            count > 0
+                ? ''
+                : 'none';
+    }
+
+
+    // Generic counters
+    document
+        .querySelectorAll(
+            '#cart-count,' +
+            '#cart-item-count,' +
+            '.cart-count,' +
+            '.cart-badge'
+        )
+        .forEach(function (element) {
+
+            element.textContent =
+                count;
+
+        });
 
 
     return count;
@@ -352,187 +783,224 @@ function updateCartCount() {
 
 
 // ============================================================
-// CART UI UPDATE
+// CART TOTAL
+// ============================================================
+
+function getCartTotal() {
+
+    const cart =
+        getPSMCart();
+
+    return cart.reduce(
+        function (
+            total,
+            item
+        ) {
+
+            const qty =
+                Number(
+                    item.qty ??
+                    item.quantity ??
+                    1
+                );
+
+            const price =
+                Number(
+                    item.price ??
+                    item.unitPrice ??
+                    item.unit_price ??
+                    0
+                );
+
+            return total +
+                price * qty;
+
+        },
+        0
+    );
+}
+
+
+// ============================================================
+// CART UI
 // ============================================================
 
 function updateCartUI() {
 
-    // Existing project function હોય તો તેનો ઉપયોગ કરો
-    if (typeof renderCart === "function") {
-
-        try {
-            renderCart();
-        } catch (error) {
-            console.warn(
-                "renderCart error:",
-                error
-            );
-        }
-
-    }
-
-
-    if (typeof updateCart === "function") {
-
-        try {
-            updateCart();
-        } catch (error) {
-            console.warn(
-                "updateCart error:",
-                error
-            );
-        }
-
-    }
-
-
     updateCartCount();
 
-    // Custom cart renderer
-    const cartContainer =
-        document.querySelector("#cart-items");
 
-    if (!cartContainer) {
-        return;
-    }
+    // Existing website renderer
+    if (
+        typeof renderCartBody ===
+        'function'
+    ) {
 
+        try {
 
-    let cart = [];
+            renderCartBody();
 
-    try {
+        } catch (error) {
 
-        const saved =
-            localStorage.getItem("psm_cart");
+            console.warn(
+                'renderCartBody error:',
+                error
+            );
 
-        if (saved) {
-            cart = JSON.parse(saved);
         }
-
-    } catch (error) {
-        cart = [];
     }
 
 
-    if (!Array.isArray(cart)) {
-        cart = [];
+    if (
+        typeof updateCartBadges ===
+        'function'
+    ) {
+
+        try {
+
+            updateCartBadges();
+
+        } catch (error) {
+
+            console.warn(
+                'updateCartBadges error:',
+                error
+            );
+
+        }
     }
-
-
-    if (cart.length === 0) {
-
-        cartContainer.innerHTML =
-            '<div class="empty-cart">તમારો કાર્ટ ખાલી છે.</div>';
-
-        return;
-    }
-
-
-    cartContainer.innerHTML =
-        cart.map(function (item, index) {
-
-            const name =
-                item.nameGu ||
-                item.name_gu ||
-                item.nameEn ||
-                "Product";
-
-            const weight =
-                item.weightLabel ||
-                item.weight_label ||
-                getCartWeightLabel(item.weightKg);
-
-            const qty =
-                Number(item.qty || item.quantity || 1);
-
-            const subtotal =
-                Number(
-                    item.subtotal ||
-                    (
-                        Number(item.unitPrice || 0) *
-                        qty
-                    )
-                );
-
-
-            return `
-                <div class="cart-item">
-
-                    <div class="cart-item-info">
-
-                        <strong>
-                            ${escapeCartHTML(name)}
-                        </strong>
-
-                        <small>
-                            ${escapeCartHTML(weight)}
-                        </small>
-
-                    </div>
-
-                    <div class="cart-item-qty">
-                        ${qty}
-                    </div>
-
-                    <div class="cart-item-price">
-                        ₹${subtotal.toLocaleString("en-IN")}
-                    </div>
-
-                    <button
-                        type="button"
-                        onclick="removeFromCart(${index})"
-                        class="cart-remove-btn"
-                    >
-                        ×
-                    </button>
-
-                </div>
-            `;
-
-        }).join("");
 
 }
 
 
 // ============================================================
-// REMOVE FROM CART
+// REMOVE CART ITEM
 // ============================================================
 
 function removeFromCart(index) {
 
-    let cart = [];
-
     try {
 
-        const saved =
-            localStorage.getItem("psm_cart");
+        const cart =
+            getPSMCart();
 
-        if (saved) {
-            cart = JSON.parse(saved);
+        if (
+            index < 0 ||
+            index >= cart.length
+        ) {
+            return;
+        }
+
+
+        cart.splice(
+            index,
+            1
+        );
+
+
+        savePSMCart(
+            cart
+        );
+
+
+        if (
+            typeof showToast ===
+            'function'
+        ) {
+
+            showToast(
+                'કાર્ટમાંથી વસ્તુ દૂર થઈ ગઈ.'
+            );
+
         }
 
     } catch (error) {
-        cart = [];
+
+        console.error(
+            'Remove cart error:',
+            error
+        );
+
     }
+}
 
 
-    if (!Array.isArray(cart)) {
-        cart = [];
+// ============================================================
+// UPDATE CART QUANTITY
+// ============================================================
+
+function updateCartQty(index, change) {
+
+    try {
+
+        const cart =
+            getPSMCart();
+
+        if (
+            index < 0 ||
+            index >= cart.length
+        ) {
+            return;
+        }
+
+
+        const item =
+            cart[index];
+
+
+        let qty =
+            Number(
+                item.qty ||
+                item.quantity ||
+                1
+            );
+
+
+        qty += Number(change);
+
+
+        // Minimum 1
+        if (qty < 1) {
+            qty = 1;
+        }
+
+
+        item.qty =
+            qty;
+
+        item.quantity =
+            qty;
+
+
+        const price =
+            Number(
+                item.price ||
+                item.unitPrice ||
+                0
+            );
+
+
+        item.subtotal =
+            price * qty;
+
+
+        cart[index] =
+            item;
+
+
+        savePSMCart(
+            cart
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            'Update quantity error:',
+            error
+        );
+
     }
-
-
-    cart.splice(index, 1);
-
-
-    localStorage.setItem(
-        "psm_cart",
-        JSON.stringify(cart)
-    );
-
-
-    updateCartUI();
-
-    updateCartCount();
-
 }
 
 
@@ -542,46 +1010,181 @@ function removeFromCart(index) {
 
 function clearCart() {
 
-    localStorage.removeItem("psm_cart");
+    try {
 
-    if (typeof window.cart !== "undefined") {
-        window.cart = [];
+        localStorage.removeItem(
+            PSM_CART_KEY
+        );
+
+
+        if (
+            typeof window.cart !==
+            'undefined'
+        ) {
+            window.cart = [];
+        }
+
+
+        updateCartUI();
+
+
+        console.log(
+            'Cart cleared.'
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Clear cart error:',
+            error
+        );
+
     }
-
-    updateCartUI();
-
-    updateCartCount();
-
 }
 
 
 // ============================================================
-// HTML SAFETY
+// HTML ESCAPE
 // ============================================================
 
 function escapeCartHTML(value) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(
+        value ?? ''
+    )
+        .replace(
+            /&/g,
+            '&amp;'
+        )
+        .replace(
+            /</g,
+            '&lt;'
+        )
+        .replace(
+            />/g,
+            '&gt;'
+        )
+        .replace(
+            /"/g,
+            '&quot;'
+        )
+        .replace(
+            /'/g,
+            '&#039;'
+        );
 
 }
 
 
 // ============================================================
-// LOAD CART WHEN WEBSITE OPENS
+// LOAD CART ON WEBSITE START
 // ============================================================
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+function initFixedCartSystem() {
+
+    try {
+
+        const cart =
+            getPSMCart();
+
+
+        // Sync global cart
+        if (
+            typeof window.cart !==
+            'undefined'
+        ) {
+
+            window.cart =
+                cart;
+
+        }
+
 
         updateCartCount();
 
-        updateCartUI();
+
+        if (
+            typeof updateCartBadges ===
+            'function'
+        ) {
+
+            updateCartBadges();
+
+        }
+
+
+        if (
+            typeof renderCartBody ===
+            'function'
+        ) {
+
+            renderCartBody();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            'Cart initialization error:',
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// DOM READY
+// ============================================================
+
+if (
+    document.readyState ===
+    'loading'
+) {
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        initFixedCartSystem
+    );
+
+} else {
+
+    initFixedCartSystem();
+
+}
+
+
+// ============================================================
+// STORAGE SYNC
+// ============================================================
+
+window.addEventListener(
+    'storage',
+    function (event) {
+
+        if (
+            event.key ===
+            PSM_CART_KEY
+        ) {
+
+            updateCartCount();
+
+            if (
+                typeof updateCartBadges ===
+                'function'
+            ) {
+                updateCartBadges();
+            }
+
+            if (
+                typeof renderCartBody ===
+                'function'
+            ) {
+                renderCartBody();
+            }
+
+        }
 
     }
 );
