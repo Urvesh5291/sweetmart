@@ -1,59 +1,15 @@
-<!DOCTYPE html>
-<html lang="gu">
-<html lang="eng">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>પટેલ સ્વીટ માર્ટ — Patel Sweet Mart</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <h1>પટેલ સ્વીટ માર્ટ (Patel Sweet Mart)</h1>
-        <div class="cart-info">
-            🛒 Cart: <span id="cart-count">0</span> Items
-        </div>
-    </header>
+<!-- Toprapak Product Card -->
+<div class="product-card">
+    <img src="images/toprapak.jpg" alt="Toprapak" onerror="this.src='logo.png'">
+    <h3>ટોપરાપાક (Toprapak)</h3>
+    <p>₹500 / 1kg (Green)</p>
+    <button class="add-to-cart-btn" data-name="Toprapak" data-price="500" data-weight="1kg">Add to Cart</button>
+</div>
 
-    <main>
-        <section class="products-section">
-            <h2>Amari Traditional Items & Namkin</h2>
-            <div class="product-grid" id="product-grid">
-                <!-- Product 1: Toprapak -->
-                <div class="product-card">
-                    <img src="images/toprapak.jpg" alt="Toprapak" onerror="this.src='logo.png'">
-                    <h3>ટોપરાપાક (Toprapak)</h3>
-                    <p>₹500 / 1kg (Green)</p>
-                    <button onclick="addToCart('Toprapak', 500, '1kg')">Add to Cart</button>
-                </div>
-
-                <!-- Product 2: Namkin / Sev -->
-                <div class="product-card">
-                    <img src="images/sev.jpg" alt="Namkin Sev" onerror="this.src='logo.png'">
-                    <h3>તીખી સેવ (Namkin Sev)</h3>
-                    <p>₹180 / 1kg</p>
-                    <button onclick="addToCart('Namkin Sev', 180, '1kg')">Add to Cart</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Cart View & Checkout Section -->
-        <section class="cart-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px;">
-            <h3>Tamaru Cart</h3>
-            <ul id="cart-items-list"></ul>
-            <p><b>Kul Rakkam: ₹<span id="cart-total">0</span></b></p>
-            
-            <h4>Customer Details</h4>
-            <input type="text" id="cust-name" placeholder="Tamaru Naam" style="width:100%; margin-bottom:10px; padding:8px;"><br>
-            <input type="text" id="cust-phone" placeholder="Phone Number" style="width:100%; margin-bottom:10px; padding:8px;"><br>
-            <input type="text" id="cust-address" placeholder="Sarnamu (Address, Area)" style="width:100%; margin-bottom:10px; padding:8px;"><br>
-            <button onclick="checkoutOrder()" style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">WhatsApp par Order Moklo</button>
-        </section>
-    </main>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+<!-- Namkin Sev Product Card -->
+<div class="product-card">
+    <img src="images/sev.jpg" alt="Namkin Sev" onerror="this.src='logo.png'">
+    <h3>તીખી સેવ (Namkin Sev)</h3>
+    <p>₹180 / 1kg</p>
+    <button class="add-to-cart-btn" data-name="Namkin Sev" data-price="180" data-weight="1kg">Add to Cart</button>
+</div>
