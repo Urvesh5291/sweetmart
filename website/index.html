@@ -1,15 +1,68 @@
-<!-- Toprapak Product Card -->
-<div class="product-card">
-    <img src="images/toprapak.jpg" alt="Toprapak" onerror="this.src='logo.png'">
-    <h3>ટોપરાપાક (Toprapak)</h3>
-    <p>₹500 / 1kg (Green)</p>
-    <button class="add-to-cart-btn" data-name="Toprapak" data-price="500" data-weight="1kg">Add to Cart</button>
-</div>
+<!DOCTYPE html>
+<html lang="gu" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title class="lang-title">પટેલ સ્વીટ માર્ટ — Patel Sweet Mart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; background: #f4f4f4; }
+        header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .product-card { background: #fff; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; }
+        select, button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+        .add-btn { background: #ff4757; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .lang-btn { background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
 
-<!-- Namkin Sev Product Card -->
-<div class="product-card">
-    <img src="images/sev.jpg" alt="Namkin Sev" onerror="this.src='logo.png'">
-    <h3>તીખી સેવ (Namkin Sev)</h3>
-    <p>₹180 / 1kg</p>
-    <button class="add-to-cart-btn" data-name="Namkin Sev" data-price="180" data-weight="1kg">Add to Cart</button>
-</div>
+    <header>
+        <div>
+            <h2 id="store-title" style="margin:0; font-size:18px;">પટેલ સ્વીટ માર્ટ</h2>
+        </div>
+        <div>
+            <button class="lang-btn" onclick="toggleLanguage()">English / ગુજરાતી</button>
+            <span style="font-weight: bold; margin-left: 10px;">🛒 <span id="cart-count">0</span></span>
+        </div>
+    </header>
+
+    <main>
+        <section class="products-section">
+            <h3 id="sec-heading">Products / વસ્તુઓ</h3>
+            <div class="product-grid">
+                
+                <!-- Product 1: Toprapak -->
+                <div class="product-card">
+                    <img src="images/toprapak.jpg" alt="Toprapak" onerror="this.src='logo.png'">
+                    <h4 class="p1-name">ટોપરાપાક (Toprapak)</h4>
+                    <p>₹500 / kg</p>
+                    <select id="weight-toprapak">
+                        <option value="1kg">1 kg (₹500)</option>
+                        <option value="500g">500 g (₹250)</option>
+                        <option value="250g">250 g (₹130)</option>
+                    </select>
+                    <button class="add-btn" onclick="addCustomToCart('Toprapak', 500, 'weight-toprapak')">Add to Cart</button>
+                </div>
+
+                <!-- Product 2: Namkin Sev -->
+                <div class="product-card">
+                    <img src="images/sev.jpg" alt="Namkin Sev" onerror="this.src='logo.png'">
+                    <h4 class="p2-name">તીખી સેવ (Namkin Sev)</h4>
+                    <p>₹180 / kg</p>
+                    <select id="weight-sev">
+                        <option value="1kg">1 kg (₹180)</option>
+                        <option value="500g">500 g (₹90)</option>
+                        <option value="250g">250 g (₹45)</option>
+                    </select>
+                    <button class="add-btn" onclick="addCustomToCart('Namkin Sev', 180, 'weight-sev')">Add to Cart</button>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
