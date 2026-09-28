@@ -1,4 +1,3 @@
-// Cart and Language Initialization
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentLang = localStorage.getItem('selectedLang') || 'gu';
 
@@ -7,33 +6,31 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
 });
 
-// Language Toggle Function
 function toggleLanguage() {
     currentLang = currentLang === 'gu' ? 'en' : 'gu';
     localStorage.setItem('selectedLang', currentLang);
     applyLanguage(currentLang);
 }
 
-// Apply Language to Elements
 function applyLanguage(lang) {
     document.querySelectorAll('[data-en]').forEach(element => {
         if (lang === 'gu') {
-            if(element.getAttribute('data-gu')) {
+            if (element.getAttribute('data-gu')) {
                 element.innerText = element.getAttribute('data-gu');
             }
         } else {
-            if(element.getAttribute('data-en')) {
+            if (element.getAttribute('data-en')) {
                 element.innerText = element.getAttribute('data-en');
             }
         }
     });
 }
 
-// Add to Cart with Dynamic Weight & Price Calculation
 function addCustomToCart(productName, basePrice, selectId) {
     let selectElement = document.getElementById(selectId);
-    let selectedValue = selectElement ? selectElement.value : '1kg';
+    if (!selectElement) return;
     
+    let selectedValue = selectElement.value;
     let finalPrice = basePrice;
     let weightLabel = '1 kg';
 
@@ -59,11 +56,10 @@ function addCustomToCart(productName, basePrice, selectId) {
     alert("Item Cart ma add thai gai che! 🛒");
 }
 
-// Update Cart Badge Count
 function updateCartCount() {
     let cartCount = document.getElementById('cart-count');
     if (cartCount) {
         let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartCount.innerText = totalItems;
     }
-                   }
+}
