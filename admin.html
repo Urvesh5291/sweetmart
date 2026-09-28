@@ -2,545 +2,2025 @@
 <html lang="gu" data-theme="royal">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>પટેલ સ્વીટ માર્ટ — એડમિન અને બિઝનેસ એનાલિટિક્સ | Patel Sweet Mart Admin</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+
+  <title>
+    પટેલ સ્વીટ માર્ટ — એડમિન અને બિઝનેસ એનાલિટિક્સ | Patel Sweet Mart Admin
+  </title>
+
   <meta name="robots" content="noindex, nofollow" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+Gujarati:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Favicon -->
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="images/favicon-32x32.png"
+  />
+
+  <!-- Admin CSS -->
   <link rel="stylesheet" href="admin.css" />
-  <!-- Supabase JS Client (v2) -->
+
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
-  <!-- ADMIN AUTH GUARD MODAL (Can also be bypassed with 1-click Demo Access) -->
+  <!-- =========================================================
+       ADMIN LOGIN
+  ========================================================== -->
   <div class="admin-login-overlay" id="admin-login-modal">
+
     <div class="admin-login-card">
-      <img src="images/brand-logo-full.png" alt="Patel Sweet Mart" class="admin-login-logo" />
-      <h2 class="admin-login-title">ઓનર અને એડમિન લોગિન</h2>
-      <p class="admin-login-sub">પટેલ સ્વીટ માર્ટ બિઝનેસ કમાન્ડ સેન્ટર</p>
-      
-      <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+
+      <img
+        src="images/brand-logo-full.png"
+        alt="Patel Sweet Mart"
+        class="admin-login-logo"
+      />
+
+      <h2 class="admin-login-title">
+        ઓનર અને એડમિન લોગિન
+      </h2>
+
+      <p class="admin-login-sub">
+        પટેલ સ્વીટ માર્ટ બિઝનેસ કમાન્ડ સેન્ટર
+      </p>
+
+      <form
+        id="admin-login-form"
+        onsubmit="handleAdminLogin(event)"
+      >
+
         <div class="admin-input-group">
-          <label class="admin-label" for="login-email">ઇમેઇલ (Email)</label>
-          <input type="email" id="login-email" class="admin-input" value="admin@patelsweetmart.com" required autocomplete="email" />
-        </div>
-        <div class="admin-input-group" style="position:relative;">
-          <label class="admin-label" for="login-password">પાસવર્ડ (Password)</label>
-          <div style="position:relative;display:flex;align-items:center;">
-            <input type="password" id="login-password" class="admin-input" placeholder="••••••••" required autocomplete="current-password" style="padding-right:40px;" />
-            <button type="button" onclick="toggleAdminPasswordVisibility('login-password', this)" style="position:absolute;right:10px;background:none;border:none;cursor:pointer;font-size:1.1rem;color:#64748B;" title="પાસવર્ડ જુઓ">&#128065;</button>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 16px;font-size:0.8rem;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--charcoal);">
-            <input type="checkbox" id="login-remember" checked />
-            <span>મને યાદ રાખો (Remember Me)</span>
+
+          <label
+            class="admin-label"
+            for="login-email"
+          >
+            ઇમેઇલ (Email)
           </label>
-          <small style="color:var(--text-muted);">ડિફોલ્ટ: <strong>patel1995</strong></small>
+
+          <input
+            type="email"
+            id="login-email"
+            class="admin-input"
+            value="admin@patelsweetmart.com"
+            required
+            autocomplete="email"
+          />
+
         </div>
-        <button type="submit" class="btn-admin-primary" id="btn-login-submit">લોગિન કરો / Login &rarr;</button>
+
+
+        <div
+          class="admin-input-group"
+          style="position:relative;"
+        >
+
+          <label
+            class="admin-label"
+            for="login-password"
+          >
+            પાસવર્ડ (Password)
+          </label>
+
+          <div
+            style="
+              position:relative;
+              display:flex;
+              align-items:center;
+            "
+          >
+
+            <input
+              type="password"
+              id="login-password"
+              class="admin-input"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+              style="padding-right:40px;"
+            />
+
+            <button
+              type="button"
+              onclick="toggleAdminPasswordVisibility('login-password', this)"
+              style="
+                position:absolute;
+                right:10px;
+                background:none;
+                border:none;
+                cursor:pointer;
+                font-size:1.1rem;
+                color:#64748B;
+              "
+              title="પાસવર્ડ જુઓ"
+            >
+              &#128065;
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin:12px 0 16px;
+            font-size:0.8rem;
+          "
+        >
+
+          <label
+            style="
+              display:flex;
+              align-items:center;
+              gap:6px;
+              cursor:pointer;
+              color:var(--charcoal);
+            "
+          >
+
+            <input
+              type="checkbox"
+              id="login-remember"
+              checked
+            />
+
+            <span>
+              મને યાદ રાખો (Remember Me)
+            </span>
+
+          </label>
+
+          <small style="color:var(--text-muted);">
+            એડમિન પાસવર્ડથી લોગિન કરો
+          </small>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn-admin-primary"
+          id="btn-login-submit"
+        >
+          લોગિન કરો / Login &rarr;
+        </button>
+
       </form>
-      
-      <button type="button" class="btn-admin-demo" onclick="bypassDemoAccess()">
-        ⚡ ૧-ક્લિક ઓનર ડેમો એક્સેસ (Instant Owner Access)
+
+
+      <button
+        type="button"
+        class="btn-admin-demo"
+        onclick="bypassDemoAccess()"
+      >
+        ⚡ ૧-ક્લિક ઓનર ડેમો એક્સેસ
       </button>
+
     </div>
+
   </div>
 
-  <!-- ADMIN TOP BAR -->
+
+  <!-- =========================================================
+       ADMIN TOP BAR
+  ========================================================== -->
   <header class="admin-topbar">
+
     <div class="admin-brand">
-      <img src="images/brand-logo-full.png" alt="Patel Sweet Mart" class="admin-brand-logo" />
-      <span class="admin-brand-badge">Admin Suite</span>
+
+      <img
+        src="images/brand-logo-full.png"
+        alt="Patel Sweet Mart"
+        class="admin-brand-logo"
+      />
+
+      <span class="admin-brand-badge">
+        Admin Suite
+      </span>
+
     </div>
-    
+
+
     <div class="admin-top-actions">
-      <div class="admin-sync-indicator" id="sync-status">
+
+      <div
+        class="admin-sync-indicator"
+        id="sync-status"
+      >
+
         <span class="sync-dot"></span>
-        <span id="sync-label">Supabase Cloud / Local Hybrid Sync</span>
+
+        <span id="sync-label">
+          Local Orders / Supabase Cloud Sync
+        </span>
+
       </div>
-      <a href="index.html" target="_blank" class="btn-view-store">
+
+
+      <a
+        href="index.html"
+        target="_blank"
+        rel="noopener"
+        class="btn-view-store"
+      >
         &#127978; સ્ટોર જુઓ (Store)
       </a>
-      <button type="button" class="btn-logout" onclick="adminLogout()">
+
+
+      <!-- Manual Order Refresh -->
+      <button
+        type="button"
+        class="btn-view-store"
+        onclick="window.refreshAdminOrders && window.refreshAdminOrders(true)"
+        title="ઓર્ડર રિફ્રેશ કરો"
+      >
+        &#128260; Refresh
+      </button>
+
+
+      <button
+        type="button"
+        class="btn-logout"
+        onclick="adminLogout()"
+      >
         લોગઆઉટ
       </button>
+
     </div>
+
   </header>
 
-  <!-- NAVIGATION TABS & DATE FILTER STRIP -->
+
+  <!-- =========================================================
+       NAVIGATION
+  ========================================================== -->
   <div class="admin-nav-bar">
+
     <div class="admin-tabs">
-      <button type="button" class="admin-tab-btn active" data-tab="orders" onclick="switchAdminTab('orders')">
+
+      <button
+        type="button"
+        class="admin-tab-btn active"
+        data-tab="orders"
+        onclick="switchAdminTab('orders')"
+      >
         📋 ઓર્ડર વ્યવસ્થાપન
-        <span class="tab-badge" id="tab-orders-badge">0</span>
+
+        <span
+          class="tab-badge"
+          id="tab-orders-badge"
+        >
+          0
+        </span>
+
       </button>
-      <button type="button" class="admin-tab-btn" data-tab="kitchen" onclick="switchAdminTab('kitchen')">
+
+
+      <button
+        type="button"
+        class="admin-tab-btn"
+        data-tab="kitchen"
+        onclick="switchAdminTab('kitchen')"
+      >
         👨‍🍳 રસોડા બેચ પ્લાનર (Kitchen KG)
       </button>
-      <button type="button" class="admin-tab-btn" data-tab="analytics" onclick="switchAdminTab('analytics')">
+
+
+      <button
+        type="button"
+        class="admin-tab-btn"
+        data-tab="analytics"
+        onclick="switchAdminTab('analytics')"
+      >
         📊 વ્યવસાય વિશ્લેષણ (Analytics)
       </button>
-      <button type="button" class="admin-tab-btn" data-tab="crm" onclick="switchAdminTab('crm')">
+
+
+      <button
+        type="button"
+        class="admin-tab-btn"
+        data-tab="crm"
+        onclick="switchAdminTab('crm')"
+      >
         👥 ગ્રાહક ડિરેક્ટરી (CRM)
       </button>
-      <button type="button" class="admin-tab-btn" data-tab="inventory" onclick="switchAdminTab('inventory')">
+
+
+      <button
+        type="button"
+        class="admin-tab-btn"
+        data-tab="inventory"
+        onclick="switchAdminTab('inventory')"
+      >
         🏷️ ભાવ અને સ્ટોક કંટ્રોલ
       </button>
-      <button type="button" class="admin-tab-btn" data-tab="settings" onclick="switchAdminTab('settings')">
+
+
+      <button
+        type="button"
+        class="admin-tab-btn"
+        data-tab="settings"
+        onclick="switchAdminTab('settings')"
+      >
         ⚙️ સુપાબેઝ સેટિંગ્સ
       </button>
+
     </div>
-    
+
+
     <div class="admin-sub-strip">
-      <button type="button" class="date-pill-btn active" data-range="today" onclick="filterByDateRange('today')">આજે (Today)</button>
-      <button type="button" class="date-pill-btn" data-range="week" onclick="filterByDateRange('week')">આ સપ્તાહ (Week)</button>
-      <button type="button" class="date-pill-btn" data-range="month" onclick="filterByDateRange('month')">આ મહિનો (Month)</button>
-      <button type="button" class="date-pill-btn" data-range="all" onclick="filterByDateRange('all')">તમામ (All)</button>
+
+      <button
+        type="button"
+        class="date-pill-btn active"
+        data-range="today"
+        onclick="filterByDateRange('today')"
+      >
+        આજે (Today)
+      </button>
+
+
+      <button
+        type="button"
+        class="date-pill-btn"
+        data-range="week"
+        onclick="filterByDateRange('week')"
+      >
+        આ સપ્તાહ (Week)
+      </button>
+
+
+      <button
+        type="button"
+        class="date-pill-btn"
+        data-range="month"
+        onclick="filterByDateRange('month')"
+      >
+        આ મહિનો (Month)
+      </button>
+
+
+      <button
+        type="button"
+        class="date-pill-btn"
+        data-range="all"
+        onclick="filterByDateRange('all')"
+      >
+        તમામ (All)
+      </button>
+
     </div>
+
   </div>
 
-  <!-- MAIN DASHBOARD CONTAINER -->
+
+  <!-- =========================================================
+       MAIN DASHBOARD
+  ========================================================== -->
   <main class="admin-container">
-    
-    <!-- EXECUTIVE KPI CARDS -->
-    <section class="kpi-grid" aria-label="Key Performance Indicators">
+
+
+    <!-- =======================================================
+         KPI CARDS
+    ======================================================== -->
+
+    <section
+      class="kpi-grid"
+      aria-label="Key Performance Indicators"
+    >
+
       <div class="kpi-card kpi-gold">
+
         <div class="kpi-info">
-          <span class="kpi-label">કુલ આવક (Total Revenue)</span>
-          <span class="kpi-value" id="kpi-revenue">&#8377;0</span>
-          <span class="kpi-subtext" id="kpi-revenue-trend">&#8593; લાઈવ ઓર્ડર ડેટા</span>
+
+          <span class="kpi-label">
+            કુલ આવક (Total Revenue)
+          </span>
+
+          <span
+            class="kpi-value"
+            id="kpi-revenue"
+          >
+            &#8377;0
+          </span>
+
+          <span
+            class="kpi-subtext"
+            id="kpi-revenue-trend"
+          >
+            &#8593; લાઈવ ઓર્ડર ડેટા
+          </span>
+
         </div>
-        <div class="kpi-icon-wrap">&#128176;</div>
+
+        <div class="kpi-icon-wrap">
+          &#128176;
+        </div>
+
       </div>
-      
+
+
       <div class="kpi-card">
+
         <div class="kpi-info">
-          <span class="kpi-label">ઓર્ડર સંખ્યા (Total Orders)</span>
-          <span class="kpi-value" id="kpi-orders-count">0</span>
-          <span class="kpi-subtext" id="kpi-orders-sub">ખેરવા &amp; અમદાવાદ</span>
+
+          <span class="kpi-label">
+            ઓર્ડર સંખ્યા (Total Orders)
+          </span>
+
+          <span
+            class="kpi-value"
+            id="kpi-orders-count"
+          >
+            0
+          </span>
+
+          <span
+            class="kpi-subtext"
+            id="kpi-orders-sub"
+          >
+            ખેરવા &amp; અમદાવાદ
+          </span>
+
         </div>
-        <div class="kpi-icon-wrap">&#128230;</div>
+
+        <div class="kpi-icon-wrap">
+          &#128230;
+        </div>
+
       </div>
-      
+
+
       <div class="kpi-card kpi-kesari">
+
         <div class="kpi-info">
-          <span class="kpi-label">વેચાયેલ કુલ વજન (Total KG Sold)</span>
-          <span class="kpi-value" id="kpi-total-kg">0.00 kg</span>
-          <span class="kpi-subtext">મિઠાઈ &amp; નમકીન બેચ</span>
+
+          <span class="kpi-label">
+            વેચાયેલ કુલ વજન (Total KG Sold)
+          </span>
+
+          <span
+            class="kpi-value"
+            id="kpi-total-kg"
+          >
+            0.00 kg
+          </span>
+
+          <span class="kpi-subtext">
+            મિઠાઈ &amp; નમકીન બેચ
+          </span>
+
         </div>
-        <div class="kpi-icon-wrap">&#9878;&#65039;</div>
+
+        <div class="kpi-icon-wrap">
+          &#9878;&#65039;
+        </div>
+
       </div>
-      
+
+
       <div class="kpi-card kpi-green">
+
         <div class="kpi-info">
-          <span class="kpi-label">સરેરાશ ઓર્ડર મૂલ્ય (AOV)</span>
-          <span class="kpi-value" id="kpi-aov">&#8377;0</span>
-          <span class="kpi-subtext">પ્રતિ ગ્રાહક બાસ્કેટ</span>
+
+          <span class="kpi-label">
+            સરેરાશ ઓર્ડર મૂલ્ય (AOV)
+          </span>
+
+          <span
+            class="kpi-value"
+            id="kpi-aov"
+          >
+            &#8377;0
+          </span>
+
+          <span class="kpi-subtext">
+            પ્રતિ ગ્રાહક બાસ્કેટ
+          </span>
+
         </div>
-        <div class="kpi-icon-wrap">&#127919;</div>
+
+        <div class="kpi-icon-wrap">
+          &#127919;
+        </div>
+
       </div>
+
     </section>
 
-    <!-- TAB 1: ORDERS MANAGEMENT -->
-    <section class="admin-panel-view active" id="panel-orders">
+
+    <!-- =======================================================
+         ORDERS
+    ======================================================== -->
+
+    <section
+      class="admin-panel-view active"
+      id="panel-orders"
+    >
+
       <div class="panel-header">
+
         <div class="panel-title-wrap">
-          <h2>ઓર્ડર વ્યવસ્થાપન (Live Orders Engine)</h2>
-          <p>ગ્રાહકના WhatsApp ઓર્ડર, વિતરણ શહેર અને પેકેજ સ્થિતિ ટ્રેક કરો</p>
+
+          <h2>
+            ઓર્ડર વ્યવસ્થાપન (Live Orders Engine)
+          </h2>
+
+          <p>
+            ગ્રાહકના WhatsApp ઓર્ડર, વિતરણ શહેર અને પેકેજ સ્થિતિ ટ્રેક કરો
+          </p>
+
         </div>
+
+
         <div class="panel-actions">
-          <input type="text" id="order-search-input" class="search-input" placeholder="🔍 નામ, ફોન કે Order ID શોધો..." oninput="handleOrderSearch(this.value)" />
-          <button type="button" class="btn-panel-action btn-export-excel" onclick="exportOrdersToExcel()">
+
+          <input
+            type="text"
+            id="order-search-input"
+            class="search-input"
+            placeholder="🔍 નામ, ફોન કે Order ID શોધો..."
+            oninput="handleOrderSearch(this.value)"
+          />
+
+
+          <button
+            type="button"
+            class="btn-panel-action"
+            onclick="window.refreshAdminOrders && window.refreshAdminOrders(true)"
+          >
+            &#128260; ઓર્ડર રિફ્રેશ
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-panel-action btn-export-excel"
+            onclick="exportOrdersToExcel()"
+          >
             &#128229; Excel (CSV) એક્સપોર્ટ
           </button>
+
         </div>
+
       </div>
+
 
       <div class="table-card">
+
         <div class="filter-tabs-row">
-          <button type="button" class="order-status-filter active" data-status="all" onclick="filterOrdersByStatus('all')">તમામ (All)</button>
-          <button type="button" class="order-status-filter" data-status="new" onclick="filterOrdersByStatus('new')">નવા (New)</button>
-          <button type="button" class="order-status-filter" data-status="confirmed" onclick="filterOrdersByStatus('confirmed')">કન્ફર્મ (Confirmed)</button>
-          <button type="button" class="order-status-filter" data-status="packed" onclick="filterOrdersByStatus('packed')">પેક થયેલ (Packed)</button>
-          <button type="button" class="order-status-filter" data-status="dispatched" onclick="filterOrdersByStatus('dispatched')">રવાના (Dispatched)</button>
-          <button type="button" class="order-status-filter" data-status="delivered" onclick="filterOrdersByStatus('delivered')">પૂર્ણ (Delivered)</button>
+
+          <button
+            type="button"
+            class="order-status-filter active"
+            data-status="all"
+            onclick="filterOrdersByStatus('all')"
+          >
+            તમામ (All)
+          </button>
+
+
+          <button
+            type="button"
+            class="order-status-filter"
+            data-status="new"
+            onclick="filterOrdersByStatus('new')"
+          >
+            નવા (New)
+          </button>
+
+
+          <button
+            type="button"
+            class="order-status-filter"
+            data-status="confirmed"
+            onclick="filterOrdersByStatus('confirmed')"
+          >
+            કન્ફર્મ (Confirmed)
+          </button>
+
+
+          <button
+            type="button"
+            class="order-status-filter"
+            data-status="packed"
+            onclick="filterOrdersByStatus('packed')"
+          >
+            પેક થયેલ (Packed)
+          </button>
+
+
+          <button
+            type="button"
+            class="order-status-filter"
+            data-status="dispatched"
+            onclick="filterOrdersByStatus('dispatched')"
+          >
+            રવાના (Dispatched)
+          </button>
+
+
+          <button
+            type="button"
+            class="order-status-filter"
+            data-status="delivered"
+            onclick="filterOrdersByStatus('delivered')"
+          >
+            પૂર્ણ (Delivered)
+          </button>
+
         </div>
+
 
         <div class="table-responsive">
-          <table class="admin-table" id="orders-table">
+
+          <table
+            class="admin-table"
+            id="orders-table"
+          >
+
             <thead>
+
               <tr>
+
                 <th>ઓર્ડર ID</th>
-                <th>તારીખ / સમય</th>
-                <th>ગ્રાહકની વિગત</th>
-                <th>ડિલિવરી સ્થળ</th>
-                <th>વસ્તુઓ અને વજન (Items &amp; Weights)</th>
-                <th>કુલ રકમ</th>
-                <th>સ્થિતિ (Status)</th>
-                <th>ક્રિયાઓ (Actions)</th>
+
+                <th>
+                  તારીખ / સમય
+                </th>
+
+                <th>
+                  ગ્રાહકની વિગત
+                </th>
+
+                <th>
+                  ડિલિવરી સ્થળ
+                </th>
+
+                <th>
+                  વસ્તુઓ અને વજન (Items &amp; Weights)
+                </th>
+
+                <th>
+                  કુલ રકમ
+                </th>
+
+                <th>
+                  સ્થિતિ (Status)
+                </th>
+
+                <th>
+                  ક્રિયાઓ (Actions)
+                </th>
+
               </tr>
+
             </thead>
+
+
             <tbody id="orders-tbody">
-              <!-- Rendered dynamically by admin.js -->
+
+              <!-- admin.js દ્વારા orders અહીં render થશે -->
+
             </tbody>
+
           </table>
+
         </div>
+
       </div>
+
     </section>
 
-    <!-- TAB 2: KITCHEN BATCH PLANNER -->
-    <section class="admin-panel-view" id="panel-kitchen">
+
+    <!-- =======================================================
+         KITCHEN
+    ======================================================== -->
+
+    <section
+      class="admin-panel-view"
+      id="panel-kitchen"
+    >
+
       <div class="kitchen-summary-banner">
+
         <div class="kitchen-title">
-          <h3>👨‍🍳 રસોડા બેચ પ્લાનર (Daily Halwai Preparation List)</h3>
-          <p>આજે ડિલિવરી માટે કેટલા કિલો કઈ મિઠાઈ તૈયાર કરવાની છે તેની ચોક્કસ ગણતરી</p>
+
+          <h3>
+            👨‍🍳 રસોડા બેચ પ્લાનર
+          </h3>
+
+          <p>
+            આજે ડિલિવરી માટે કેટલા કિલો કઈ મિઠાઈ તૈયાર કરવાની છે તેની ચોક્કસ ગણતરી
+          </p>
+
         </div>
-        <button type="button" class="btn-panel-action" style="background:var(--gold);color:var(--charcoal);" onclick="window.print()">
-          &#128438; રસોડા સ્લિપ પ્રિન્ટ કરો (Print Kitchen Sheet)
+
+
+        <button
+          type="button"
+          class="btn-panel-action"
+          style="background:var(--gold);color:var(--charcoal);"
+          onclick="window.print()"
+        >
+          &#128438; રસોડા સ્લિપ પ્રિન્ટ કરો
         </button>
+
       </div>
 
-      <div class="kitchen-grid" id="kitchen-grid">
-        <!-- Rendered dynamically by admin.js -->
-      </div>
+
+      <div
+        class="kitchen-grid"
+        id="kitchen-grid"
+      ></div>
+
     </section>
 
-    <!-- TAB 3: BUSINESS ANALYTICS & INSIGHTS -->
-    <section class="admin-panel-view" id="panel-analytics">
+
+    <!-- =======================================================
+         ANALYTICS
+    ======================================================== -->
+
+    <section
+      class="admin-panel-view"
+      id="panel-analytics"
+    >
+
       <div class="panel-header">
+
         <div class="panel-title-wrap">
-          <h2>📊 વ્યવસાય વિશ્લેષણ અને ડેટા ઇન્ટેલિજન્સ</h2>
-          <p>વેચાણ પેટર્ન, વજન પસંદગી અને ડિલિવરી વિસ્તારનું વિશ્લેષણ</p>
+
+          <h2>
+            📊 વ્યવસાય વિશ્લેષણ અને ડેટા ઇન્ટેલિજન્સ
+          </h2>
+
+          <p>
+            વેચાણ પેટર્ન, વજન પસંદગી અને ડિલિવરી વિસ્તારનું વિશ્લેષણ
+          </p>
+
         </div>
+
       </div>
+
 
       <div class="analytics-grid-two">
-        <!-- Chart 1: Weight Distribution Analysis -->
+
         <div class="analytics-card">
+
           <div class="analytics-card-title">
-            <span>⚖️ વજન વિતરણ ટકાવારી (Fractional Weights)</span>
-            <small style="color:var(--text-muted)">સવા કિલો vs 500g vs 1kg</small>
+
+            <span>
+              ⚖️ વજન વિતરણ ટકાવારી
+            </span>
+
+            <small style="color:var(--text-muted)">
+              સવા કિલો vs 500g vs 1kg
+            </small>
+
           </div>
-          <div class="bar-chart-row" id="weight-distribution-chart">
-            <!-- Rendered dynamically -->
-          </div>
+
+
+          <div
+            class="bar-chart-row"
+            id="weight-distribution-chart"
+          ></div>
+
         </div>
 
-        <!-- Chart 2: Geographic Delivery Zones -->
+
         <div class="analytics-card">
+
           <div class="analytics-card-title">
-            <span>📍 ડિલિવરી ઝોન હિસ્સો (Zone Breakdown)</span>
-            <small style="color:var(--text-muted)">ખેરવા vs અમદાવાદ</small>
+
+            <span>
+              📍 ડિલિવરી ઝોન હિસ્સો
+            </span>
+
+            <small style="color:var(--text-muted)">
+              ખેરવા vs અમદાવાદ
+            </small>
+
           </div>
-          <div class="bar-chart-row" id="zone-distribution-chart">
-            <!-- Rendered dynamically -->
-          </div>
+
+
+          <div
+            class="bar-chart-row"
+            id="zone-distribution-chart"
+          ></div>
+
         </div>
+
       </div>
 
-      <!-- Top Selling Products Breakdown -->
+
       <div class="table-card">
-        <div class="panel-header" style="padding:16px 20px; margin:0;">
-          <h3 style="font-size:1.05rem;font-weight:800;color:var(--cobalt);">🏆 શ્રેષ્ઠ વેચાતી મિઠાઈ અને નમકીન (Top Products by Revenue &amp; KG)</h3>
+
+        <div
+          class="panel-header"
+          style="padding:16px 20px;margin:0;"
+        >
+
+          <h3
+            style="
+              font-size:1.05rem;
+              font-weight:800;
+              color:var(--cobalt);
+            "
+          >
+            🏆 શ્રેષ્ઠ વેચાતી મિઠાઈ અને નમકીન
+          </h3>
+
         </div>
+
+
         <div class="table-responsive">
-          <table class="admin-table" id="analytics-products-table">
+
+          <table
+            class="admin-table"
+            id="analytics-products-table"
+          >
+
             <thead>
+
               <tr>
+
                 <th>ઉત્પાદન નામ</th>
+
                 <th>કુલ ઓર્ડર</th>
+
                 <th>કુલ વજન (KG)</th>
+
                 <th>કુલ વેચાણ (Revenue)</th>
+
                 <th>લોકપ્રિય વજન</th>
+
               </tr>
+
             </thead>
-            <tbody id="analytics-products-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+
+
+            <tbody id="analytics-products-tbody"></tbody>
+
           </table>
+
         </div>
+
       </div>
+
     </section>
 
-    <!-- TAB 4: CUSTOMER DIRECTORY (CRM) -->
-    <section class="admin-panel-view" id="panel-crm">
+
+    <!-- =======================================================
+         CRM
+    ======================================================== -->
+
+    <section
+      class="admin-panel-view"
+      id="panel-crm"
+    >
+
       <div class="panel-header">
+
         <div class="panel-title-wrap">
-          <h2>👥 ગ્રાહક ડિરેક્ટરી અને ફેસ્ટિવલ બ્રોડકાસ્ટ (CRM)</h2>
-          <p>નિયમિત ગ્રાહકોના ફોન નંબર અને દિવાળી/તહેવાર વિશ બ્રોડકાસ્ટ લિસ્ટ</p>
+
+          <h2>
+            👥 ગ્રાહક ડિરેક્ટરી અને ફેસ્ટિવલ બ્રોડકાસ્ટ
+          </h2>
+
+          <p>
+            નિયમિત ગ્રાહકોના ફોન નંબર અને તહેવાર વિશ બ્રોડકાસ્ટ લિસ્ટ
+          </p>
+
         </div>
+
+
         <div class="panel-actions">
-          <button type="button" class="btn-panel-action btn-export-excel" onclick="exportCustomersToExcel()">
+
+          <button
+            type="button"
+            class="btn-panel-action btn-export-excel"
+            onclick="exportCustomersToExcel()"
+          >
             &#128229; ગ્રાહક ડેટા Excel (CSV) એક્સપોર્ટ
           </button>
+
         </div>
+
       </div>
+
 
       <div class="table-card">
+
         <div class="table-responsive">
-          <table class="admin-table" id="customers-table">
+
+          <table
+            class="admin-table"
+            id="customers-table"
+          >
+
             <thead>
+
               <tr>
+
                 <th>ગ્રાહક નામ</th>
+
                 <th>WhatsApp નંબર</th>
+
                 <th>શહેર</th>
+
                 <th>સરનામું</th>
+
                 <th>કુલ ઓર્ડર</th>
+
                 <th>કુલ ખરીદી (LTV)</th>
+
                 <th>છેલ્લો ઓર્ડર</th>
+
                 <th>WhatsApp</th>
+
               </tr>
+
             </thead>
-            <tbody id="customers-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+
+
+            <tbody id="customers-tbody"></tbody>
+
           </table>
+
         </div>
+
       </div>
+
     </section>
 
-    <!-- TAB 5: PRICE & STOCK CONTROLLER -->
-    <section class="admin-panel-view" id="panel-inventory">
+
+    <!-- =======================================================
+         INVENTORY
+    ======================================================== -->
+
+    <section
+      class="admin-panel-view"
+      id="panel-inventory"
+    >
+
       <div class="panel-header">
+
         <div class="panel-title-wrap">
-          <h2>🏷️ લાઈવ ભાવ, કેટાલોગ અને સ્ટોક કંટ્રોલર</h2>
-          <p>શુદ્ધ ઘીના બજાર ભાવ અનુસાર 1kg નો બેઝ રેટ બદલો — વેબસાઇટ પર તમામ વજનના ભાવ સ્વયં અપડેટ થશે</p>
+
+          <h2>
+            🏷️ લાઈવ ભાવ, કેટાલોગ અને સ્ટોક કંટ્રોલર
+          </h2>
+
+          <p>
+            1kg નો બેઝ રેટ બદલો — વેબસાઇટ પર તમામ વજનના ભાવ સ્વયં અપડેટ થશે
+          </p>
+
         </div>
-        <div class="panel-actions" style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button type="button" class="btn-panel-action" style="background:#10B981;" onclick="openAddProductModal()">
-            &#10010; નવું ઉત્પાદન ઉમેરો (+ Add Product)
+
+
+        <div
+          class="panel-actions"
+          style="display:flex;gap:10px;flex-wrap:wrap;"
+        >
+
+          <button
+            type="button"
+            class="btn-panel-action"
+            style="background:#10B981;"
+            onclick="openAddProductModal()"
+          >
+            &#10010; નવું ઉત્પાદન ઉમેરો
           </button>
-          <button type="button" class="btn-panel-action" onclick="saveAllInventoryPrices()">
-            &#128190; તમામ નવા ભાવ સેવ કરો (Save Prices)
+
+
+          <button
+            type="button"
+            class="btn-panel-action"
+            onclick="saveAllInventoryPrices()"
+          >
+            &#128190; તમામ નવા ભાવ સેવ કરો
           </button>
+
         </div>
+
       </div>
 
-      <!-- BULK PRICING TOOLBAR -->
+
+      <!-- BULK PRICING -->
+
       <div class="bulk-pricing-panel">
+
         <div class="bulk-header-row">
+
           <div class="bulk-title-wrap">
-            <span style="font-size:1.3rem;">⚡</span>
+
+            <span style="font-size:1.3rem;">
+              ⚡
+            </span>
+
             <div>
-              <div class="bulk-title">બલ્ક પ્રાઇસિંગ અપડેટ (1-Click Bulk Price Adjuster)</div>
-              <div class="bulk-sub">તહેવાર અથવા બજાર અનુસાર એક સાથે તમામ કે ચોક્કસ કેટેગરીના ભાવ વધારો / ઘટાડો</div>
+
+              <div class="bulk-title">
+                બલ્ક પ્રાઇસિંગ અપડેટ
+              </div>
+
+              <div class="bulk-sub">
+                એક સાથે તમામ અથવા ચોક્કસ કેટેગરીના ભાવ વધારો / ઘટાડો
+              </div>
+
             </div>
+
           </div>
-          <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);" id="bulk-affected-count">
-            10 ઉત્પાદનો સક્રિય
+
+
+          <div
+            id="bulk-affected-count"
+            style="
+              font-size:0.78rem;
+              font-weight:700;
+              color:var(--text-muted);
+            "
+          >
+            0 ઉત્પાદનો સક્રિય
           </div>
+
         </div>
+
 
         <div class="bulk-tool-row">
-          <label style="font-size:0.8rem;font-weight:700;color:var(--charcoal);">લક્ષ્ય કેટેગરી:</label>
-          <select id="bulk-target-category" class="bulk-target-select" onchange="updateBulkTargetCount()">
-            <option value="all">બધા ઉત્પાદનો (All Products)</option>
-            <option value="mithai">ફક્ત મીઠાઈ (Mithai Only)</option>
-            <option value="namkeen">ફક્ત નમકીન (Namkeen Only)</option>
+
+          <label
+            style="
+              font-size:0.8rem;
+              font-weight:700;
+              color:var(--charcoal);
+            "
+          >
+            લક્ષ્ય કેટેગરી:
+          </label>
+
+
+          <select
+            id="bulk-target-category"
+            class="bulk-target-select"
+            onchange="updateBulkTargetCount()"
+          >
+
+            <option value="all">
+              બધા ઉત્પાદનો
+            </option>
+
+            <option value="mithai">
+              ફક્ત મીઠાઈ
+            </option>
+
+            <option value="namkeen">
+              ફક્ત નમકીન
+            </option>
+
           </select>
 
-          <!-- Quick Chips -->
-          <button type="button" class="btn-bulk-chip" onclick="applyQuickBulkPrice(10, 'flat')">+ ₹10 વધારો</button>
-          <button type="button" class="btn-bulk-chip" onclick="applyQuickBulkPrice(20, 'flat')">+ ₹20 વધારો</button>
-          <button type="button" class="btn-bulk-chip" onclick="applyQuickBulkPrice(50, 'flat')">+ ₹50 વધારો</button>
-          <button type="button" class="btn-bulk-chip chip-discount" onclick="applyQuickBulkPrice(-10, 'flat')">- ₹10 ઘટાડો</button>
-          <button type="button" class="btn-bulk-chip chip-discount" onclick="applyQuickBulkPrice(-20, 'flat')">- ₹20 ઘટાડો</button>
-          <button type="button" class="btn-bulk-chip" onclick="applyQuickBulkPrice(5, 'pct')">+ 5%</button>
-          <button type="button" class="btn-bulk-chip" onclick="applyQuickBulkPrice(10, 'pct')">+ 10%</button>
-          <button type="button" class="btn-bulk-chip chip-discount" onclick="applyQuickBulkPrice(-5, 'pct')">- 5% ઓફર</button>
 
-          <!-- Custom Bulk Adjuster -->
+          <button
+            type="button"
+            class="btn-bulk-chip"
+            onclick="applyQuickBulkPrice(10, 'flat')"
+          >
+            + ₹10 વધારો
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip"
+            onclick="applyQuickBulkPrice(20, 'flat')"
+          >
+            + ₹20 વધારો
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip"
+            onclick="applyQuickBulkPrice(50, 'flat')"
+          >
+            + ₹50 વધારો
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip chip-discount"
+            onclick="applyQuickBulkPrice(-10, 'flat')"
+          >
+            - ₹10 ઘટાડો
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip chip-discount"
+            onclick="applyQuickBulkPrice(-20, 'flat')"
+          >
+            - ₹20 ઘટાડો
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip"
+            onclick="applyQuickBulkPrice(5, 'pct')"
+          >
+            + 5%
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip"
+            onclick="applyQuickBulkPrice(10, 'pct')"
+          >
+            + 10%
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-bulk-chip chip-discount"
+            onclick="applyQuickBulkPrice(-5, 'pct')"
+          >
+            - 5% ઓફર
+          </button>
+
+
           <div class="bulk-custom-box">
-            <select id="bulk-custom-dir" class="bulk-type-select">
-              <option value="add">+</option>
-              <option value="sub">-</option>
+
+            <select
+              id="bulk-custom-dir"
+              class="bulk-type-select"
+            >
+
+              <option value="add">
+                +
+              </option>
+
+              <option value="sub">
+                -
+              </option>
+
             </select>
-            <input type="number" id="bulk-custom-amount" class="bulk-custom-input" placeholder="0" min="1" step="1" />
-            <select id="bulk-custom-unit" class="bulk-type-select">
-              <option value="flat">₹ ફિક્સ</option>
-              <option value="pct">% ટકા</option>
+
+
+            <input
+              type="number"
+              id="bulk-custom-amount"
+              class="bulk-custom-input"
+              placeholder="0"
+              min="1"
+              step="1"
+            />
+
+
+            <select
+              id="bulk-custom-unit"
+              class="bulk-type-select"
+            >
+
+              <option value="flat">
+                ₹ ફિક્સ
+              </option>
+
+              <option value="pct">
+                % ટકા
+              </option>
+
             </select>
-            <button type="button" class="btn-bulk-apply" onclick="applyCustomBulkAdjustment()">લાગુ કરો (Apply)</button>
+
+
+            <button
+              type="button"
+              class="btn-bulk-apply"
+              onclick="applyCustomBulkAdjustment()"
+            >
+              લાગુ કરો
+            </button>
+
           </div>
+
         </div>
+
       </div>
 
-      <div class="inventory-grid" id="inventory-grid">
-        <!-- Rendered dynamically -->
-      </div>
 
-      <!-- DATA SAFETY & BACKUP STRIP -->
+      <div
+        class="inventory-grid"
+        id="inventory-grid"
+      ></div>
+
+
+      <!-- BACKUP -->
+
       <div class="backup-safety-strip">
+
         <div class="safety-info">
-          <div class="safety-icon">🛡️</div>
-          <div class="safety-text">
-            <h4>સંપૂર્ણ ડેટા સલામતી અને બેકઅપ વૉલ્ટ (Data Safety &amp; Vault)</h4>
-            <p id="safety-last-backup-text">તમામ ઓર્ડર, ગ્રાહકો, પ્રોડક્ટ કેટાલોગ અને ભાવનું સુરક્ષિત JSON બેકઅપ લો અથવા જૂનું રિસ્ટોર કરો</p>
+
+          <div class="safety-icon">
+            🛡️
           </div>
+
+          <div class="safety-text">
+
+            <h4>
+              સંપૂર્ણ ડેટા સલામતી અને બેકઅપ વૉલ્ટ
+            </h4>
+
+            <p id="safety-last-backup-text">
+              તમામ ઓર્ડર, ગ્રાહકો, પ્રોડક્ટ કેટાલોગ અને ભાવનું સુરક્ષિત JSON બેકઅપ લો અથવા જૂનું રિસ્ટોર કરો
+            </p>
+
+          </div>
+
         </div>
+
+
         <div class="safety-actions">
-          <button type="button" class="btn-safety-export" onclick="exportFullBackup()">
-            &#128229; સુરક્ષિત પૂર્ણ બેકઅપ ડાઉનલોડ (Backup JSON)
+
+          <button
+            type="button"
+            class="btn-safety-export"
+            onclick="exportFullBackup()"
+          >
+            &#128229; પૂર્ણ બેકઅપ ડાઉનલોડ
           </button>
-          <button type="button" class="btn-safety-restore" onclick="triggerRestoreBackup()">
-            &#128228; બેકઅપ રિસ્ટોર કરો (Restore)
+
+
+          <button
+            type="button"
+            class="btn-safety-restore"
+            onclick="triggerRestoreBackup()"
+          >
+            &#128228; બેકઅપ રિસ્ટોર કરો
           </button>
-          <input type="file" id="backup-file-input" accept=".json" style="display:none;" onchange="handleRestoreBackupFile(event)" />
-          <button type="button" class="btn-logout" style="font-size:0.78rem;padding:6px 10px;" onclick="confirmResetDefaults()">
+
+
+          <input
+            type="file"
+            id="backup-file-input"
+            accept=".json"
+            style="display:none;"
+            onchange="handleRestoreBackupFile(event)"
+          />
+
+
+          <button
+            type="button"
+            class="btn-logout"
+            style="font-size:0.78rem;padding:6px 10px;"
+            onclick="confirmResetDefaults()"
+          >
             &#8635; ડિફોલ્ટ રિસેટ
           </button>
+
         </div>
+
       </div>
+
     </section>
 
-    <!-- TAB 6: SUPABASE SETTINGS -->
-    <section class="admin-panel-view" id="panel-settings">
+
+    <!-- =======================================================
+         SUPABASE SETTINGS
+    ======================================================== -->
+
+    <section
+      class="admin-panel-view"
+      id="panel-settings"
+    >
+
       <div class="panel-header">
+
         <div class="panel-title-wrap">
-          <h2>⚙️ સુપાબેઝ ક્લાઉડ ડેટાબેઝ સેટિંગ્સ</h2>
-          <p>તમારા Supabase પ્રોજેક્ટની વિગતો અહીં દાખલ કરો જેથી રિયલ-ટાઈમ ક્લાઉડ સિંક શરૂ થઈ જાય</p>
+
+          <h2>
+            ⚙️ સુપાબેઝ ક્લાઉડ ડેટાબેઝ સેટિંગ્સ
+          </h2>
+
+          <p>
+            Supabase Project URL અને Anon Public Key દ્વારા ક્લાઉડ સિંક ચાલુ કરો
+          </p>
+
         </div>
+
       </div>
 
-      <div class="table-card" style="padding:28px; max-width:680px;">
-        <form id="supabase-config-form" onsubmit="saveSupabaseSettings(event)">
+
+      <div
+        class="table-card"
+        style="padding:28px;max-width:680px;"
+      >
+
+        <form
+          id="supabase-config-form"
+          onsubmit="saveSupabaseSettings(event)"
+        >
+
           <div class="admin-input-group">
-            <label class="admin-label" for="cfg-supabase-url">Supabase Project URL</label>
-            <input type="url" id="cfg-supabase-url" class="admin-input" placeholder="https://your-project.supabase.co" />
-            <small style="color:var(--text-muted);font-size:0.75rem;">દા.ત. https://xyzcompany.supabase.co</small>
+
+            <label
+              class="admin-label"
+              for="cfg-supabase-url"
+            >
+              Supabase Project URL
+            </label>
+
+
+            <input
+              type="url"
+              id="cfg-supabase-url"
+              class="admin-input"
+              placeholder="https://your-project.supabase.co"
+            />
+
+
+            <small
+              style="
+                color:var(--text-muted);
+                font-size:0.75rem;
+              "
+            >
+              દા.ત. https://xyzcompany.supabase.co
+            </small>
+
           </div>
-          <div class="admin-input-group" style="margin-top:14px;">
-            <label class="admin-label" for="cfg-supabase-key">Supabase Anon Public Key</label>
-            <input type="password" id="cfg-supabase-key" class="admin-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." />
-            <small style="color:var(--text-muted);font-size:0.75rem;">તમારા Supabase Project Settings -> API માંથી 'anon public' કી કૉપિ કરો</small>
+
+
+          <div
+            class="admin-input-group"
+            style="margin-top:14px;"
+          >
+
+            <label
+              class="admin-label"
+              for="cfg-supabase-key"
+            >
+              Supabase Anon Public Key
+            </label>
+
+
+            <input
+              type="password"
+              id="cfg-supabase-key"
+              class="admin-input"
+              placeholder="Supabase anon public key"
+            />
+
+
+            <small
+              style="
+                color:var(--text-muted);
+                font-size:0.75rem;
+              "
+            >
+              Supabase Project Settings → APIમાંથી 'anon public' કી કૉપિ કરો
+            </small>
+
           </div>
-          <div style="margin-top:20px; display:flex; gap:12px;">
-            <button type="submit" class="btn-panel-action" style="padding:10px 20px;">
+
+
+          <div
+            style="
+              margin-top:20px;
+              display:flex;
+              gap:12px;
+              flex-wrap:wrap;
+            "
+          >
+
+            <button
+              type="submit"
+              class="btn-panel-action"
+              style="padding:10px 20px;"
+            >
               &#10003; કનેક્શન સેવ કરો અને ટેસ્ટ કરો
             </button>
-            <button type="button" class="btn-logout" style="color:var(--cobalt);border-color:var(--cobalt);" onclick="testSupabaseConnection()">
-              ટેસ્ટ કનેક્શન (Ping)
+
+
+            <button
+              type="button"
+              class="btn-logout"
+              style="
+                color:var(--cobalt);
+                border-color:var(--cobalt);
+              "
+              onclick="testSupabaseConnection()"
+            >
+              ટેસ્ટ કનેક્શન
             </button>
+
           </div>
+
         </form>
 
-        <div id="cfg-status-box" style="margin-top:20px; padding:14px; border-radius:8px; display:none;"></div>
+
+        <div
+          id="cfg-status-box"
+          style="
+            margin-top:20px;
+            padding:14px;
+            border-radius:8px;
+            display:none;
+          "
+        ></div>
+
       </div>
+
     </section>
 
   </main>
 
-  <!-- ORDER DETAIL MODAL -->
-  <div class="modal-overlay" id="order-detail-modal">
+
+  <!-- =========================================================
+       ORDER DETAIL MODAL
+  ========================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="order-detail-modal"
+  >
+
     <div class="modal-card">
+
       <div class="modal-header">
-        <h3 id="modal-order-title">ઓર્ડર વિગત</h3>
-        <button type="button" class="modal-close-btn" onclick="closeOrderModal()">&times;</button>
+
+        <h3 id="modal-order-title">
+          ઓર્ડર વિગત
+        </h3>
+
+
+        <button
+          type="button"
+          class="modal-close-btn"
+          onclick="closeOrderModal()"
+        >
+          &times;
+        </button>
+
       </div>
-      <div class="modal-body" id="modal-order-body">
-        <!-- Rendered by admin.js -->
-      </div>
-      <div class="modal-footer" id="modal-order-footer">
-        <!-- Action buttons rendered by admin.js -->
-      </div>
+
+
+      <div
+        class="modal-body"
+        id="modal-order-body"
+      ></div>
+
+
+      <div
+        class="modal-footer"
+        id="modal-order-footer"
+      ></div>
+
     </div>
+
   </div>
 
-  <!-- ADD PRODUCT MODAL -->
-  <div class="modal-overlay" id="add-product-modal">
-    <div class="modal-card" style="max-width:620px;">
+
+  <!-- =========================================================
+       ADD PRODUCT MODAL
+  ========================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="add-product-modal"
+  >
+
+    <div
+      class="modal-card"
+      style="max-width:620px;"
+    >
+
       <div class="modal-header">
-        <h3>&#10010; નવું ઉત્પાદન ઉમેરો (+ Add New Product)</h3>
-        <button type="button" class="modal-close-btn" onclick="closeAddProductModal()">&times;</button>
+
+        <h3>
+          &#10010; નવું ઉત્પાદન ઉમેરો
+        </h3>
+
+
+        <button
+          type="button"
+          class="modal-close-btn"
+          onclick="closeAddProductModal()"
+        >
+          &times;
+        </button>
+
       </div>
-      <form id="add-product-form" onsubmit="handleAddNewProduct(event)">
-        <div class="modal-body" style="gap:16px;">
-          <div class="admin-form-pair" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+
+      <form
+        id="add-product-form"
+        onsubmit="handleAddNewProduct(event)"
+      >
+
+        <div
+          class="modal-body"
+          style="gap:16px;"
+        >
+
+          <div
+            class="admin-form-pair"
+            style="
+              display:grid;
+              grid-template-columns:1fr 1fr;
+              gap:12px;
+            "
+          >
+
             <div class="admin-input-group">
-              <label class="admin-label" for="new-prod-name-gu">ગુજરાતી નામ (Gujarati Name) *</label>
-              <input type="text" id="new-prod-name-gu" class="admin-input" placeholder="દા.ત. કાજુ કતરી" required oninput="updateNewProdPreview()" />
+
+              <label
+                class="admin-label"
+                for="new-prod-name-gu"
+              >
+                ગુજરાતી નામ *
+              </label>
+
+              <input
+                type="text"
+                id="new-prod-name-gu"
+                class="admin-input"
+                placeholder="દા.ત. કાજુ કતરી"
+                required
+                oninput="updateNewProdPreview()"
+              />
+
             </div>
+
+
             <div class="admin-input-group">
-              <label class="admin-label" for="new-prod-name-en">અંગ્રેજી નામ (English Name) *</label>
-              <input type="text" id="new-prod-name-en" class="admin-input" placeholder="e.g. Kaju Katli" required oninput="updateNewProdPreview()" />
+
+              <label
+                class="admin-label"
+                for="new-prod-name-en"
+              >
+                અંગ્રેજી નામ *
+              </label>
+
+              <input
+                type="text"
+                id="new-prod-name-en"
+                class="admin-input"
+                placeholder="e.g. Kaju Katli"
+                required
+                oninput="updateNewProdPreview()"
+              />
+
             </div>
+
           </div>
 
-          <div class="admin-form-pair" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+          <div
+            class="admin-form-pair"
+            style="
+              display:grid;
+              grid-template-columns:1fr 1fr;
+              gap:12px;
+            "
+          >
+
             <div class="admin-input-group">
-              <label class="admin-label" for="new-prod-category">કેટેગરી (Category) *</label>
-              <select id="new-prod-category" class="admin-input" required onchange="updateNewProdPreview()">
-                <option value="mithai">મીઠાઈ (Mithai - Sweets)</option>
-                <option value="namkeen">નમકીન (Namkeen - Savouries)</option>
+
+              <label
+                class="admin-label"
+                for="new-prod-category"
+              >
+                કેટેગરી *
+              </label>
+
+
+              <select
+                id="new-prod-category"
+                class="admin-input"
+                required
+                onchange="updateNewProdPreview()"
+              >
+
+                <option value="mithai">
+                  મીઠાઈ
+                </option>
+
+                <option value="namkeen">
+                  નમકીન
+                </option>
+
               </select>
+
             </div>
+
+
             <div class="admin-input-group">
-              <label class="admin-label" for="new-prod-price">1kg નો બેઝ ભાવ (Base Price ₹) *</label>
-              <input type="number" id="new-prod-price" class="admin-input" placeholder="500" min="50" step="10" required oninput="updateNewProdPreview()" />
+
+              <label
+                class="admin-label"
+                for="new-prod-price"
+              >
+                1kg નો બેઝ ભાવ (₹) *
+              </label>
+
+
+              <input
+                type="number"
+                id="new-prod-price"
+                class="admin-input"
+                placeholder="500"
+                min="50"
+                step="10"
+                required
+                oninput="updateNewProdPreview()"
+              />
+
             </div>
+
           </div>
 
+
           <div class="admin-input-group">
-            <label class="admin-label" for="new-prod-preset-img">પ્રીસેટ ફોટો પસંદ કરો (Choose Photo Preset)</label>
-            <select id="new-prod-preset-img" class="admin-input" onchange="onNewProdPresetChange()">
-              <option value="images/product-toprapak.jpg">ટોપરાપાક / બરફી (Toprapak / Barfi)</option>
-              <option value="images/product-mohanthal.jpg">મોહનથાળ / બેસન (Mohanthal / Besan Sweet)</option>
-              <option value="images/product-penda.jpg">માવા પેંડા (Mava Penda / Peda)</option>
-              <option value="images/product-ladva.jpg">ચુરમા લાડવા (Churma Ladva)</option>
-              <option value="images/product-jalebi.jpg">કેસર જલેબી (Hot Kesar Jalebi)</option>
-              <option value="images/product-feni.jpg">સુતરફેણી (Sutarfeni)</option>
-              <option value="images/product-ganthiya.jpg">ભાવનગરી ગાંઠિયા (Ganthiya)</option>
-              <option value="images/product-chorafari.jpg">ક્રિસ્પી ચોરાફળી (Chorafari)</option>
-              <option value="images/product-chavanu.jpg">મિક્સ ચવાણું / સેવ (Chavanu)</option>
-              <option value="images/product-farali.jpg">ફરાળી ચેવડો (Farali Chevdo)</option>
-              <option value="images/category-gifting.jpg">પ્રીમિયમ ગિફ્ટ બોક્સ (Gift Box)</option>
-              <option value="custom">-- કસ્ટમ ઇમેજ લિંક દાખલ કરો (Custom URL) --</option>
+
+            <label
+              class="admin-label"
+              for="new-prod-preset-img"
+            >
+              પ્રીસેટ ફોટો પસંદ કરો
+            </label>
+
+
+            <select
+              id="new-prod-preset-img"
+              class="admin-input"
+              onchange="onNewProdPresetChange()"
+            >
+
+              <option value="images/product-toprapak.jpg">
+                ટોપરાપાક / બરફી
+              </option>
+
+              <option value="images/product-mohanthal.jpg">
+                મોહનથાળ / બેસન
+              </option>
+
+              <option value="images/product-penda.jpg">
+                માવા પેંડા
+              </option>
+
+              <option value="images/product-ladva.jpg">
+                ચુરમા લાડવા
+              </option>
+
+              <option value="images/product-jalebi.jpg">
+                કેસર જલેબી
+              </option>
+
+              <option value="images/product-feni.jpg">
+                સુતરફેણી
+              </option>
+
+              <option value="images/product-ganthiya.jpg">
+                ભાવનગરી ગાંઠિયા
+              </option>
+
+              <option value="images/product-chorafari.jpg">
+                ક્રિસ્પી ચોરાફળી
+              </option>
+
+              <option value="images/product-chavanu.jpg">
+                મિક્સ ચવાણું / સેવ
+              </option>
+
+              <option value="images/product-farali.jpg">
+                ફરાળી ચેવડો
+              </option>
+
+              <option value="images/category-gifting.jpg">
+                પ્રીમિયમ ગિફ્ટ બોક્સ
+              </option>
+
+              <option value="custom">
+                -- કસ્ટમ ઇમેજ લિંક --
+              </option>
+
             </select>
+
           </div>
 
-          <div class="admin-input-group" id="new-prod-custom-url-group" style="display:none;">
-            <label class="admin-label" for="new-prod-img">કસ્ટમ ઇમેજ URL (Custom Image Path/URL)</label>
-            <input type="text" id="new-prod-img" class="admin-input" placeholder="images/your-photo.jpg અથવા https://..." oninput="updateNewProdPreview()" />
+
+          <div
+            class="admin-input-group"
+            id="new-prod-custom-url-group"
+            style="display:none;"
+          >
+
+            <label
+              class="admin-label"
+              for="new-prod-img"
+            >
+              કસ્ટમ ઇમેજ URL
+            </label>
+
+
+            <input
+              type="text"
+              id="new-prod-img"
+              class="admin-input"
+              placeholder="images/your-photo.jpg અથવા https://..."
+              oninput="updateNewProdPreview()"
+            />
+
           </div>
+
 
           <div class="admin-input-group">
-            <label class="admin-label" for="new-prod-desc-gu">ટૂંકી વિગત (Short Description - Gujarati)</label>
-            <input type="text" id="new-prod-desc-gu" class="admin-input" placeholder="દા.ત. શુદ્ધ દેશી ઘી અને તાજા માવામાંથી બનેલી પ્રીમિયમ બનાવટ" />
+
+            <label
+              class="admin-label"
+              for="new-prod-desc-gu"
+            >
+              ટૂંકી વિગત
+            </label>
+
+
+            <input
+              type="text"
+              id="new-prod-desc-gu"
+              class="admin-input"
+              placeholder="દા.ત. શુદ્ધ દેશી ઘી અને તાજા માવામાંથી બનેલી પ્રીમિયમ બનાવટ"
+            />
+
           </div>
 
-          <!-- LIVE PREVIEW CARD -->
-          <div style="background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:8px;padding:12px;display:flex;align-items:center;gap:14px;">
-            <img id="new-prod-preview-img" src="images/product-toprapak.jpg" alt="Preview" style="width:58px;height:58px;object-fit:cover;border-radius:6px;border:1px solid #CBD5E1;" />
+
+          <!-- PRODUCT PREVIEW -->
+
+          <div
+            style="
+              background:#F8FAFC;
+              border:1px dashed #CBD5E1;
+              border-radius:8px;
+              padding:12px;
+              display:flex;
+              align-items:center;
+              gap:14px;
+            "
+          >
+
+            <img
+              id="new-prod-preview-img"
+              src="images/product-toprapak.jpg"
+              alt="Preview"
+              style="
+                width:58px;
+                height:58px;
+                object-fit:cover;
+                border-radius:6px;
+                border:1px solid #CBD5E1;
+              "
+            />
+
+
             <div style="flex:1;">
-              <div style="display:flex;align-items:center;gap:6px;">
-                <strong id="new-prod-preview-title" style="font-size:0.95rem;color:var(--charcoal);">નવું ઉત્પાદન</strong>
-                <span id="new-prod-preview-tag" class="inv-badge-tag">મીઠાઈ</span>
+
+              <div
+                style="
+                  display:flex;
+                  align-items:center;
+                  gap:6px;
+                "
+              >
+
+                <strong
+                  id="new-prod-preview-title"
+                  style="
+                    font-size:0.95rem;
+                    color:var(--charcoal);
+                  "
+                >
+                  નવું ઉત્પાદન
+                </strong>
+
+
+                <span
+                  id="new-prod-preview-tag"
+                  class="inv-badge-tag"
+                >
+                  મીઠાઈ
+                </span>
+
               </div>
-              <div id="new-prod-preview-en" style="font-size:0.8rem;color:#64748B;">New Product</div>
-              <div style="font-size:0.88rem;font-weight:800;color:var(--cobalt);margin-top:2px;">
-                <span id="new-prod-preview-price">₹500</span> <small style="font-weight:500;color:#64748B;">/ 1kg</small>
+
+
+              <div
+                id="new-prod-preview-en"
+                style="
+                  font-size:0.8rem;
+                  color:#64748B;
+                "
+              >
+                New Product
               </div>
+
+
+              <div
+                style="
+                  font-size:0.88rem;
+                  font-weight:800;
+                  color:var(--cobalt);
+                  margin-top:2px;
+                "
+              >
+
+                <span id="new-prod-preview-price">
+                  ₹500
+                </span>
+
+                <small
+                  style="
+                    font-weight:500;
+                    color:#64748B;
+                  "
+                >
+                  / 1kg
+                </small>
+
+              </div>
+
             </div>
+
           </div>
+
         </div>
+
 
         <div class="modal-footer">
-          <button type="button" class="btn-logout" onclick="closeAddProductModal()">રદ કરો (Cancel)</button>
-          <button type="submit" class="btn-panel-action" style="background:#10B981;">
-            &#10003; સાઈટ પર લાઈવ ઉમેરો (Add to Live Store)
+
+          <button
+            type="button"
+            class="btn-logout"
+            onclick="closeAddProductModal()"
+          >
+            રદ કરો
           </button>
+
+
+          <button
+            type="submit"
+            class="btn-panel-action"
+            style="background:#10B981;"
+          >
+            &#10003; સાઈટ પર લાઈવ ઉમેરો
+          </button>
+
         </div>
+
       </form>
+
     </div>
+
   </div>
 
-  <!-- PRINT SLIP CONTAINER (Hidden until window.print is called) -->
-  <div id="print-slip-area" style="display:none;"></div>
+
+  <!-- =========================================================
+       PRINT SLIP
+  ========================================================== -->
+
+  <div
+    id="print-slip-area"
+    style="display:none;"
+  ></div>
+
+
+  <!-- =========================================================
+       ADMIN JAVASCRIPT
+  ========================================================== -->
 
   <script src="admin.js"></script>
+
+
+  <!-- =========================================================
+       EXTRA ADMIN ORDER REFRESH SAFETY
+       This helps admin page detect orders saved by index.html
+  ========================================================== -->
+
+  <script>
+    (function () {
+
+      function refreshAdminOrdersSafe() {
+
+        try {
+
+          if (
+            typeof window.refreshAdminOrders === "function"
+          ) {
+            window.refreshAdminOrders(false);
+            return;
+          }
+
+          if (
+            typeof window.refreshOrdersFromLocalStorage === "function"
+          ) {
+            window.refreshOrdersFromLocalStorage();
+            return;
+          }
+
+        } catch (error) {
+
+          console.warn(
+            "Admin order refresh error:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /* Other browser tab/window saved a new order */
+      window.addEventListener(
+        "storage",
+        function (event) {
+
+          if (
+            event.key === "psm_orders"
+          ) {
+            refreshAdminOrdersSafe();
+          }
+
+        }
+      );
+
+
+      /* Admin page becomes visible */
+      document.addEventListener(
+        "visibilitychange",
+        function () {
+
+          if (
+            document.visibilityState === "visible"
+          ) {
+            refreshAdminOrdersSafe();
+          }
+
+        }
+      );
+
+
+      /* Admin page gets focus */
+      window.addEventListener(
+        "focus",
+        function () {
+          refreshAdminOrdersSafe();
+        }
+      );
+
+
+      /*
+       * Small polling safety net.
+       * Checks localStorage every 5 seconds while
+       * admin page is visible.
+       */
+      setInterval(
+        function () {
+
+          if (
+            document.visibilityState === "visible"
+          ) {
+            refreshAdminOrdersSafe();
+          }
+
+        },
+        5000
+      );
+
+    })();
+  </script>
+
 </body>
 </html>
