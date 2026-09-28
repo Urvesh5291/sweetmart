@@ -7,6 +7,23 @@
 
 /* ---- LANGUAGE SWITCHER ---- */
 let currentLang = localStorage.getItem('psm-lang') || 'gu';
+function submitOrder(customerDetails, cartItems, totalAmount) {
+    db.collection("orders").add({
+        name: customerDetails.name,
+        phone: customerDetails.phone,
+        address: customerDetails.address,
+        items: cartItems,
+        total: totalAmount,
+        status: "Pending",
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        alert("Tamaro order safaltapoorvak place thai gyo che!");
+    })
+    .catch((error) => {
+        console.error("Order save thavama bhool che: ", error);
+    });
+}
 
 function applyLang(lang) {
   currentLang = lang;
