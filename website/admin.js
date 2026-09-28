@@ -1,4 +1,42 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const ordersContainer = document.getElementById("orders-container"); // Tamaru HTML container ID je admin.html ma che
+    
+    if (ordersContainer) {
+        db.collection("orders").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+            ordersContainer.innerHTML = "";
+            if (snapshot.empty) {
+                ordersContainer.innerHTML = "<p>Hajie koi order nathi.</p>";
+                return;
+            }
+            
+            snapshot.forEach((doc) => {
+                const order = doc.data();
+                const orderId = doc.id;
+                
+                let itemsList = "";
+                if(order.items && Array.isArray(order.items)) {
+                    itemsList = order.items.map(item => `<li>${item.name} (x${item.quantity}) - ₹${item.price}</li>`).join("");
+                }
+
+                const card = document.createElement("div");
+                card.className = "order-card";
+                card.style.cssText = "background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 4px solid #ff4757;";
+                card.innerHTML = `
+                    <h4>Order ID: ${orderId}</h4>
+                    <p><b>Grahak nu Naam:</b> ${order.name}</p>
+                    <p><b>Phone Number:</b> ${order.phone}</p>
+                    <p><b>Sarunamaanu:</b> ${order.address}</p>
+                    <p><b>Items:</b><ul>${itemsList}</ul></p>
+                    <p><b>Kul Rakkam:</b> ₹${order.total}</p>
+                    <p><b>Status:</b> <span style="color: orange; font-weight: bold;">${order.status}</span></p>
+                `;
+                ordersContainer.appendChild(card);
+            });
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
     const loginModal = document.getElementById("login-modal");
     const adminDashboard = document.getElementById("admin-dashboard");
     const loginForm = document.getElementById("admin-login-form");
