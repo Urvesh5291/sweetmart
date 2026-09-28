@@ -3,18 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title class="lang-title">પટેલ સ્વીટ માર્ટ — Patel Sweet Mart</title>
+    <title>પટેલ સ્વીટ માર્ટ — Patel Sweet Mart</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        body { font-family: Arial, sans-serif; padding: 10px; background: #f4f4f4; }
-        header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-        .product-card { background: #fff; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .product-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; }
-        select, button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-        .add-btn { background: #ff4757; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .lang-btn { background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-    </style>
 </head>
 <body>
 
@@ -30,33 +20,37 @@
 
     <main>
         <section class="products-section">
-            <h3 id="sec-heading" data-en="Products" data-gu="વસ્તુઓ">Products / વસ્તુઓ</h3>
+            <h3 id="sec-heading" data-en="Products" data-gu="વસ્તુઓ">વસ્તુઓ</h3>
             <div class="product-grid">
                 
                 <!-- Product 1: Toprapak -->
                 <div class="product-card">
                     <img src="images/toprapak.jpg" alt="Toprapak" onerror="this.src='logo.png'">
-                    <h4 data-en="Toprapak (Green)" data-gu="ટોપરાપાક (લીલો)">ટોપરાપાક (Toprapak)</h4>
+                    <h4 data-en="Toprapak (Green)" data-gu="ટોપરાપાક (લીલો)">ટોપરાપાક (લીલો)</h4>
                     <p>₹500 / kg</p>
                     <select id="weight-toprapak">
                         <option value="1kg">1 kg (₹500)</option>
                         <option value="500g">500 g (₹250)</option>
                         <option value="250g">250 g (₹130)</option>
                     </select>
-                    <button class="add-btn" onclick="addCustomToCart('Toprapak', 500, 'weight-toprapak')">Add to Cart</button>
+                    <button class="add-btn" onclick="addCustomToCart('Toprapak', 500, 'weight-toprapak')">
+                        <span data-en="Add to Cart" data-gu="કાર્ટમાં ઉમેરો">કાર્ટમાં ઉમેરો</span>
+                    </button>
                 </div>
 
                 <!-- Product 2: Namkin Sev -->
                 <div class="product-card">
                     <img src="images/sev.jpg" alt="Namkin Sev" onerror="this.src='logo.png'">
-                    <h4 data-en="Namkin Sev" data-gu="તીખી સેવ">તીખી સેવ (Namkin Sev)</h4>
+                    <h4 data-en="Namkin Sev" data-gu="તીખી સેવ">તીખી સેવ</h4>
                     <p>₹180 / kg</p>
                     <select id="weight-sev">
                         <option value="1kg">1 kg (₹180)</option>
                         <option value="500g">500 g (₹90)</option>
                         <option value="250g">250 g (₹45)</option>
                     </select>
-                    <button class="add-btn" onclick="addCustomToCart('Namkin Sev', 180, 'weight-sev')">Add to Cart</button>
+                    <button class="add-btn" onclick="addCustomToCart('Namkin Sev', 180, 'weight-sev')">
+                        <span data-en="Add to Cart" data-gu="કાર્ટમાં ઉમેરો">કાર્ટમાં ઉમેરો</span>
+                    </button>
                 </div>
 
             </div>
