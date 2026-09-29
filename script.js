@@ -3746,3 +3746,1167 @@ window.PSM = {
     getProductPrice
 
 };
+/* ============================================================
+   PATEL SWEET MART — FINAL COMPATIBILITY FIX
+   Fix:
+   1. Add To Cart
+   2. Weight selection
+   3. Gujarati / English language
+   4. Cart drawer ID mismatch
+   5. Cart badge
+   ============================================================ */
+
+(function () {
+
+    'use strict';
+
+
+    /* ==========================================================
+       LANGUAGE FIX
+       Supports BOTH:
+       .gu-text / .en-text
+       AND
+       [data-lang="gu"] / [data-lang="en"]
+       ========================================================== */
+
+    window.applyLang = function (lang) {
+
+        lang = String(lang || '').toLowerCase() === 'en'
+            ? 'en'
+            : 'gu';
+
+        currentLang = lang;
+
+        localStorage.setItem('psm-lang', lang);
+
+        document.documentElement.setAttribute(
+            'data-lang',
+            lang
+        );
+
+        document.documentElement.lang =
+            lang === 'gu'
+                ? 'gu-IN'
+                : 'en-IN';
+
+
+        /* Old language system */
+
+        document.querySelectorAll('.gu-text').forEach(function (el) {
+
+            el.style.display =
+                lang === 'gu'
+                    ? ''
+                    : 'none';
+
+        });
+
+
+        document.querySelectorAll('.en-text').forEach(function (el) {
+
+            el.style.display =
+                lang === 'en'
+                    ? ''
+                    : 'none';
+
+        });
+
+
+        /* New data-lang system */
+
+        document.querySelectorAll('[data-lang="gu"]').forEach(function (el) {
+
+            el.style.display =
+                lang === 'gu'
+                    ? ''
+                    : 'none';
+
+        });
+
+
+        document.querySelectorAll('[data-lang="en"]').forEach(function (el) {
+
+            el.style.display =
+                lang === 'en'
+                    ? ''
+                    : 'none';
+
+        });
+
+
+        /* Language buttons */
+
+        var guButton =
+            document.getElementById('btn-gu');
+
+        var enButton =
+            document.getElementById('btn-en');
+
+
+        if (guButton) {
+
+            guButton.classList.toggle(
+                'active-lang',
+                lang === 'gu'
+            );
+
+        }
+
+
+        if (enButton) {
+
+            enButton.classList.toggle(
+                'active-lang',
+                lang === 'en'
+            );
+
+        }
+
+
+        /* Other possible buttons */
+
+        document
+            .querySelectorAll('[data-set-lang="gu"]')
+            .forEach(function (el) {
+
+                el.classList.toggle(
+                    'active-lang',
+                    lang === 'gu'
+                );
+
+            });
+
+
+        document
+            .querySelectorAll('[data-set-lang="en"]')
+            .forEach(function (el) {
+
+                el.classList.toggle(
+                    'active-lang',
+                    lang === 'en'
+                );
+
+            });
+
+
+        /* Refresh cart language */
+
+        if (typeof updateCartBadges === 'function') {
+            updateCartBadges();
+        }
+
+        if (typeof renderCartBody === 'function') {
+            renderCartBody();
+        }
+
+
+        /* Custom cart system */
+
+        if (typeof renderCart === 'function') {
+            renderCart();
+        }
+
+    };
+
+
+    window.toggleLang = function () {
+
+        var nextLanguage =
+            currentLang === 'gu'
+                ? 'en'
+                : 'gu';
+
+        window.applyLang(nextLanguage);
+
+    };
+
+
+    window.setLang = function (lang) {
+
+        window.applyLang(lang);
+
+    };
+
+
+    /* ==========================================================
+       WEIGHT SELECTION FIX
+       ========================================================== */
+
+    window.selectProductWeight = function (
+        productId,
+        weightKey,
+        multiplier,
+        label
+    ) {
+
+        productId = String(productId);
+
+        var product =
+            typeof PRODUCTS !== 'undefined'
+                ? PRODUCTS[productId]
+                : null;
+
+
+        if (!product) {
+
+            console.warn(
+                'Product not found:',
+                productId
+            );
+
+            return;
+
+        }
+
+
+        multiplier =
+            Number(multiplier);
+
+
+        if (!Number.isFinite(multiplier) ||
+            multiplier <= 0) {
+
+            multiplier = 1;
+
+        }
+
+
+        var basePrice =
+            Number(product.basePrice) || 0;
+
+
+        var calculatedPrice =
+            Math.round(
+                basePrice * multiplier
+            );
+
+
+        var labelData;
+
+
+        if (typeof formatWeightLabel === 'function') {
+
+            labelData =
+                formatWeightLabel(multiplier);
+
+        } else {
+
+            labelData = {
+
+                gu:
+                    multiplier === 1
+                        ? '1kg'
+                        : Math.round(multiplier * 1000) + 'g',
+
+                en:
+                    multiplier === 1
+                        ? '1kg'
+                        : Math.round(multiplier * 1000) + 'g',
+
+                key:
+                    weightKey || String(multiplier)
+
+            };
+
+        }
+
+
+        if (typeof selectedWeights === 'undefined') {
+
+            window.selectedWeights = {};
+
+        }
+
+
+        selectedWeights[productId] = {
+
+            weightKey:
+                weightKey || labelData.key,
+
+            multiplier:
+                multiplier,
+
+            label:
+                label ||
+                (
+                    currentLang === 'gu'
+                        ? labelData.gu
+                        : labelData.en
+                ),
+
+            labelGu:
+                labelData.gu,
+
+            labelEn:
+                labelData.en,
+
+            price:
+                calculatedPrice
+
+        };
+
+
+        /* Update product card selected button */
+
+        var card =
+            document.querySelector(
+                '[data-product-id="' +
+                productId +
+                '"]'
+            );
+
+
+        if (card) {
+
+            card
+                .querySelectorAll(
+                    '[data-weight]'
+                )
+                .forEach(function (btn) {
+
+                    btn.classList.remove(
+                        'active',
+                        'selected'
+                    );
+
+                });
+
+
+            var selectedButton =
+                card.querySelector(
+                    '[data-weight="' +
+                    (weightKey || labelData.key) +
+                    '"]'
+                );
+
+
+            if (selectedButton) {
+
+                selectedButton.classList.add(
+                    'active',
+                    'selected'
+                );
+
+            }
+
+        }
+
+
+        /* Common IDs */
+
+        var priceElements = [
+
+            'price-' + productId,
+
+            'product-price-' + productId,
+
+            'selected-price-' + productId,
+
+            'weight-price-' + productId
+
+        ];
+
+
+        priceElements.forEach(function (elementId) {
+
+            var element =
+                document.getElementById(elementId);
+
+
+            if (element) {
+
+                element.textContent =
+                    '₹' +
+                    calculatedPrice.toLocaleString(
+                        'en-IN'
+                    );
+
+            }
+
+        });
+
+
+        /* Selected weight display */
+
+        var weightElements = [
+
+            'selected-weight-' + productId,
+
+            'weight-label-' + productId,
+
+            'current-weight-' + productId
+
+        ];
+
+
+        weightElements.forEach(function (elementId) {
+
+            var element =
+                document.getElementById(elementId);
+
+
+            if (element) {
+
+                element.textContent =
+                    currentLang === 'gu'
+                        ? labelData.gu
+                        : labelData.en;
+
+            }
+
+        });
+
+
+        /* Radio buttons */
+
+        document
+            .querySelectorAll(
+                'input[name="weight-' +
+                productId +
+                '"]'
+            )
+            .forEach(function (radio) {
+
+                radio.checked =
+                    String(radio.value) ===
+                    String(weightKey);
+
+            });
+
+    };
+
+
+    /* ==========================================================
+       FORCE WEIGHT BUTTONS TO WORK
+       ========================================================== */
+
+    document.addEventListener(
+        'click',
+        function (event) {
+
+            var button =
+                event.target.closest(
+                    '[data-weight]'
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            var productId =
+                button.getAttribute(
+                    'data-product-id'
+                );
+
+
+            if (!productId) {
+
+                var parent =
+                    button.closest(
+                        '[data-product-id]'
+                    );
+
+
+                if (parent) {
+
+                    productId =
+                        parent.getAttribute(
+                            'data-product-id'
+                        );
+
+                }
+
+            }
+
+
+            if (!productId) {
+                return;
+            }
+
+
+            var weightKey =
+                button.getAttribute(
+                    'data-weight'
+                );
+
+
+            var multiplier =
+                Number(
+                    button.getAttribute(
+                        'data-multiplier'
+                    )
+                );
+
+
+            if (!Number.isFinite(multiplier)) {
+
+                var weightText =
+                    String(weightKey || '')
+                        .toLowerCase()
+                        .replace('kg', '')
+                        .replace('g', '');
+
+
+                var numeric =
+                    Number(weightText);
+
+
+                if (weightKey &&
+                    weightKey.toLowerCase().includes('g')) {
+
+                    multiplier =
+                        numeric / 1000;
+
+                } else {
+
+                    multiplier =
+                        numeric || 1;
+
+                }
+
+            }
+
+
+            var label =
+                button.getAttribute(
+                    'data-label'
+                ) ||
+                button.textContent.trim();
+
+
+            window.selectProductWeight(
+                productId,
+                weightKey,
+                multiplier,
+                label
+            );
+
+        }
+    );
+
+
+    /* ==========================================================
+       ADD TO CART FIX
+       ========================================================== */
+
+    window.addToCart = function (
+        id,
+        nameGu,
+        nameEn,
+        price,
+        img,
+        unit
+    ) {
+
+        var productId =
+            String(id || '').trim();
+
+
+        if (!productId) {
+
+            console.error(
+                'Add to Cart: Product ID missing'
+            );
+
+            return;
+
+        }
+
+
+        var basePrice =
+            Number(price) || 0;
+
+
+        /* Get actual product */
+
+        var product =
+            typeof PRODUCTS !== 'undefined'
+                ? PRODUCTS[productId]
+                : null;
+
+
+        if (product) {
+
+            nameGu =
+                product.nameGu ||
+                nameGu ||
+                productId;
+
+            nameEn =
+                product.nameEn ||
+                nameEn ||
+                productId;
+
+            basePrice =
+                Number(
+                    product.basePrice
+                ) || basePrice;
+
+            img =
+                product.img ||
+                img ||
+                'logo.png';
+
+        }
+
+
+        /* Selected weight */
+
+        var selected =
+            typeof selectedWeights !== 'undefined'
+                ? selectedWeights[productId]
+                : null;
+
+
+        if (!selected) {
+
+            selected = {
+
+                weightKey: '1kg',
+
+                multiplier: 1,
+
+                label: '1kg',
+
+                labelGu: '1kg',
+
+                labelEn: '1kg',
+
+                price: basePrice
+
+            };
+
+
+            if (typeof selectedWeights !== 'undefined') {
+
+                selectedWeights[productId] =
+                    selected;
+
+            }
+
+        }
+
+
+        var weightKey =
+            selected.weightKey ||
+            '1kg';
+
+
+        var multiplier =
+            Number(
+                selected.multiplier
+            ) || 1;
+
+
+        var selectedPrice =
+            Number(
+                selected.price
+            );
+
+
+        if (!Number.isFinite(selectedPrice) ||
+            selectedPrice <= 0) {
+
+            selectedPrice =
+                Math.round(
+                    basePrice * multiplier
+                );
+
+        }
+
+
+        var cartItemId =
+            productId +
+            '_' +
+            weightKey;
+
+
+        /* Make sure cart exists */
+
+        if (!Array.isArray(cart)) {
+            cart = [];
+        }
+
+
+        /* Find existing item */
+
+        var existing =
+            cart.find(function (item) {
+
+                return String(item.id) ===
+                    String(cartItemId);
+
+            });
+
+
+        if (existing) {
+
+            existing.qty =
+                Math.max(
+                    1,
+                    Number(existing.qty || 0) + 1
+                );
+
+        } else {
+
+            cart.push({
+
+                id:
+                    cartItemId,
+
+                productId:
+                    productId,
+
+                nameGu:
+                    nameGu,
+
+                nameEn:
+                    nameEn,
+
+                weightKey:
+                    weightKey,
+
+                weightLabel:
+                    selected.label ||
+                    unit ||
+                    '1kg',
+
+                weightLabelGu:
+                    selected.labelGu ||
+                    selected.label ||
+                    unit ||
+                    '1kg',
+
+                weightLabelEn:
+                    selected.labelEn ||
+                    selected.label ||
+                    unit ||
+                    '1kg',
+
+                multiplier:
+                    multiplier,
+
+                basePrice:
+                    basePrice,
+
+                price:
+                    selectedPrice,
+
+                img:
+                    img || 'logo.png',
+
+                qty:
+                    1
+
+            });
+
+        }
+
+
+        /* Save */
+
+        if (typeof saveCart === 'function') {
+
+            saveCart();
+
+        } else {
+
+            var data =
+                JSON.stringify(cart);
+
+            localStorage.setItem(
+                'psm-cart',
+                data
+            );
+
+            localStorage.setItem(
+                'psm_cart',
+                data
+            );
+
+        }
+
+
+        /* Update UI */
+
+        if (typeof updateCartBadges === 'function') {
+            updateCartBadges();
+        }
+
+        if (typeof renderCartBody === 'function') {
+            renderCartBody();
+        }
+
+
+        /* Button feedback */
+
+        var button =
+            document.getElementById(
+                'btn-add-' + productId
+            );
+
+
+        if (button) {
+
+            var oldHTML =
+                button.innerHTML;
+
+
+            button.classList.add(
+                'added'
+            );
+
+
+            button.innerHTML =
+                currentLang === 'gu'
+                    ? '✓ ઉમેરાયું'
+                    : '✓ Added';
+
+
+            setTimeout(function () {
+
+                button.innerHTML =
+                    oldHTML;
+
+                button.classList.remove(
+                    'added'
+                );
+
+            }, 1200);
+
+        }
+
+
+        /* Toast */
+
+        var displayName =
+            currentLang === 'gu'
+                ? nameGu
+                : nameEn;
+
+
+        if (typeof showToast === 'function') {
+
+            showToast(
+
+                currentLang === 'gu'
+
+                    ? '🛒 <strong>' +
+                      displayName +
+                      '</strong> (' +
+                      (selected.label || '1kg') +
+                      ') કાર્ટમાં ઉમેરાયું!'
+
+                    : '🛒 <strong>' +
+                      displayName +
+                      '</strong> (' +
+                      (selected.label || '1kg') +
+                      ') added to cart!'
+
+            );
+
+        }
+
+
+        console.log(
+            'Added to cart:',
+            cartItemId,
+            cart
+        );
+
+    };
+
+
+    /* ==========================================================
+       CART ID COMPATIBILITY
+       ========================================================== */
+
+    function setupCartCompatibility() {
+
+        var oldDrawer =
+            document.getElementById(
+                'cart-drawer'
+            );
+
+
+        var newDrawer =
+            document.getElementById(
+                'cartDrawer'
+            );
+
+
+        var oldBackdrop =
+            document.getElementById(
+                'cart-backdrop'
+            );
+
+
+        var newBackdrop =
+            document.getElementById(
+                'cartOverlay'
+            );
+
+
+        var oldBody =
+            document.getElementById(
+                'cart-body'
+            );
+
+
+        var newBody =
+            document.getElementById(
+                'cartItems'
+            );
+
+
+        /*
+         * Current script uses old IDs.
+         * If new HTML uses new IDs, create aliases.
+         */
+
+        if (!oldDrawer && newDrawer) {
+
+            newDrawer.id =
+                'cart-drawer';
+
+        }
+
+
+        if (!oldBackdrop && newBackdrop) {
+
+            newBackdrop.id =
+                'cart-backdrop';
+
+        }
+
+
+        if (!oldBody && newBody) {
+
+            newBody.id =
+                'cart-body';
+
+        }
+
+    }
+
+
+    /* ==========================================================
+       CHECKOUT COMPATIBILITY
+       ========================================================== */
+
+    window.openCheckout = function () {
+
+        /* First support old checkout */
+
+        var oldCheckout =
+            document.getElementById(
+                'checkout-modal'
+            );
+
+
+        if (oldCheckout) {
+
+            oldCheckout.classList.add(
+                'open'
+            );
+
+            oldCheckout.setAttribute(
+                'aria-hidden',
+                'false'
+            );
+
+            return;
+
+        }
+
+
+        /* New checkout modal */
+
+        var modal =
+            document.getElementById(
+                'checkoutModal'
+            );
+
+
+        if (modal) {
+
+            modal.classList.add(
+                'active'
+            );
+
+            modal.setAttribute(
+                'aria-hidden',
+                'false'
+            );
+
+
+            if (
+                typeof renderCartBody ===
+                'function'
+            ) {
+
+                renderCartBody();
+
+            }
+
+        }
+
+    };
+
+
+    window.closeCheckout = function () {
+
+        var modal =
+            document.getElementById(
+                'checkoutModal'
+            );
+
+
+        if (modal) {
+
+            modal.classList.remove(
+                'active'
+            );
+
+            modal.setAttribute(
+                'aria-hidden',
+                'true'
+            );
+
+        }
+
+
+        var oldModal =
+            document.getElementById(
+                'checkout-modal'
+            );
+
+
+        if (oldModal) {
+
+            oldModal.classList.remove(
+                'open'
+            );
+
+            oldModal.setAttribute(
+                'aria-hidden',
+                'true'
+            );
+
+        }
+
+    };
+
+
+    /* ==========================================================
+       OPEN CART COMPATIBILITY
+       ========================================================== */
+
+    var originalOpenCart =
+        window.openCart;
+
+
+    window.openCart = function () {
+
+        setupCartCompatibility();
+
+
+        
+           if (
+            typeof originalOpenCart ===
+            'function'
+        ) {
+              originalOpenCart();
+
+            return;
+
+    }
+       var drawer =
+            document.getElementById(
+                'cart-drawer'
+            );
+       var backdrop =
+            document.getElementById(
+                'cart-backdrop'
+            );
+       if (drawer) {
+
+            drawer.classList.add(
+                'open'
+            );
+
+       }
+       if (backdrop) {
+
+            backdrop.classList.add(
+                'open'
+            );
+
+        }
+
+
+        if (typeof renderCartBody === 'function') {
+
+            renderCartBody();
+
+        }
+
+    };
+   /* ==========================================================
+       INIT
+       ========================================================== */
+
+    function finalFixInit() {
+
+        setupCartCompatibility();
+
+
+        var savedLanguage =
+            localStorage.getItem(
+                'psm-lang'
+            ) || 'gu';
+
+
+        window.applyLang(
+            savedLanguage
+        );
+       if (
+            typeof updateCartBadges ===
+            'function'
+        ) {
+
+            updateCartBadges();
+
+        }
+
+
+        if (
+            typeof renderCartBody ===
+            'function'
+        ) {
+
+            renderCartBody();
+
+        }
+
+    }
+   if (
+        document.readyState ===
+        'loading'
+    ) {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            finalFixInit
+        );
+
+    } else {
+
+        finalFixInit();
+
+    }
+
+
+})();
