@@ -1,2381 +1,3748 @@
-```javascript
 /* ================================================================
-   PATEL SWEET MART — FIXED CART + ORDER SYSTEM
-   ------------------------------------------------
-   FIXES:
-   1. Supports both psm-cart and psm_cart
-   2. Compatible with old/new addToCart() calls
-   3. Cart immediately updates on website
-   4. Cart persists after refresh
-   5. Orders save to localStorage BEFORE WhatsApp opens
-   6. Admin/order page gets update event
-   7. Supabase order sync supported
+   PATEL SWEET MART — script.js
+   Main Website Controller
+   Cart + Orders + WhatsApp + Language + Owner Hub + Live Pricing
    ================================================================ */
 
 'use strict';
 
-/* ================================================================
-   CART STORAGE CONFIG
-   ================================================================ */
-
-const CART_STORAGE_KEY = 'psm-cart';
-const OLD_CART_STORAGE_KEY = 'psm_cart';
-const ORDERS_STORAGE_KEY = 'psm_orders';
 
 /* ================================================================
-   SAFE JSON HELPERS
-   ================================================================ */
+   CONFIG
+================================================================ */
 
-function safeGetJSON(key, fallback) {
-  try {
-    const value = localStorage.getItem(key);
+const PSM_CONFIG = {
 
-    if (!value) return fallback;
+    whatsappNumber:
+        '919999999999',
 
-    const parsed = JSON.parse(value);
+    currency:
+        '₹',
 
-    return parsed;
-  } catch (error) {
-    console.warn('Storage read error:', key, error);
-    return fallback;
-  }
-}
+    cartKey:
+        'psm_cart',
 
-function safeSetJSON(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (error) {
-    console.error('Storage save error:', key, error);
-    return false;
-  }
-}
+    ordersKey:
+        'psm_orders',
+
+    priceKey:
+        'psm_product_prices',
+
+    catalogKey:
+        'psm_custom_catalog',
+
+    languageKey:
+        'psm-lang',
+
+    orderPrefix:
+        'PSM'
+};
+
 
 /* ================================================================
-   LOAD CART
-   ================================================================ */
+   DEFAULT PRODUCT CATALOG
+================================================================ */
 
-function loadCartFromStorage() {
+const PRODUCTS = {
 
-  let saved = null;
+    toprapak: {
+        id: 'toprapak',
+        nameGu: 'ટોપરાપાક',
+        nameEn: 'Toprapak',
+        basePrice: 500,
+        category: 'mithai',
+        img: 'images/product-toprapak.webp',
+        descGu: 'સ્વાદિષ્ટ પરંપરાગત મીઠાઈ',
+        descEn: 'Delicious traditional sweet'
+    },
 
-  /* First try current key */
-  saved = safeGetJSON(CART_STORAGE_KEY, null);
+    mohanthal: {
+        id: 'mohanthal',
+        nameGu: 'મોહનથાળ',
+        nameEn: 'Mohanthal',
+        basePrice: 480,
+        category: 'mithai',
+        img: 'images/product-mohanthal.webp',
+        descGu: 'શુદ્ધ દેશી ઘીથી બનાવેલ મોહનથાળ',
+        descEn: 'Traditional mohanthal made with pure ghee'
+    },
 
-  /* If current key is empty, try old key */
-  if (!Array.isArray(saved) || saved.length === 0) {
-    const oldCart = safeGetJSON(OLD_CART_STORAGE_KEY, null);
+    penda: {
+        id: 'penda',
+        nameGu: 'માવા પેંડા',
+        nameEn: 'Mava Penda',
+        basePrice: 520,
+        category: 'mithai',
+        img: 'images/product-penda.webp',
+        descGu: 'તાજા માવાથી બનાવેલા પેંડા',
+        descEn: 'Fresh traditional mava peda'
+    },
 
-    if (Array.isArray(oldCart)) {
-      saved = oldCart;
+    ladva: {
+        id: 'ladva',
+        nameGu: 'સ્પેશિયલ લાડવા',
+        nameEn: 'Special Ladva',
+        basePrice: 400,
+        category: 'mithai',
+        img: 'images/product-ladva.webp',
+        descGu: 'ઘી અને ગુણવત્તાયુક્ત સામગ્રીથી બનાવેલા લાડવા',
+        descEn: 'Traditional ladva made with quality ingredients'
+    },
+
+    jalebi: {
+        id: 'jalebi',
+        nameGu: 'ગરમ જલેબી',
+        nameEn: 'Hot Jalebi',
+        basePrice: 380,
+        category: 'mithai',
+        img: 'images/product-jalebi.webp',
+        descGu: 'ગરમ અને રસદાર જલેબી',
+        descEn: 'Hot and juicy jalebi'
+    },
+
+    feni: {
+        id: 'feni',
+        nameGu: 'સ્વાદિષ્ટ ફેણી',
+        nameEn: 'Feni',
+        basePrice: 450,
+        category: 'mithai',
+        img: 'images/product-feni.webp',
+        descGu: 'પરંપરાગત સ્વાદિષ્ટ ફેણી',
+        descEn: 'Traditional delicious feni'
+    },
+
+    ganthiya: {
+        id: 'ganthiya',
+        nameGu: 'ચટાકેદાર ગાંઠિયા',
+        nameEn: 'Ganthiya',
+        basePrice: 340,
+        category: 'namkeen',
+        img: 'images/product-ganthiya.webp',
+        descGu: 'ક્રિસ્પી અને ચટાકેદાર ગાંઠિયા',
+        descEn: 'Crispy traditional ganthiya'
+    },
+
+    chorafari: {
+        id: 'chorafari',
+        nameGu: 'ચોરાફળી',
+        nameEn: 'Chorafari',
+        basePrice: 360,
+        category: 'namkeen',
+        img: 'images/product-chorafari.webp',
+        descGu: 'ક્રિસ્પી ચોરાફળી',
+        descEn: 'Crispy traditional chorafari'
+    },
+
+    chavanu: {
+        id: 'chavanu',
+        nameGu: 'મિક્સ ચવાણું',
+        nameEn: 'Mix Chavanu',
+        basePrice: 350,
+        category: 'namkeen',
+        img: 'images/product-chavanu.webp',
+        descGu: 'સ્વાદિષ્ટ મિક્સ ચવાણું',
+        descEn: 'Tasty mixed snack'
+    },
+
+    farali: {
+        id: 'farali',
+        nameGu: 'ફરાળી નાસ્તો',
+        nameEn: 'Farali Snacks',
+        basePrice: 400,
+        category: 'namkeen',
+        img: 'images/product-farali.webp',
+        descGu: 'ફરાળી નાસ્તા માટે ઉત્તમ પસંદગી',
+        descEn: 'Perfect traditional fasting snack'
+    },
+
+    hamper: {
+        id: 'hamper',
+        nameGu: 'પ્રીમિયમ ગિફ્ટ બોક્સ',
+        nameEn: 'Premium Gift Box',
+        basePrice: 850,
+        category: 'gifting',
+        img: 'images/category-gifting.webp',
+        descGu: 'ખાસ પ્રસંગ માટે પ્રીમિયમ ગિફ્ટ બોક્સ',
+        descEn: 'Premium gift box for special occasions'
     }
-  }
+};
 
-  if (!Array.isArray(saved)) {
-    saved = [];
-  }
-
-  /* Clean invalid cart items */
-  return saved.filter(function(item) {
-
-    return item &&
-      typeof item === 'object' &&
-      item.productId &&
-      Number(item.qty) > 0;
-
-  }).map(function(item) {
-
-    return {
-      id: item.id || (
-        String(item.productId) + '_' +
-        String(item.weightKey || '1kg')
-      ),
-
-      productId: item.productId,
-
-      nameGu: item.nameGu || '',
-      nameEn: item.nameEn || '',
-
-      weightKey: item.weightKey || '1kg',
-
-      weightLabel:
-        item.weightLabel ||
-        item.weightLabelGu ||
-        item.weightLabelEn ||
-        '1kg',
-
-      weightLabelGu:
-        item.weightLabelGu ||
-        item.weightLabel ||
-        '1kg',
-
-      weightLabelEn:
-        item.weightLabelEn ||
-        item.weightLabel ||
-        '1kg',
-
-      multiplier:
-        Number(item.multiplier) > 0
-          ? Number(item.multiplier)
-          : 1,
-
-      basePrice:
-        Number(item.basePrice) >= 0
-          ? Number(item.basePrice)
-          : Number(item.price) || 0,
-
-      price:
-        Number(item.price) >= 0
-          ? Number(item.price)
-          : Number(item.basePrice) || 0,
-
-      img: item.img || '',
-
-      qty:
-        Number(item.qty) > 0
-          ? Number(item.qty)
-          : 1
-    };
-
-  });
-}
-
-/* Global cart */
-let cart = loadCartFromStorage();
 
 /* ================================================================
-   SAVE CART
-   ================================================================ */
+   GLOBAL STATE
+================================================================ */
 
-function saveCart() {
+let currentLang =
+    localStorage.getItem(
+        PSM_CONFIG.languageKey
+    ) || 'gu';
 
-  /* Save using NEW key */
-  safeSetJSON(CART_STORAGE_KEY, cart);
+let cart = [];
 
-  /* Also save using OLD key for compatibility */
-  safeSetJSON(OLD_CART_STORAGE_KEY, cart);
+let currentProductId = null;
 
-  updateCartBadges();
-  renderCartBody();
-
-  /* Notify other code / tabs */
-  try {
-    window.dispatchEvent(
-      new CustomEvent('psm-cart-updated', {
-        detail: {
-          cart: cart
-        }
-      })
-    );
-  } catch (e) {}
-
-  /* Browser storage event compatibility */
-  try {
-    localStorage.setItem(
-      'psm-cart-updated-at',
-      String(Date.now())
-    );
-  } catch (e) {}
-}
 
 /* ================================================================
-   RELOAD CART
-   ================================================================ */
-
-function reloadCartFromStorage() {
-
-  cart = loadCartFromStorage();
-
-  updateCartBadges();
-  renderCartBody();
-}
-
-/* ================================================================
-   CART BADGES
-   ================================================================ */
-
-function updateCartBadges() {
-
-  if (!Array.isArray(cart)) {
-    cart = [];
-  }
-
-  const totalItems = cart.reduce(function(sum, item) {
-
-    return sum + (
-      Number(item.qty) > 0
-        ? Number(item.qty)
-        : 0
-    );
-
-  }, 0);
-
-  const totalPrice = cart.reduce(function(sum, item) {
-
-    const qty = Number(item.qty) || 0;
-    const price = Number(item.price) || 0;
-
-    return sum + (qty * price);
-
-  }, 0);
-
-  /* Header badge */
-  const badge = document.getElementById('cart-badge');
-
-  if (badge) {
-
-    badge.textContent = totalItems;
-
-    badge.classList.remove('bump');
-
-    void badge.offsetWidth;
-
-    if (totalItems > 0) {
-      badge.classList.add('bump');
-    }
-  }
-
-  /* Mobile badge */
-  const mobileBadge =
-    document.getElementById('mobile-cart-badge');
-
-  if (mobileBadge) {
-
-    mobileBadge.textContent =
-      totalItems === 1
-        ? '1 item'
-        : totalItems + ' items';
-  }
-
-  /* Floating cart */
-  const floatingBar =
-    document.getElementById('cart-floating-bar');
-
-  const floatingCount =
-    document.getElementById('cart-floating-count');
-
-  const floatingTotal =
-    document.getElementById('cart-floating-total');
-
-  if (
-    floatingBar &&
-    floatingCount &&
-    floatingTotal
-  ) {
-
-    floatingCount.textContent = totalItems;
-
-    floatingTotal.textContent =
-      '₹' + totalPrice.toLocaleString('en-IN');
-
-    floatingBar.classList.toggle(
-      'visible',
-      totalItems > 0
-    );
-  }
-
-  /* Cart header */
-  const cartCounter =
-    document.getElementById('cart-items-counter');
-
-  if (cartCounter) {
-
-    cartCounter.textContent =
-      currentLang === 'gu'
-        ? totalItems + ' વસ્તુઓ'
-        : totalItems +
-          (totalItems === 1 ? ' item' : ' items');
-  }
-
-  /* Subtotal */
-  const subtotalVal =
-    document.getElementById('cart-subtotal-val');
-
-  if (subtotalVal) {
-
-    subtotalVal.textContent =
-      '₹' + totalPrice.toLocaleString('en-IN');
-  }
-
-  /* Checkout button */
-  const checkoutBtn =
-    document.getElementById('btn-cart-checkout');
-
-  if (checkoutBtn) {
-
-    checkoutBtn.disabled =
-      totalItems === 0;
-  }
-}
-
-/* ================================================================
-   PRODUCT ADD — MAIN FUNCTION
-   ================================================================ */
-
-function addCurrentProductToCart(productId) {
-
-  try {
-
-    const prod = PRODUCTS[productId];
-
-    if (!prod) {
-
-      console.error(
-        'Product not found:',
-        productId
-      );
-
-      showToast(
-        currentLang === 'gu'
-          ? 'ઉત્પાદન મળ્યું નથી!'
-          : 'Product not found!'
-      );
-
-      return false;
-    }
-
-    const sel =
-      selectedWeights[productId] || {
-        weightKey: '1kg',
-        multiplier: 1,
-        label: '1kg',
-        labelGu: '1kg',
-        labelEn: '1kg',
-        price: Number(prod.basePrice) || 0
-      };
-
-    const price =
-      Number(sel.price) ||
-      Math.round(
-        Number(prod.basePrice || 0) *
-        Number(sel.multiplier || 1)
-      );
-
-    const cartItemId =
-      String(productId) +
-      '_' +
-      String(sel.weightKey || '1kg');
-
-    const existingIndex =
-      cart.findIndex(function(item) {
-
-        return item.id === cartItemId;
-
-      });
-
-    if (existingIndex !== -1) {
-
-      cart[existingIndex].qty =
-        Number(cart[existingIndex].qty || 0) + 1;
-
-    } else {
-
-      cart.push({
-
-        id: cartItemId,
-
-        productId: productId,
-
-        nameGu: prod.nameGu || '',
-        nameEn: prod.nameEn || '',
-
-        weightKey:
-          sel.weightKey || '1kg',
-
-        weightLabel:
-          sel.label ||
-          sel.labelGu ||
-          sel.labelEn ||
-          '1kg',
-
-        weightLabelGu:
-          sel.labelGu ||
-          sel.label ||
-          '1kg',
-
-        weightLabelEn:
-          sel.labelEn ||
-          sel.label ||
-          '1kg',
-
-        multiplier:
-          Number(sel.multiplier) || 1,
-
-        basePrice:
-          Number(prod.basePrice) || 0,
-
-        price: price,
-
-        img: prod.img || '',
-
-        qty: 1
-
-      });
-    }
-
-    /* SAVE */
-    saveCart();
-
-    /* Button animation */
-    const btn =
-      document.getElementById(
-        'btn-add-' + productId
-      );
-
-    if (btn) {
-
-      const originalHTML =
-        btn.innerHTML;
-
-      btn.classList.add('added');
-
-      btn.innerHTML =
-        '<span>✓</span> ' +
-        '<span class="btn-cart-text">' +
-        (
-          currentLang === 'gu'
-            ? 'ઉમેરાયું'
-            : 'Added'
-        ) +
-        '</span>';
-
-      setTimeout(function() {
-
-        btn.innerHTML = originalHTML;
-
-        btn.classList.remove('added');
-
-      }, 1200);
-    }
-
-    /* Toast */
-    const displayName =
-      currentLang === 'gu'
-        ? prod.nameGu
-        : prod.nameEn;
-
-    const selectedLabel =
-      currentLang === 'gu'
-        ? (
-            sel.labelGu ||
-            sel.label ||
-            '1kg'
-          )
-        : (
-            sel.labelEn ||
-            sel.label ||
-            '1kg'
-          );
-
-    const msg =
-      currentLang === 'gu'
-        ? (
-          '&#128722; <strong>' +
-          displayName +
-          ' (' +
-          selectedLabel +
-          ')</strong> કાર્ટમાં ઉમેરાયું! ' +
-          '<button class="cart-toast-btn" onclick="openCart()">' +
-          'કાર્ટ જુઓ &rarr;' +
-          '</button>'
-        )
-        : (
-          '&#128722; <strong>' +
-          displayName +
-          ' (' +
-          selectedLabel +
-          ')</strong> added to cart! ' +
-          '<button class="cart-toast-btn" onclick="openCart()">' +
-          'View Cart &rarr;' +
-          '</button>'
-        );
-
-    showToast(msg);
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      'Add to cart error:',
-      error
-    );
-
-    showToast(
-      currentLang === 'gu'
-        ? 'કાર્ટમાં ઉમેરવામાં ભૂલ આવી!'
-        : 'Unable to add item to cart!'
-    );
-
-    return false;
-  }
-}
-
-/* ================================================================
-   BACKWARD COMPATIBLE addToCart()
-   ------------------------------------------------
-   Supports:
-   addToCart(productId)
-   addToCart(productId, weightKg, qty)
-   addToCart(id, nameGu, nameEn, price, img, unit)
-   ================================================================ */
-
-function addToCart(
-  id,
-  arg2,
-  arg3,
-  arg4,
-  arg5,
-  arg6
+   BASIC HELPERS
+================================================================ */
+
+function readJSON(
+    key,
+    fallback
 ) {
 
-  try {
+    try {
 
-    /* ---------------------------------------------
-       NEW / SHORT CALL
-       addToCart('toprapak', 1, 1)
-       --------------------------------------------- */
+        const value =
+            JSON.parse(
+                localStorage.getItem(key)
+            );
 
-    if (
-      typeof arg2 === 'number' ||
-      (
-        typeof arg2 === 'string' &&
-        (
-          !arg3 ||
-          typeof arg3 === 'number'
-        )
-      )
-    ) {
+        return value ?? fallback;
 
-      const product =
-        PRODUCTS[id];
+    } catch (error) {
 
-      if (!product) {
+        console.warn(
+            'PSM JSON error:',
+            key,
+            error
+        );
+
+        return fallback;
+    }
+}
+
+
+function writeJSON(
+    key,
+    value
+) {
+
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+        return true;
+
+    } catch (error) {
 
         console.error(
-          'Product not found:',
-          id
+            'PSM storage error:',
+            error
         );
 
         return false;
-      }
-
-      const weightKg =
-        Number(arg2) > 0
-          ? Number(arg2)
-          : 1;
-
-      const qty =
-        Number(arg3) > 0
-          ? Number(arg3)
-          : 1;
-
-      const fmt =
-        formatWeightLabel(weightKg);
-
-      const calculatedPrice =
-        Math.round(
-          Number(product.basePrice || 0) *
-          weightKg
-        );
-
-      const weightKey =
-        fmt.key ||
-        String(weightKg) + 'kg';
-
-      const cartItemId =
-        String(id) +
-        '_' +
-        String(weightKey);
-
-      const existing =
-        cart.find(function(item) {
-
-          return item.id === cartItemId;
-
-        });
-
-      if (existing) {
-
-        existing.qty =
-          Number(existing.qty || 0) +
-          qty;
-
-      } else {
-
-        cart.push({
-
-          id: cartItemId,
-
-          productId: id,
-
-          nameGu:
-            product.nameGu || '',
-
-          nameEn:
-            product.nameEn || '',
-
-          weightKey:
-            weightKey,
-
-          weightLabel:
-            currentLang === 'gu'
-              ? fmt.gu
-              : fmt.en,
-
-          weightLabelGu:
-            fmt.gu,
-
-          weightLabelEn:
-            fmt.en,
-
-          multiplier:
-            weightKg,
-
-          basePrice:
-            Number(product.basePrice || 0),
-
-          price:
-            calculatedPrice,
-
-          img:
-            product.img || '',
-
-          qty:
-            qty
-        });
-      }
-
-      saveCart();
-
-      showToast(
-        currentLang === 'gu'
-          ? '🛒 વસ્તુ કાર્ટમાં ઉમેરાઈ!'
-          : '🛒 Item added to cart!'
-      );
-
-      return true;
     }
-
-    /* ---------------------------------------------
-       OLD CALL
-       addToCart(
-         id,
-         nameGu,
-         nameEn,
-         price,
-         img,
-         unit
-       )
-       --------------------------------------------- */
-
-    const nameGu =
-      arg2 || PRODUCTS[id]?.nameGu || id;
-
-    const nameEn =
-      arg3 || PRODUCTS[id]?.nameEn || id;
-
-    const price =
-      Number(arg4) || 0;
-
-    const img =
-      arg5 ||
-      PRODUCTS[id]?.img ||
-      '';
-
-    const unit =
-      arg6 ||
-      '1kg';
-
-    const sel =
-      selectedWeights[id] || {
-        weightKey: '1kg',
-        multiplier: 1,
-        label: unit,
-        labelGu: unit,
-        labelEn: unit,
-        price: price
-      };
-
-    const cartItemId =
-      String(id) +
-      '_' +
-      String(
-        sel.weightKey || '1kg'
-      );
-
-    const existing =
-      cart.find(function(item) {
-
-        return item.id === cartItemId;
-
-      });
-
-    if (existing) {
-
-      existing.qty =
-        Number(existing.qty || 0) + 1;
-
-    } else {
-
-      cart.push({
-
-        id: cartItemId,
-
-        productId: id,
-
-        nameGu: nameGu,
-        nameEn: nameEn,
-
-        weightKey:
-          sel.weightKey || '1kg',
-
-        weightLabel:
-          sel.label || unit,
-
-        weightLabelGu:
-          sel.labelGu ||
-          sel.label ||
-          unit,
-
-        weightLabelEn:
-          sel.labelEn ||
-          sel.label ||
-          unit,
-
-        multiplier:
-          Number(sel.multiplier) || 1,
-
-        basePrice:
-          price,
-
-        price:
-          Number(sel.price) || price,
-
-        img:
-          img,
-
-        qty: 1
-      });
-    }
-
-    saveCart();
-
-    showToast(
-      currentLang === 'gu'
-        ? '🛒 <strong>' +
-          nameGu +
-          '</strong> કાર્ટમાં ઉમેરાયું!'
-        : '🛒 <strong>' +
-          nameEn +
-          '</strong> added!'
-    );
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      'addToCart error:',
-      error
-    );
-
-    showToast(
-      currentLang === 'gu'
-        ? 'કાર્ટમાં ઉમેરવામાં ભૂલ!'
-        : 'Cart error!'
-    );
-
-    return false;
-  }
 }
 
-/* ================================================================
-   UPDATE CART QUANTITY
-   ================================================================ */
-
-function updateCartQty(id, delta) {
-
-  const index =
-    cart.findIndex(function(item) {
-
-      return item.id === id;
-
-    });
-
-  if (index === -1) return;
-
-  const newQty =
-    Number(cart[index].qty || 0) +
-    Number(delta || 0);
-
-  if (newQty <= 0) {
-
-    cart.splice(index, 1);
-
-  } else {
-
-    cart[index].qty = newQty;
-  }
-
-  saveCart();
-}
-
-/* ================================================================
-   REMOVE CART ITEM
-   ================================================================ */
-
-function removeFromCart(id) {
-
-  cart =
-    cart.filter(function(item) {
-
-      return item.id !== id;
-
-    });
-
-  saveCart();
-
-  showToast(
-    currentLang === 'gu'
-      ? 'વસ્તુ કાર્ટમાંથી હટાવી'
-      : 'Item removed from cart'
-  );
-}
-
-/* ================================================================
-   OPEN CART
-   ================================================================ */
-
-function openCart() {
-
-  /* Always get latest cart */
-  cart =
-    loadCartFromStorage();
-
-  const drawer =
-    document.getElementById('cart-drawer');
-
-  const backdrop =
-    document.getElementById('cart-backdrop');
-
-  if (
-    drawer &&
-    backdrop
-  ) {
-
-    drawer.classList.add('open');
-
-    drawer.setAttribute(
-      'aria-hidden',
-      'false'
-    );
-
-    backdrop.classList.add('open');
-
-    backdrop.setAttribute(
-      'aria-hidden',
-      'false'
-    );
-
-    document.body.style.overflow =
-      'hidden';
-
-    updateCartBadges();
-
-    renderCartBody();
-
-    restoreCustomerInfo();
-  }
-}
-
-/* ================================================================
-   CLOSE CART
-   ================================================================ */
-
-function closeCart() {
-
-  const drawer =
-    document.getElementById('cart-drawer');
-
-  const backdrop =
-    document.getElementById('cart-backdrop');
-
-  if (
-    drawer &&
-    backdrop
-  ) {
-
-    drawer.classList.remove('open');
-
-    drawer.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
-    backdrop.classList.remove('open');
-
-    backdrop.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
-    document.body.style.overflow =
-      '';
-  }
-}
-
-/* ================================================================
-   TOGGLE CART
-   ================================================================ */
-
-function toggleCart() {
-
-  const drawer =
-    document.getElementById('cart-drawer');
-
-  if (
-    drawer &&
-    drawer.classList.contains('open')
-  ) {
-
-    closeCart();
-
-  } else {
-
-    openCart();
-  }
-}
-
-/* ================================================================
-   RENDER CART
-   ================================================================ */
-
-function renderCartBody() {
-
-  const container =
-    document.getElementById('cart-body');
-
-  if (!container) return;
-
-  /* Make sure latest data is used */
-  if (!Array.isArray(cart)) {
-    cart = [];
-  }
-
-  if (cart.length === 0) {
-
-    container.innerHTML = `
-      <div class="cart-empty">
-
-        <div class="cart-empty-icon">
-          &#128722;
-        </div>
-
-        <h4 class="cart-empty-title">
-
-          <span class="gu-text">
-            તમારું કાર્ટ ખાલી છે
-          </span>
-
-          <span
-            class="en-text"
-            style="display:none"
-          >
-            Your cart is empty
-          </span>
-
-        </h4>
-
-        <p class="cart-empty-desc">
-
-          <span class="gu-text">
-            શુદ્ધ ઘીની તાજી મીઠાઈ અને
-            સ્વાદિષ્ટ નમકીન કાર્ટમાં ઉમેરો.
-          </span>
-
-          <span
-            class="en-text"
-            style="display:none"
-          >
-            Add pure desi ghee sweets and
-            crispy namkeen to get started.
-          </span>
-
-        </p>
-
-        <button
-          class="btn-browse-sweets"
-          onclick="
-            closeCart();
-            window.location.hash='mithai';
-          "
-        >
-
-          <span class="gu-text">
-            મીઠાઈ જુઓ &rarr;
-          </span>
-
-          <span
-            class="en-text"
-            style="display:none"
-          >
-            Browse Mithai &rarr;
-          </span>
-
-        </button>
-
-      </div>
-    `;
-
-    applyLang(currentLang);
-
-    updateCartBadges();
-
-    return;
-  }
-
-  let html =
-    '<div class="cart-items-list">';
-
-  cart.forEach(function(item) {
-
-    const qty =
-      Number(item.qty) || 0;
-
-    const price =
-      Number(item.price) || 0;
-
-    const itemTotal =
-      qty * price;
-
-    html += `
-
-      <div
-        class="cart-item"
-        data-id="${escapeHtml(item.id)}"
-      >
-
-        <img
-          src="${escapeHtml(item.img || '')}"
-          alt="${escapeHtml(item.nameEn || '')}"
-          class="cart-item-img"
-          onerror="
-            this.src='images/product-toprapak.webp'
-          "
-        />
-
-        <div class="cart-item-details">
-
-          <div class="cart-item-name">
-
-            <span class="gu-text">
-              ${escapeHtml(item.nameGu || '')}
-            </span>
-
-            <span
-              class="en-text"
-              style="display:none"
-            >
-              ${escapeHtml(item.nameEn || '')}
-            </span>
-
-          </div>
-
-          <div class="cart-item-weight-badge">
-
-            &#128230;
-
-            <strong>
-
-              <span class="gu-text">
-                ${escapeHtml(
-                  item.weightLabelGu ||
-                  item.weightLabel ||
-                  '1kg'
-                )}
-              </span>
-
-              <span
-                class="en-text"
-                style="display:none"
-              >
-                ${escapeHtml(
-                  item.weightLabelEn ||
-                  item.weightLabel ||
-                  '1kg'
-                )}
-              </span>
-
-            </strong>
-
-            <span class="cart-item-rate">
-              (₹${price.toLocaleString('en-IN')})
-            </span>
-
-          </div>
-
-          <div class="cart-item-qty-row">
-
-            <button
-              class="cart-qty-btn"
-              onclick="
-                updateCartQty(
-                  '${escapeJs(item.id)}',
-                  -1
-                )
-              "
-              aria-label="Decrease quantity"
-            >
-              &#8722;
-            </button>
-
-            <span class="cart-item-qty">
-              ${qty}
-            </span>
-
-            <button
-              class="cart-qty-btn"
-              onclick="
-                updateCartQty(
-                  '${escapeJs(item.id)}',
-                  1
-                )
-              "
-              aria-label="Increase quantity"
-            >
-              &#43;
-            </button>
-
-          </div>
-
-        </div>
-
-        <div class="cart-item-right">
-
-          <span class="cart-item-price">
-            ₹${itemTotal.toLocaleString('en-IN')}
-          </span>
-
-          <button
-            class="cart-item-remove"
-            onclick="
-              removeFromCart(
-                '${escapeJs(item.id)}'
-              )
-            "
-            aria-label="Remove item"
-            title="Remove"
-          >
-            &#128465;
-          </button>
-
-        </div>
-
-      </div>
-    `;
-  });
-
-  html += '</div>';
-
-  container.innerHTML = html;
-
-  applyLang(currentLang);
-
-  updateCartBadges();
-}
-
-/* ================================================================
-   HTML SAFETY
-   ================================================================ */
 
 function escapeHtml(value) {
 
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    return String(
+        value ?? ''
+    ).replace(
+        /[&<>"']/g,
+        character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[character]
+    );
 }
 
-function escapeJs(value) {
-
-  return String(value ?? '')
-    .replace(/\\/g, '\\\\')
-    .replace(/'/g, "\\'");
-}
 
 /* ================================================================
-   RESTORE CUSTOMER
-   ================================================================ */
+   PRODUCT PRICE SYSTEM
+================================================================ */
 
-function restoreCustomerInfo() {
+function loadSavedPrices() {
 
-  try {
+    return readJSON(
+        PSM_CONFIG.priceKey,
+        {}
+    );
+}
+
+
+function loadCustomCatalog() {
+
+    return readJSON(
+        PSM_CONFIG.catalogKey,
+        {}
+    );
+}
+
+
+function mergeProductCatalog() {
+
+    const savedPrices =
+        loadSavedPrices();
+
+    const customCatalog =
+        loadCustomCatalog();
+
+
+    Object.keys(
+        savedPrices
+    ).forEach(id => {
+
+        if (PRODUCTS[id]) {
+
+            PRODUCTS[id].basePrice =
+                Number(
+                    savedPrices[id]
+                ) ||
+                PRODUCTS[id].basePrice;
+        }
+    });
+
+
+    Object.keys(
+        customCatalog
+    ).forEach(id => {
+
+        PRODUCTS[id] =
+            customCatalog[id];
+    });
+
+
+    Object.keys(
+        savedPrices
+    ).forEach(id => {
+
+        if (PRODUCTS[id]) {
+
+            PRODUCTS[id].basePrice =
+                Number(
+                    savedPrices[id]
+                ) ||
+                PRODUCTS[id].basePrice;
+        }
+    });
+}
+
+
+function getProduct(
+    productId
+) {
+
+    mergeProductCatalog();
+
+    return PRODUCTS[
+        productId
+    ] || null;
+}
+
+
+function getProductPrice(
+    productId,
+    weightKg = 1
+) {
+
+    const product =
+        getProduct(
+            productId
+        );
+
+
+    if (!product) {
+
+        return 0;
+    }
+
+
+    const price =
+        Number(
+            product.basePrice
+        ) || 0;
+
+
+    return Math.round(
+        price *
+        Number(weightKg || 1)
+    );
+}
+
+
+/* ================================================================
+   CART LOAD / SAVE
+================================================================ */
+
+function loadCart() {
 
     const saved =
-      localStorage.getItem('psm-cust');
+        readJSON(
+            PSM_CONFIG.cartKey,
+            []
+        );
 
-    if (!saved) return;
 
-    const data =
-      JSON.parse(saved);
+    if (!Array.isArray(saved)) {
 
-    const name =
-      document.getElementById(
-        'cart-cust-name'
-      );
+        cart = [];
 
-    const phone =
-      document.getElementById(
-        'cart-cust-phone'
-      );
+        saveCart();
 
-    const city =
-      document.getElementById(
-        'cart-cust-city'
-      );
+        return;
+    }
 
-    const address =
-      document.getElementById(
-        'cart-cust-address'
-      );
 
-    if (name && data.name)
-      name.value = data.name;
+    cart =
+        saved
+            .filter(item =>
+                item &&
+                item.productId
+            )
+            .map(item => {
 
-    if (phone && data.phone)
-      phone.value = data.phone;
+                const product =
+                    getProduct(
+                        item.productId
+                    );
 
-    if (city && data.city)
-      city.value = data.city;
 
-    if (address && data.address)
-      address.value = data.address;
+                const weightKg =
+                    Number(
+                        item.weightKg
+                    ) || 1;
 
-  } catch (error) {
 
-    console.warn(
-      'Customer restore error:',
-      error
-    );
-  }
+                const qty =
+                    Math.max(
+                        1,
+                        Number(
+                            item.qty
+                        ) || 1
+                    );
+
+
+                return {
+
+                    ...item,
+
+                    nameGu:
+                        item.nameGu ||
+                        product?.nameGu ||
+                        'Product',
+
+                    nameEn:
+                        item.nameEn ||
+                        product?.nameEn ||
+                        'Product',
+
+                    weightKg,
+
+                    qty,
+
+                    unitPrice:
+                        Number(
+                            item.unitPrice
+                        ) ||
+                        getProductPrice(
+                            item.productId,
+                            weightKg
+                        ) /
+                        weightKg
+                };
+            });
+
+
+    saveCart();
 }
+
+
+function saveCart() {
+
+    writeJSON(
+        PSM_CONFIG.cartKey,
+        cart
+    );
+}
+
+
+function clearCart() {
+
+    cart = [];
+
+    saveCart();
+
+    renderCart();
+
+    updateCartBadge();
+
+    updateCartTotals();
+}
+
+
+window.clearCart =
+    clearCart;
+
+
+/* ================================================================
+   ADD TO CART
+================================================================ */
+
+function addToCart(
+    productId,
+    weightKg = 1,
+    qty = 1
+) {
+
+    try {
+
+        mergeProductCatalog();
+
+
+        const product =
+            PRODUCTS[
+                productId
+            ];
+
+
+        if (!product) {
+
+            console.error(
+                'Product not found:',
+                productId
+            );
+
+            alert(
+                currentLang === 'gu'
+                    ? 'આ product મળ્યું નથી.'
+                    : 'Product not found.'
+            );
+
+            return false;
+        }
+
+
+        weightKg =
+            Number(
+                weightKg
+            ) || 1;
+
+
+        qty =
+            Math.max(
+                1,
+                Number(qty) || 1
+            );
+
+
+        const unitPrice =
+            getProductPrice(
+                productId,
+                weightKg
+            ) /
+            weightKg;
+
+
+        /*
+           Same product + same weight
+           = increase quantity.
+        */
+
+        const existing =
+            cart.find(item =>
+                String(
+                    item.productId
+                ) ===
+                String(
+                    productId
+                ) &&
+                Number(
+                    item.weightKg
+                ) ===
+                Number(
+                    weightKg
+                )
+            );
+
+
+        if (existing) {
+
+            existing.qty =
+                Number(
+                    existing.qty
+                ) +
+                qty;
+
+            existing.unitPrice =
+                unitPrice;
+
+        } else {
+
+            cart.push({
+
+                cartId:
+                    productId +
+                    '_' +
+                    weightKg +
+                    '_' +
+                    Date.now(),
+
+                productId,
+
+                nameGu:
+                    product.nameGu,
+
+                nameEn:
+                    product.nameEn,
+
+                weightKg,
+
+                qty,
+
+                unitPrice,
+
+                image:
+                    product.img
+
+            });
+        }
+
+
+        saveCart();
+
+        renderCart();
+
+        updateCartBadge();
+
+        updateCartTotals();
+
+        showCartToast(
+            currentLang === 'gu'
+                ? '✓ Cart માં ઉમેર્યું'
+                : '✓ Added to cart'
+        );
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            'addToCart error:',
+            error
+        );
+
+        return false;
+    }
+}
+
+
+window.addToCart =
+    addToCart;
+
+
+/* ================================================================
+   ADD TO CART FROM BUTTON
+================================================================ */
+
+function addProductToCartFromElement(
+    button
+) {
+
+    if (!button) return;
+
+
+    const productId =
+        button.dataset.productId ||
+        button.dataset.id;
+
+
+    const weightKg =
+        Number(
+            button.dataset.weight ||
+            button.dataset.weightKg ||
+            1
+        );
+
+
+    const qty =
+        Number(
+            button.dataset.qty ||
+            1
+        );
+
+
+    if (!productId) {
+
+        console.warn(
+            'Add cart button has no product ID.'
+        );
+
+        return;
+    }
+
+
+    addToCart(
+        productId,
+        weightKg,
+        qty
+    );
+}
+
+
+window.addProductToCartFromElement =
+    addProductToCartFromElement;
+
+
+/* ================================================================
+   CART ITEM QUANTITY
+================================================================ */
+
+function increaseCartItem(
+    cartId
+) {
+
+    const item =
+        cart.find(
+            item =>
+                String(item.cartId) ===
+                String(cartId)
+        );
+
+
+    if (!item) return;
+
+
+    item.qty =
+        Number(item.qty) + 1;
+
+
+    saveCart();
+
+    renderCart();
+
+    updateCartBadge();
+
+    updateCartTotals();
+}
+
+
+window.increaseCartItem =
+    increaseCartItem;
+
+
+function decreaseCartItem(
+    cartId
+) {
+
+    const index =
+        cart.findIndex(
+            item =>
+                String(item.cartId) ===
+                String(cartId)
+        );
+
+
+    if (index === -1) return;
+
+
+    if (
+        Number(
+            cart[index].qty
+        ) > 1
+    ) {
+
+        cart[index].qty--;
+
+    } else {
+
+        cart.splice(
+            index,
+            1
+        );
+    }
+
+
+    saveCart();
+
+    renderCart();
+
+    updateCartBadge();
+
+    updateCartTotals();
+}
+
+
+window.decreaseCartItem =
+    decreaseCartItem;
+
+
+function removeCartItem(
+    cartId
+) {
+
+    cart =
+        cart.filter(
+            item =>
+                String(item.cartId) !==
+                String(cartId)
+        );
+
+
+    saveCart();
+
+    renderCart();
+
+    updateCartBadge();
+
+    updateCartTotals();
+}
+
+
+window.removeCartItem =
+    removeCartItem;
+
+
+/* ================================================================
+   CART TOTALS
+================================================================ */
+
+function getCartItemSubtotal(
+    item
+) {
+
+    return Math.round(
+        (
+            Number(
+                item.unitPrice
+            ) || 0
+        ) *
+        (
+            Number(
+                item.weightKg
+            ) || 1
+        ) *
+        (
+            Number(
+                item.qty
+            ) || 1
+        )
+    );
+}
+
+
+function getCartTotal() {
+
+    return cart.reduce(
+        (
+            total,
+            item
+        ) =>
+            total +
+            getCartItemSubtotal(
+                item
+            ),
+        0
+    );
+}
+
+
+function getCartQuantity() {
+
+    return cart.reduce(
+        (
+            total,
+            item
+        ) =>
+            total +
+            (
+                Number(
+                    item.qty
+                ) || 0
+            ),
+        0
+    );
+}
+
+
+function getCartWeight() {
+
+    return cart.reduce(
+        (
+            total,
+            item
+        ) =>
+            total +
+            (
+                Number(
+                    item.weightKg
+                ) || 0
+            ) *
+            (
+                Number(
+                    item.qty
+                ) || 0
+            ),
+        0
+    );
+}
+
+
+/* ================================================================
+   CART BADGE
+================================================================ */
+
+function updateCartBadge() {
+
+    const count =
+        getCartQuantity();
+
+
+    const selectors = [
+
+        '#cart-count',
+
+        '#cart-badge',
+
+        '.cart-count',
+
+        '.cart-badge',
+
+        '[data-cart-count]'
+
+    ];
+
+
+    document
+        .querySelectorAll(
+            selectors.join(',')
+        )
+        .forEach(element => {
+
+            element.textContent =
+                count;
+
+            element.style.display =
+                count > 0
+                    ? ''
+                    : '';
+        });
+}
+
+
+window.updateCartBadge =
+    updateCartBadge;
+
+
+/* ================================================================
+   CART TOTAL ELEMENTS
+================================================================ */
+
+function updateCartTotals() {
+
+    const total =
+        getCartTotal();
+
+
+    const quantity =
+        getCartQuantity();
+
+
+    const weight =
+        getCartWeight();
+
+
+    document
+        .querySelectorAll(
+            [
+                '#cart-total',
+                '#cart-subtotal',
+                '[data-cart-total]'
+            ].join(',')
+        )
+        .forEach(element => {
+
+            element.textContent =
+                PSM_CONFIG.currency +
+                total.toLocaleString(
+                    'en-IN'
+                );
+        });
+
+
+    document
+        .querySelectorAll(
+            [
+                '#cart-items-count',
+                '[data-cart-items-count]'
+            ].join(',')
+        )
+        .forEach(element => {
+
+            element.textContent =
+                quantity;
+        });
+
+
+    document
+        .querySelectorAll(
+            [
+                '#cart-weight',
+                '[data-cart-weight]'
+            ].join(',')
+        )
+        .forEach(element => {
+
+            element.textContent =
+                weight.toFixed(2) +
+                ' kg';
+        });
+}
+
+
+/* ================================================================
+   CART RENDER
+================================================================ */
+
+function findCartContainer() {
+
+    const selectors = [
+
+        '#cart-items',
+
+        '#cartItems',
+
+        '.cart-items',
+
+        '[data-cart-items]',
+
+        '#cart-list',
+
+        '.cart-list'
+
+    ];
+
+
+    for (
+        const selector of selectors
+    ) {
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if (element) {
+
+            return element;
+        }
+    }
+
+
+    return null;
+}
+
+
+function renderCart() {
+
+    const container =
+        findCartContainer();
+
+
+    if (!container) {
+
+        updateCartTotals();
+
+        updateCartBadge();
+
+        return;
+    }
+
+
+    if (!cart.length) {
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    padding:30px 15px;
+                    text-align:center;
+                    color:#64748B;
+                "
+            >
+
+                <div
+                    style="
+                        font-size:42px;
+                        margin-bottom:10px;
+                    "
+                >
+                    🛒
+                </div>
+
+                <strong>
+                    ${
+                        currentLang === 'gu'
+                            ? 'તમારું cart ખાલી છે'
+                            : 'Your cart is empty'
+                    }
+                </strong>
+
+                <div
+                    style="
+                        margin-top:7px;
+                        font-size:13px;
+                    "
+                >
+                    ${
+                        currentLang === 'gu'
+                            ? 'મનપસંદ મીઠાઈ cart માં ઉમેરો.'
+                            : 'Add your favourite sweets to cart.'
+                    }
+                </div>
+
+            </div>
+        `;
+
+        updateCartBadge();
+
+        updateCartTotals();
+
+        return;
+    }
+
+
+    container.innerHTML =
+        cart
+            .map(item => {
+
+                const product =
+                    getProduct(
+                        item.productId
+                    );
+
+
+                const image =
+                    item.image ||
+                    product?.img ||
+                    'images/product-toprapak.webp';
+
+
+                const name =
+                    currentLang === 'gu'
+                        ? (
+                            item.nameGu ||
+                            product?.nameGu
+                        )
+                        : (
+                            item.nameEn ||
+                            product?.nameEn
+                        );
+
+
+                const subtotal =
+                    getCartItemSubtotal(
+                        item
+                    );
+
+
+                return `
+
+                    <div
+                        class="psm-cart-item"
+                        data-cart-id="${escapeHtml(
+                            item.cartId
+                        )}"
+                        style="
+                            display:flex;
+                            gap:12px;
+                            padding:12px 0;
+                            border-bottom:1px solid #E5E7EB;
+                        "
+                    >
+
+                        <img
+                            src="${escapeHtml(image)}"
+                            alt="${escapeHtml(name)}"
+                            style="
+                                width:70px;
+                                height:70px;
+                                object-fit:cover;
+                                border-radius:10px;
+                            "
+                            onerror="
+                                this.src='images/product-toprapak.webp'
+                            "
+                        >
+
+                        <div
+                            style="
+                                flex:1;
+                                min-width:0;
+                            "
+                        >
+
+                            <strong
+                                style="
+                                    display:block;
+                                    margin-bottom:4px;
+                                "
+                            >
+                                ${escapeHtml(name)}
+                            </strong>
+
+                            <small
+                                style="
+                                    color:#64748B;
+                                "
+                            >
+                                ${Number(
+                                    item.weightKg
+                                )} kg ×
+                                ${Number(
+                                    item.qty
+                                )}
+                            </small>
+
+                            <div
+                                style="
+                                    font-weight:800;
+                                    margin-top:5px;
+                                "
+                            >
+                                ₹${subtotal.toLocaleString(
+                                    'en-IN'
+                                )}
+                            </div>
+
+                            <div
+                                style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:7px;
+                                    margin-top:7px;
+                                "
+                            >
+
+                                <button
+                                    type="button"
+                                    onclick="
+                                        decreaseCartItem(
+                                            '${escapeHtml(item.cartId)}'
+                                        )
+                                    "
+                                    style="
+                                        width:30px;
+                                        height:30px;
+                                        border:1px solid #CBD5E1;
+                                        background:#fff;
+                                        border-radius:7px;
+                                    "
+                                >
+                                    −
+                                </button>
+
+                                <span
+                                    style="
+                                        min-width:25px;
+                                        text-align:center;
+                                        font-weight:700;
+                                    "
+                                >
+                                    ${Number(
+                                        item.qty
+                                    )}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    onclick="
+                                        increaseCartItem(
+                                            '${escapeHtml(item.cartId)}'
+                                        )
+                                    "
+                                    style="
+                                        width:30px;
+                                        height:30px;
+                                        border:1px solid #CBD5E1;
+                                        background:#fff;
+                                        border-radius:7px;
+                                    "
+                                >
+                                    +
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onclick="
+                                        removeCartItem(
+                                            '${escapeHtml(item.cartId)}'
+                                        )
+                                    "
+                                    style="
+                                        border:0;
+                                        background:#FEE2E2;
+                                        color:#B91C1C;
+                                        border-radius:7px;
+                                        padding:6px 9px;
+                                        margin-left:5px;
+                                    "
+                                >
+                                    Remove
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+            })
+            .join('');
+
+
+    updateCartBadge();
+
+    updateCartTotals();
+}
+
+
+window.renderCart =
+    renderCart;
+
+
+/* ================================================================
+   CART OPEN / CLOSE
+================================================================ */
+
+function openCart() {
+
+    const selectors = [
+
+        '#cart-modal',
+
+        '#cartModal',
+
+        '.cart-modal',
+
+        '#cart-drawer',
+
+        '.cart-drawer'
+
+    ];
+
+
+    let found = false;
+
+
+    selectors.forEach(
+        selector => {
+
+            document
+                .querySelectorAll(
+                    selector
+                )
+                .forEach(element => {
+
+                    element.classList.add(
+                        'open'
+                    );
+
+                    element.classList.add(
+                        'active'
+                    );
+
+                    element.style.display =
+                        '';
+
+                    found = true;
+                });
+        }
+    );
+
+
+    renderCart();
+
+    updateCartTotals();
+
+    updateCartBadge();
+
+
+    if (!found) {
+
+        const cartContainer =
+            findCartContainer();
+
+
+        if (cartContainer) {
+
+            cartContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    }
+}
+
+
+window.openCart =
+    openCart;
+
+
+function closeCart() {
+
+    const selectors = [
+
+        '#cart-modal',
+
+        '#cartModal',
+
+        '.cart-modal',
+
+        '#cart-drawer',
+
+        '.cart-drawer'
+
+    ];
+
+
+    selectors.forEach(
+        selector => {
+
+            document
+                .querySelectorAll(
+                    selector
+                )
+                .forEach(element => {
+
+                    element.classList.remove(
+                        'open'
+                    );
+
+                    element.classList.remove(
+                        'active'
+                    );
+                });
+        }
+    );
+}
+
+
+window.closeCart =
+    closeCart;
+
 
 /* ================================================================
    TOAST
-   ================================================================ */
+================================================================ */
 
-let toastTimeout = null;
-
-function showToast(
-  html,
-  duration = 3500
+function showCartToast(
+    message
 ) {
 
-  const toast =
-    document.getElementById(
-      'cart-toast'
-    );
+    let toast =
+        document.getElementById(
+            'psm-cart-toast'
+        );
 
-  if (!toast) return;
 
-  toast.innerHTML = html;
+    if (!toast) {
 
-  toast.classList.add('show');
-
-  if (toastTimeout) {
-    clearTimeout(toastTimeout);
-  }
-
-  toastTimeout =
-    setTimeout(function() {
-
-      toast.classList.remove(
-        'show'
-      );
-
-    }, duration);
-}
-
-/* ================================================================
-   SAVE ORDER LOCALLY
-   ================================================================ */
-
-function saveCompletedOrder(orderData) {
-
-  try {
-
-    let orders =
-      safeGetJSON(
-        ORDERS_STORAGE_KEY,
-        []
-      );
-
-    if (!Array.isArray(orders)) {
-      orders = [];
-    }
-
-    /* Prevent duplicate order */
-    const alreadyExists =
-      orders.some(function(order) {
-
-        return order.id === orderData.id;
-
-      });
-
-    if (!alreadyExists) {
-
-      orders.unshift(orderData);
-
-    }
-
-    /* Keep latest 500 orders */
-    if (orders.length > 500) {
-      orders = orders.slice(0, 500);
-    }
-
-    const saved =
-      safeSetJSON(
-        ORDERS_STORAGE_KEY,
-        orders
-      );
-
-    /* Also keep compatibility key if used */
-    safeSetJSON(
-      'psm-orders',
-      orders
-    );
-
-    /* Notify admin/order page */
-    try {
-
-      window.dispatchEvent(
-        new CustomEvent(
-          'psm-order-created',
-          {
-            detail: {
-              order: orderData
-            }
-          }
-        )
-      );
-
-    } catch (e) {}
-
-    try {
-
-      localStorage.setItem(
-        'psm-orders-updated-at',
-        String(Date.now())
-      );
-
-    } catch (e) {}
-
-    console.log(
-      'Order saved successfully:',
-      orderData.id
-    );
-
-    return saved;
-
-  } catch (error) {
-
-    console.error(
-      'Order save error:',
-      error
-    );
-
-    return false;
-  }
-}
-
-/* ================================================================
-   CONFIRM + SEND WHATSAPP ORDER
-   ================================================================ */
-
-function confirmAndSendWhatsAppOrder() {
-
-  /* Always reload latest cart */
-  cart =
-    loadCartFromStorage();
-
-  if (
-    !Array.isArray(cart) ||
-    cart.length === 0
-  ) {
-
-    showToast(
-      currentLang === 'gu'
-        ? 'કાર્ટ ખાલી છે!'
-        : 'Your cart is empty!'
-    );
-
-    updateCartBadges();
-
-    return;
-  }
-
-  const nameInput =
-    document.getElementById(
-      'cart-cust-name'
-    );
-
-  const phoneInput =
-    document.getElementById(
-      'cart-cust-phone'
-    );
-
-  const citySelect =
-    document.getElementById(
-      'cart-cust-city'
-    );
-
-  const addressInput =
-    document.getElementById(
-      'cart-cust-address'
-    );
-
-  const notesInput =
-    document.getElementById(
-      'cart-cust-notes'
-    );
-
-  const name =
-    nameInput
-      ? nameInput.value.trim()
-      : '';
-
-  const phone =
-    phoneInput
-      ? phoneInput.value.trim()
-      : '';
-
-  const city =
-    citySelect
-      ? citySelect.value
-      : 'Kherwa';
-
-  const address =
-    addressInput
-      ? addressInput.value.trim()
-      : '';
-
-  const notes =
-    notesInput
-      ? notesInput.value.trim()
-      : '';
-
-  /* Remove previous errors */
-  [
-    nameInput,
-    phoneInput,
-    addressInput
-  ].forEach(function(input) {
-
-    if (input) {
-      input.classList.remove(
-        'error'
-      );
-    }
-
-  });
-
-  /* Name validation */
-  if (!name) {
-
-    if (nameInput) {
-
-      nameInput.classList.add(
-        'error'
-      );
-
-      nameInput.focus();
-    }
-
-    showToast(
-      currentLang === 'gu'
-        ? 'કૃપા કરીને તમારું નામ લખો'
-        : 'Please enter your name'
-    );
-
-    return;
-  }
-
-  /* Phone validation */
-  const cleanPhone =
-    phone.replace(/\D/g, '');
-
-  if (
-    !phone ||
-    cleanPhone.length < 8
-  ) {
-
-    if (phoneInput) {
-
-      phoneInput.classList.add(
-        'error'
-      );
-
-      phoneInput.focus();
-    }
-
-    showToast(
-      currentLang === 'gu'
-        ? 'કૃપા કરીને સાચો WhatsApp નંબર લખો'
-        : 'Please enter a valid phone number'
-    );
-
-    return;
-  }
-
-  /* Address validation */
-  if (!address) {
-
-    if (addressInput) {
-
-      addressInput.classList.add(
-        'error'
-      );
-
-      addressInput.focus();
-    }
-
-    showToast(
-      currentLang === 'gu'
-        ? 'કૃપા કરીને ડિલિવરી સરનામું લખો'
-        : 'Please enter delivery address'
-    );
-
-    return;
-  }
-
-  /* Save customer */
-  safeSetJSON(
-    'psm-cust',
-    {
-      name: name,
-      phone: phone,
-      city: city,
-      address: address
-    }
-  );
-
-  /* ============================================================
-     ORDER ID
-     ============================================================ */
-
-  const orderId =
-    'PSM-' +
-    Date.now().toString().slice(-8);
-
-  const now =
-    new Date();
-
-  const dateStr =
-    now.toLocaleString(
-      'gu-IN',
-      {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      }
-    );
-
-  /* ============================================================
-     TOTAL
-     ============================================================ */
-
-  const totalAmount =
-    cart.reduce(
-      function(sum, item) {
-
-        return sum +
-          (
-            (Number(item.qty) || 0) *
-            (Number(item.price) || 0)
-          );
-
-      },
-      0
-    );
-
-  const totalUnits =
-    cart.reduce(
-      function(sum, item) {
-
-        return sum +
-          (Number(item.qty) || 0);
-
-      },
-      0
-    );
-
-  /* ============================================================
-     ORDER OBJECT
-     ============================================================ */
-
-  const completedOrder = {
-
-    id: orderId,
-
-    date:
-      now.toISOString(),
-
-    customerName:
-      name,
-
-    phone:
-      phone,
-
-    city:
-      city,
-
-    address:
-      address,
-
-    notes:
-      notes,
-
-    status:
-      'new',
-
-    totalAmount:
-      totalAmount,
-
-    totalKg:
-      cart.reduce(
-        function(sum, item) {
-
-          return sum +
-            (
-              (Number(item.multiplier) || 1) *
-              (Number(item.qty) || 0)
+        toast =
+            document.createElement(
+                'div'
             );
 
-        },
-        0
-      ),
+        toast.id =
+            'psm-cart-toast';
 
-    items:
-      cart.map(
-        function(item) {
 
-          return {
+        toast.style.cssText = `
 
-            productId:
-              item.productId,
+            position:fixed;
 
-            nameGu:
-              item.nameGu,
+            left:50%;
 
-            nameEn:
-              item.nameEn,
+            bottom:30px;
 
-            weightLabel:
-              item.weightLabelGu ||
-              item.weightLabel ||
-              '1kg',
+            transform:translateX(-50%);
 
-            weightKg:
-              Number(item.multiplier) || 1,
+            z-index:999999;
 
-            unitPrice:
-              Number(item.price) || 0,
+            background:#173F8A;
 
-            qty:
-              Number(item.qty) || 0,
+            color:#fff;
 
-            subtotal:
-              (
-                Number(item.price) || 0
-              ) *
-              (
-                Number(item.qty) || 0
-              )
-          };
+            padding:12px 18px;
 
-        }
-      )
-  };
+            border-radius:999px;
 
-  /* ============================================================
-     IMPORTANT:
-     SAVE WEBSITE ORDER FIRST
-     THEN OPEN WHATSAPP
-     ============================================================ */
+            font-weight:700;
 
-  const orderSaved =
-    saveCompletedOrder(
-      completedOrder
-    );
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,.25);
 
-  if (!orderSaved) {
+            opacity:0;
 
-    const retry =
-      confirm(
-        'Order website માં save થઈ શક્યો નથી. ' +
-        'તમે WhatsApp પર મોકલવા માંગો છો?'
-      );
+            pointer-events:none;
 
-    if (!retry) {
-      return;
-    }
-  }
+            transition:.25s ease;
 
-  /* ============================================================
-     WHATSAPP MESSAGE
-     ============================================================ */
+        `;
 
-  const lines = [];
 
-  lines.push(
-    '*🛍️ પટેલ સ્વીટ માર્ટ — નવો ઓર્ડર / NEW ORDER*'
-  );
-
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
-
-  lines.push(
-    '*ઓર્ડર ક્રમાંક (Order ID):* #' +
-    orderId
-  );
-
-  lines.push(
-    '*તારીખ (Date):* ' +
-    dateStr
-  );
-
-  lines.push('');
-
-  lines.push(
-    '*👤 ગ્રાહકની વિગત / Customer Details:*'
-  );
-
-  lines.push(
-    '• *નામ:* ' +
-    name
-  );
-
-  lines.push(
-    '• *ફોન:* ' +
-    phone
-  );
-
-  lines.push(
-    '• *શહેર:* ' +
-    city
-  );
-
-  lines.push(
-    '• *સરનામું:* ' +
-    address
-  );
-
-  if (notes) {
-
-    lines.push(
-      '• *ઓર્ડર નોંધ:* ' +
-      notes
-    );
-  }
-
-  lines.push('');
-
-  lines.push(
-    '*📦 ઓર્ડર કરેલી વસ્તુઓ:*'
-  );
-
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
-
-  cart.forEach(
-    function(item, index) {
-
-      const itemTotal =
-        (
-          Number(item.qty) || 0
-        ) *
-        (
-          Number(item.price) || 0
+        document.body.appendChild(
+            toast
         );
-
-      lines.push(
-        (
-          index + 1
-        ) +
-        '. *' +
-        (
-          item.nameGu || ''
-        ) +
-        ' (' +
-        (
-          item.nameEn || ''
-        ) +
-        ')*'
-      );
-
-      lines.push(
-        '   ▸ વજન: *' +
-        (
-          item.weightLabel ||
-          item.weightLabelGu ||
-          '1kg'
-        ) +
-        '* | જથ્થો: *' +
-        item.qty +
-        ' પેક* = *₹' +
-        itemTotal.toLocaleString(
-          'en-IN'
-        ) +
-        '*'
-      );
     }
-  );
 
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
 
-  lines.push(
-    '*કુલ પેક:* ' +
-    totalUnits
-  );
+    toast.textContent =
+        message;
 
-  lines.push(
-    '*કુલ રકમ:* *₹' +
-    totalAmount.toLocaleString(
-      'en-IN'
-    ) +
-    '*'
-  );
 
-  lines.push(
-    '━━━━━━━━━━━━━━━━━━━━━'
-  );
+    toast.style.opacity =
+        '1';
 
-  lines.push(
-    '📍 *ડિલિવરી:* ખેરવા / અમદાવાદ'
-  );
 
-  lines.push('');
+    setTimeout(
+        () => {
 
-  lines.push(
-    'કૃપા કરીને આ ઓર્ડર કન્ફર્મ કરો અને ડિલિવરી સમય જણાવો. આભાર!'
-  );
+            toast.style.opacity =
+                '0';
 
-  lines.push(
-    '_Please confirm this order and advise delivery time. Thank you!_'
-  );
-
-  const waUrl =
-    'https://wa.me/919173565466?text=' +
-    encodeURIComponent(
-      lines.join('\n')
+        },
+        1800
     );
-
-  /* ============================================================
-     BUTTON
-     ============================================================ */
-
-  const btn =
-    document.getElementById(
-      'btn-cart-checkout'
-    );
-
-  if (btn) {
-
-    btn.disabled = true;
-
-    btn.innerHTML =
-      '&#9203; Sending to WhatsApp...';
-  }
-
-  /* ============================================================
-     OPEN WHATSAPP
-     ============================================================ */
-
-  try {
-
-    window.open(
-      waUrl,
-      '_blank',
-      'noopener,noreferrer'
-    );
-
-  } catch (error) {
-
-    console.error(
-      'WhatsApp open error:',
-      error
-    );
-  }
-
-  /* ============================================================
-     CLEAR CART ONLY AFTER ORDER IS SAVED
-     ============================================================ */
-
-  cart = [];
-
-  saveCart();
-
-  /* ============================================================
-     ADMIN / WEBSITE SUCCESS SCREEN
-     ============================================================ */
-
-  const body =
-    document.getElementById(
-      'cart-body'
-    );
-
-  if (body) {
-
-    body.innerHTML = `
-
-      <div
-        class="cart-empty"
-        style="padding:30px 10px;"
-      >
-
-        <div
-          class="cart-empty-icon"
-          style="
-            background:rgba(37,211,102,0.1);
-            color:#25D366;
-          "
-        >
-          &#10003;
-        </div>
-
-        <h4 class="cart-empty-title">
-
-          <span class="gu-text">
-            ઓર્ડર મોકલાઈ ગયો!
-          </span>
-
-          <span
-            class="en-text"
-            style="display:none"
-          >
-            Order Placed via WhatsApp!
-          </span>
-
-        </h4>
-
-        <p class="cart-empty-desc">
-
-          <span class="gu-text">
-            ઓર્ડર ક્રમાંક #${orderId}
-            સફળતાપૂર્વક સેવ થયો છે.
-          </span>
-
-          <span
-            class="en-text"
-            style="display:none"
-          >
-            Order #${orderId}
-            has been saved successfully.
-          </span>
-
-        </p>
-
-        <button
-          class="btn-browse-sweets"
-          onclick="closeCart()"
-        >
-
-          <span class="gu-text">
-            પૂર્ણ / Done
-          </span>
-
-          <span
-            class="en-text"
-            style="display:none"
-          >
-            Done
-          </span>
-
-        </button>
-
-      </div>
-    `;
-
-    applyLang(currentLang);
-  }
-
-  /* ============================================================
-     SEND TO SUPABASE
-     ============================================================ */
-
-  saveOrderToSupabase(
-    completedOrder
-  );
-
-  /* Update badges */
-  updateCartBadges();
 }
 
-/* ================================================================
-   SUPABASE ORDER SAVE
-   ================================================================ */
 
-function saveOrderToSupabase(
-  orderData
+/* ================================================================
+   ORDER ID
+================================================================ */
+
+function createOrderId() {
+
+    const now =
+        new Date();
+
+
+    const date =
+        now
+            .toISOString()
+            .slice(
+                0,
+                10
+            )
+            .replace(
+                /-/g,
+                ''
+            );
+
+
+    const random =
+        Math.floor(
+            1000 +
+            Math.random() *
+            9000
+        );
+
+
+    return (
+        PSM_CONFIG.orderPrefix +
+        '-' +
+        date +
+        '-' +
+        random
+    );
+}
+
+
+/* ================================================================
+   CUSTOMER FORM HELPERS
+================================================================ */
+
+function getFieldValue(
+    selectors
 ) {
 
-  const url =
-    localStorage.getItem(
-      'psm_supabase_url'
-    );
+    if (!Array.isArray(
+        selectors
+    )) {
 
-  const key =
-    localStorage.getItem(
-      'psm_supabase_key'
-    );
-
-  if (!url || !key) {
-
-    console.log(
-      'Supabase not configured. Local order saved.'
-    );
-
-    return;
-  }
-
-  fetch(
-    url.replace(/\/+$/, '') +
-    '/rest/v1/orders',
-    {
-      method: 'POST',
-
-      headers: {
-
-        'apikey':
-          key,
-
-        'Authorization':
-          'Bearer ' + key,
-
-        'Content-Type':
-          'application/json',
-
-        'Prefer':
-          'return=representation'
-      },
-
-      body:
-        JSON.stringify({
-
-          order_number:
-            orderData.id,
-
-          customer_name:
-            orderData.customerName,
-
-          customer_phone:
-            orderData.phone,
-
-          delivery_city:
-            orderData.city,
-
-          delivery_address:
-            orderData.address,
-
-          order_notes:
-            orderData.notes || '',
-
-          total_amount:
-            orderData.totalAmount,
-
-          total_items:
-            orderData.items.reduce(
-              function(sum, item) {
-
-                return sum +
-                  (
-                    Number(item.qty) || 0
-                  );
-
-              },
-              0
-            ),
-
-          status:
-            'new'
-        })
+        selectors =
+            [selectors];
     }
-  )
-  .then(
-    async function(response) {
 
-      if (!response.ok) {
 
-        const errorText =
-          await response.text();
+    for (
+        const selector
+        of selectors
+    ) {
 
-        throw new Error(
-          'Supabase order error: ' +
-          response.status +
-          ' ' +
-          errorText
-        );
-      }
+        const element =
+            document.querySelector(
+                selector
+            );
 
-      return response.json();
+
+        if (
+            element &&
+            String(
+                element.value
+            ).trim()
+        ) {
+
+            return String(
+                element.value
+            ).trim();
+        }
     }
-  )
-  .then(
-    function(data) {
 
-      console.log(
-        'Supabase order saved:',
-        data
-      );
 
-      if (
-        !Array.isArray(data) ||
-        !data[0] ||
-        !data[0].id
-      ) {
+    return '';
+}
 
-        return;
-      }
 
-      const orderDbId =
-        data[0].id;
+/* ================================================================
+   CREATE ORDER OBJECT
+================================================================ */
 
-      const itemsPayload =
-        orderData.items.map(
-          function(item) {
+function createOrderObject() {
+
+    const customerName =
+        getFieldValue([
+
+            '#customer-name',
+            '#customerName',
+            '#order-name',
+            '[name="customerName"]',
+            '[name="customer_name"]'
+
+        ]);
+
+
+    const phone =
+        getFieldValue([
+
+            '#customer-phone',
+            '#customerPhone',
+            '#order-phone',
+            '[name="phone"]',
+            '[name="customerPhone"]',
+            '[name="customer_phone"]'
+
+        ]);
+
+
+    const city =
+        getFieldValue([
+
+            '#customer-city',
+            '#customerCity',
+            '#order-city',
+            '[name="city"]',
+            '[name="customerCity"]'
+
+        ]);
+
+
+    const address =
+        getFieldValue([
+
+            '#customer-address',
+            '#customerAddress',
+            '#order-address',
+            '[name="address"]',
+            '[name="customerAddress"]'
+
+        ]);
+
+
+    const notes =
+        getFieldValue([
+
+            '#order-notes',
+            '#customer-notes',
+            '#notes',
+            '[name="notes"]',
+            '[name="orderNotes"]'
+
+        ]);
+
+
+    const orderId =
+        createOrderId();
+
+
+    const items =
+        cart.map(item => {
+
+            const product =
+                getProduct(
+                    item.productId
+                );
+
+
+            const subtotal =
+                getCartItemSubtotal(
+                    item
+                );
+
 
             return {
 
-              order_id:
-                orderDbId,
+                productId:
+                    item.productId,
 
-              product_id:
-                item.productId,
+                nameGu:
+                    item.nameGu ||
+                    product?.nameGu ||
+                    '',
 
-              product_name_gu:
-                item.nameGu,
+                nameEn:
+                    item.nameEn ||
+                    product?.nameEn ||
+                    '',
 
-              product_name_en:
-                item.nameEn,
+                weightKg:
+                    Number(
+                        item.weightKg
+                    ) || 1,
 
-              weight_label:
-                item.weightLabel,
+                weightLabel:
+                    (
+                        Number(
+                            item.weightKg
+                        ) || 1
+                    ) +
+                    'kg',
 
-              weight_kg:
-                item.weightKg,
+                unitPrice:
+                    Number(
+                        item.unitPrice
+                    ) || 0,
 
-              unit_price:
-                item.unitPrice,
+                qty:
+                    Number(
+                        item.qty
+                    ) || 1,
 
-              quantity:
-                item.qty,
-
-              subtotal:
-                item.subtotal
+                subtotal
             };
-          }
-        );
+        });
 
-      return fetch(
-        url.replace(/\/+$/, '') +
-        '/rest/v1/order_items',
-        {
-          method: 'POST',
 
-          headers: {
+    return {
 
-            'apikey':
-              key,
+        id:
+            orderId,
 
-            'Authorization':
-              'Bearer ' + key,
+        orderNumber:
+            orderId,
 
-            'Content-Type':
-              'application/json',
+        date:
+            new Date().toISOString(),
 
-            'Prefer':
-              'return=minimal'
-          },
+        createdAt:
+            new Date().toISOString(),
 
-          body:
-            JSON.stringify(
-              itemsPayload
-            )
-        }
-      );
-    }
-  )
-  .then(
-    function(response) {
+        customerName,
 
-      if (
-        response &&
-        !response.ok
-      ) {
+        phone,
 
-        console.warn(
-          'Supabase order_items save failed:',
-          response.status
-        );
+        city,
 
-      } else if (response) {
+        address,
 
-        console.log(
-          'Order items saved successfully.'
-        );
-      }
-    }
-  )
-  .catch(
-    function(error) {
+        notes,
 
-      console.warn(
-        'Supabase sync failed:',
-        error
-      );
+        status:
+            'new',
 
-      /*
-       IMPORTANT:
-       Website local order is already saved.
-       Therefore WhatsApp order is NOT lost.
-      */
-    }
-  );
+        totalAmount:
+            getCartTotal(),
+
+        totalItems:
+            getCartQuantity(),
+
+        totalKg:
+            getCartWeight(),
+
+        items,
+
+        source:
+            'website',
+
+        whatsappSent:
+            false
+    };
 }
 
-/* ================================================================
-   CROSS TAB / ADMIN PAGE SYNC
-   ================================================================ */
-
-window.addEventListener(
-  'storage',
-  function(event) {
-
-    if (
-      event.key === CART_STORAGE_KEY ||
-      event.key === OLD_CART_STORAGE_KEY ||
-      event.key === 'psm-cart-updated-at'
-    ) {
-
-      reloadCartFromStorage();
-    }
-
-    if (
-      event.key === ORDERS_STORAGE_KEY ||
-      event.key === 'psm-orders-updated-at'
-    ) {
-
-      if (
-        typeof checkOwnerAuthState ===
-        'function'
-      ) {
-
-        checkOwnerAuthState();
-      }
-
-      if (
-        typeof refreshSingleHubOrders ===
-        'function'
-      ) {
-
-        refreshSingleHubOrders();
-      }
-    }
-
-  }
-);
-
-/* Custom cart event */
-window.addEventListener(
-  'psm-cart-updated',
-  function() {
-
-    updateCartBadges();
-
-  }
-);
-
-/* Custom order event */
-window.addEventListener(
-  'psm-order-created',
-  function() {
-
-    if (
-      typeof checkOwnerAuthState ===
-      'function'
-    ) {
-
-      checkOwnerAuthState();
-    }
-
-    if (
-      typeof refreshSingleHubOrders ===
-      'function'
-    ) {
-
-      refreshSingleHubOrders();
-    }
-
-  }
-);
 
 /* ================================================================
-   ESCAPE CLOSE
-   ================================================================ */
+   SAVE ORDER LOCALLY
+================================================================ */
 
-document.addEventListener(
-  'keydown',
-  function(event) {
-
-    if (event.key === 'Escape') {
-
-      closeCart();
-    }
-
-  }
-);
-
-/* ================================================================
-   CART INITIALIZATION
-   ================================================================ */
-
-function initFixedCartSystem() {
-
-  cart =
-    loadCartFromStorage();
-
-  updateCartBadges();
-
-  renderCartBody();
-
-  console.log(
-    'Patel Sweet Mart Cart:',
-    cart
-  );
-}
-
-/* Run */
-if (
-  document.readyState ===
-  'loading'
+function saveOrderLocally(
+    order
 ) {
 
-  document.addEventListener(
-    'DOMContentLoaded',
-    initFixedCartSystem
-  );
+    const orders =
+        readJSON(
+            PSM_CONFIG.ordersKey,
+            []
+        );
+
+
+    const safeOrders =
+        Array.isArray(
+            orders
+        )
+            ? orders
+            : [];
+
+
+    const existingIndex =
+        safeOrders.findIndex(
+            oldOrder =>
+                String(
+                    oldOrder.id
+                ) ===
+                String(
+                    order.id
+                )
+        );
+
+
+    if (
+        existingIndex >= 0
+    ) {
+
+        safeOrders[
+            existingIndex
+        ] = order;
+
+    } else {
+
+        safeOrders.unshift(
+            order
+        );
+    }
+
+
+    writeJSON(
+        PSM_CONFIG.ordersKey,
+        safeOrders
+    );
+
+
+    /*
+       Trigger storage event for
+       other tabs.
+    */
+
+    try {
+
+        window.dispatchEvent(
+            new StorageEvent(
+                'storage',
+                {
+                    key:
+                        PSM_CONFIG.ordersKey,
+
+                    newValue:
+                        JSON.stringify(
+                            safeOrders
+                        )
+                }
+            )
+        );
+
+    } catch (error) {
+
+        console.warn(
+            'Storage event:',
+            error
+        );
+    }
+
+
+    return order;
+}
+
+
+/* ================================================================
+   WHATSAPP MESSAGE
+================================================================ */
+
+function createWhatsAppMessage(
+    order
+) {
+
+    let message =
+        '🍬 *PATEL SWEET MART*' +
+        '\n' +
+        '━━━━━━━━━━━━━━━━━━' +
+        '\n' +
+        '🧾 *Order:* #' +
+        order.id +
+        '\n';
+
+
+    message +=
+        '📅 *Date:* ' +
+        new Date(
+            order.date
+        ).toLocaleString(
+            'en-IN'
+        ) +
+        '\n\n';
+
+
+    message +=
+        '👤 *Customer:* ' +
+        (
+            order.customerName ||
+            '-'
+        ) +
+        '\n';
+
+
+    message +=
+        '📱 *Phone:* ' +
+        (
+            order.phone ||
+            '-'
+        ) +
+        '\n';
+
+
+    if (order.city) {
+
+        message +=
+            '🏙️ *City:* ' +
+            order.city +
+            '\n';
+    }
+
+
+    if (order.address) {
+
+        message +=
+            '📍 *Address:* ' +
+            order.address +
+            '\n';
+    }
+
+
+    message +=
+        '\n🛒 *ORDER ITEMS*' +
+        '\n' +
+        '━━━━━━━━━━━━━━━━━━' +
+        '\n';
+
+
+    order.items.forEach(
+        (
+            item,
+            index
+        ) => {
+
+            message +=
+                (
+                    index + 1
+                ) +
+                '. ' +
+                (
+                    currentLang === 'gu'
+                        ? (
+                            item.nameGu ||
+                            item.nameEn
+                        )
+                        : (
+                            item.nameEn ||
+                            item.nameGu
+                        )
+                ) +
+                '\n';
+
+
+            message +=
+                '   Weight: ' +
+                item.weightLabel +
+                '\n';
+
+
+            message +=
+                '   Qty: ' +
+                item.qty +
+                '\n';
+
+
+            message +=
+                '   ₹' +
+                Number(
+                    item.subtotal
+                ).toLocaleString(
+                    'en-IN'
+                ) +
+                '\n\n';
+        }
+    );
+
+
+    message +=
+        '━━━━━━━━━━━━━━━━━━' +
+        '\n';
+
+
+    message +=
+        '⚖️ *Total Weight:* ' +
+        Number(
+            order.totalKg
+        ).toFixed(2) +
+        ' kg' +
+        '\n';
+
+
+    message +=
+        '📦 *Total Items:* ' +
+        order.totalItems +
+        '\n';
+
+
+    message +=
+        '💰 *TOTAL:* ₹' +
+        Number(
+            order.totalAmount
+        ).toLocaleString(
+            'en-IN'
+        ) +
+        '\n';
+
+
+    if (order.notes) {
+
+        message +=
+            '\n📝 *Notes:* ' +
+            order.notes +
+            '\n';
+    }
+
+
+    message +=
+        '\n🙏 Thank you for ordering from Patel Sweet Mart.';
+
+
+    return message;
+}
+
+
+/* ================================================================
+   OPEN WHATSAPP
+================================================================ */
+
+function sendOrderToWhatsApp(
+    order
+) {
+
+    const number =
+        String(
+            PSM_CONFIG.whatsappNumber
+        )
+        .replace(
+            /\D/g,
+            ''
+        );
+
+
+    if (
+        !number ||
+        number.length < 10
+    ) {
+
+        alert(
+            currentLang === 'gu'
+                ? 'WhatsApp number script.js માં set કરો.'
+                : 'Please set WhatsApp number in script.js.'
+        );
+
+        return false;
+    }
+
+
+    const message =
+        createWhatsAppMessage(
+            order
+        );
+
+
+    const url =
+        'https://wa.me/' +
+        number +
+        '?text=' +
+        encodeURIComponent(
+            message
+        );
+
+
+    /*
+       Mobile / desktop WhatsApp.
+    */
+
+    window.open(
+        url,
+        '_blank'
+    );
+
+
+    order.whatsappSent =
+        true;
+
+    order.whatsappSentAt =
+        new Date().toISOString();
+
+
+    saveOrderLocally(
+        order
+    );
+
+
+    return true;
+}
+
+
+window.sendOrderToWhatsApp =
+    sendOrderToWhatsApp;
+
+
+/* ================================================================
+   CONFIRM + SEND WHATSAPP ORDER
+================================================================ */
+
+function confirmAndSendWhatsAppOrder() {
+
+    if (!cart.length) {
+
+        alert(
+            currentLang === 'gu'
+                ? 'તમારું cart ખાલી છે.'
+                : 'Your cart is empty.'
+        );
+
+        return;
+    }
+
+
+    const order =
+        createOrderObject();
+
+
+    /*
+       Basic customer validation.
+    */
+
+    if (
+        !order.customerName
+    ) {
+
+        alert(
+            currentLang === 'gu'
+                ? 'કૃપા કરીને તમારું નામ દાખલ કરો.'
+                : 'Please enter your name.'
+        );
+
+        focusFirst([
+            '#customer-name',
+            '#customerName',
+            '#order-name',
+            '[name="customerName"]'
+        ]);
+
+        return;
+    }
+
+
+    if (
+        !order.phone
+    ) {
+
+        alert(
+            currentLang === 'gu'
+                ? 'કૃપા કરીને મોબાઇલ નંબર દાખલ કરો.'
+                : 'Please enter mobile number.'
+        );
+
+        focusFirst([
+            '#customer-phone',
+            '#customerPhone',
+            '#order-phone',
+            '[name="phone"]'
+        ]);
+
+        return;
+    }
+
+
+    /*
+       Save order BEFORE WhatsApp.
+       Therefore Owner Hub can see it even if
+       WhatsApp window is closed.
+    */
+
+    saveOrderLocally(
+        order
+    );
+
+
+    /*
+       WhatsApp
+    */
+
+    sendOrderToWhatsApp(
+        order
+    );
+
+
+    /*
+       Clear cart after successful order
+       save.
+    */
+
+    cart = [];
+
+    saveCart();
+
+    renderCart();
+
+    updateCartBadge();
+
+    updateCartTotals();
+
+
+    /*
+       Close cart / order modal.
+    */
+
+    closeCart();
+
+
+    [
+        '#checkout-modal',
+        '#checkoutModal',
+        '.checkout-modal'
+    ]
+        .forEach(
+            selector => {
+
+                document
+                    .querySelectorAll(
+                        selector
+                    )
+                    .forEach(
+                        element =>
+                            element.classList.remove(
+                                'open',
+                                'active'
+                            )
+                    );
+            }
+        );
+
+
+    showCartToast(
+        currentLang === 'gu'
+            ? '✓ Order save થયો અને WhatsApp ખુલ્યું'
+            : '✓ Order saved and WhatsApp opened'
+    );
+
+
+    /*
+       Reset customer form.
+    */
+
+    resetOrderForm();
+
+
+    return order;
+}
+
+
+window.confirmAndSendWhatsAppOrder =
+    confirmAndSendWhatsAppOrder;
+
+
+/* ================================================================
+   CHECKOUT ALIASES
+================================================================ */
+
+function checkoutAndWhatsApp() {
+
+    return confirmAndSendWhatsAppOrder();
+}
+
+
+window.checkoutAndWhatsApp =
+    checkoutAndWhatsApp;
+
+
+function placeOrder() {
+
+    return confirmAndSendWhatsAppOrder();
+}
+
+
+window.placeOrder =
+    placeOrder;
+
+
+/* ================================================================
+   FOCUS
+================================================================ */
+
+function focusFirst(
+    selectors
+) {
+
+    for (
+        const selector
+        of selectors
+    ) {
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if (element) {
+
+            element.focus();
+
+            return;
+        }
+    }
+}
+
+
+/* ================================================================
+   RESET ORDER FORM
+================================================================ */
+
+function resetOrderForm() {
+
+    const selectors = [
+
+        '#checkout-form',
+
+        '#order-form',
+
+        '#customer-form'
+
+    ];
+
+
+    selectors.forEach(
+        selector => {
+
+            const form =
+                document.querySelector(
+                    selector
+                );
+
+
+            if (
+                form &&
+                typeof form.reset ===
+                    'function'
+            ) {
+
+                form.reset();
+            }
+        }
+    );
+}
+
+
+/* ================================================================
+   LANGUAGE SYSTEM
+================================================================ */
+
+const LANGUAGE_MAP = {
+
+    gu: {
+
+        navHome: 'હોમ',
+
+        navProducts: 'મીઠાઈ',
+
+        navNamkeen: 'નમકીન',
+
+        navAbout: 'અમારા વિશે',
+
+        navContact: 'સંપર્ક',
+
+        cart: 'કાર્ટ',
+
+        addToCart: 'કાર્ટમાં ઉમેરો',
+
+        buyNow: 'હમણાં ખરીદો',
+
+        order: 'ઓર્ડર કરો',
+
+        ownerHub: 'ઓનર હબ',
+
+        checkout: 'ચેકઆઉટ',
+
+        total: 'કુલ',
+
+        quantity: 'જથ્થો',
+
+        emptyCart: 'તમારું કાર્ટ ખાલી છે',
+
+        remove: 'દૂર કરો',
+
+        customerName: 'ગ્રાહકનું નામ',
+
+        phone: 'મોબાઇલ નંબર',
+
+        address: 'સરનામું',
+
+        city: 'શહેર',
+
+        notes: 'નોંધ',
+
+        sendWhatsApp:
+            'WhatsApp પર ઓર્ડર મોકલો'
+
+    },
+
+    en: {
+
+        navHome: 'Home',
+
+        navProducts: 'Sweets',
+
+        navNamkeen: 'Namkeen',
+
+        navAbout: 'About Us',
+
+        navContact: 'Contact',
+
+        cart: 'Cart',
+
+        addToCart: 'Add to Cart',
+
+        buyNow: 'Buy Now',
+
+        order: 'Order Now',
+
+        ownerHub: 'Owner Hub',
+
+        checkout: 'Checkout',
+
+        total: 'Total',
+
+        quantity: 'Quantity',
+
+        emptyCart: 'Your cart is empty',
+
+        remove: 'Remove',
+
+        customerName: 'Customer Name',
+
+        phone: 'Mobile Number',
+
+        address: 'Address',
+
+        city: 'City',
+
+        notes: 'Notes',
+
+        sendWhatsApp:
+            'Send Order on WhatsApp'
+
+    }
+
+};
+
+
+function t(
+    key
+) {
+
+    return (
+        LANGUAGE_MAP[
+            currentLang
+        ]?.[key]
+        ||
+        LANGUAGE_MAP.gu[key]
+        ||
+        key
+    );
+}
+
+
+window.t =
+    t;
+
+
+/* ================================================================
+   APPLY LANGUAGE
+================================================================ */
+
+function applyLang(
+    lang
+) {
+
+    if (
+        lang !== 'gu' &&
+        lang !== 'en'
+    ) {
+
+        lang = 'gu';
+    }
+
+
+    currentLang =
+        lang;
+
+
+    localStorage.setItem(
+        PSM_CONFIG.languageKey,
+        lang
+    );
+
+
+    document.documentElement
+        .setAttribute(
+            'data-lang',
+            lang
+        );
+
+
+    document.documentElement.lang =
+        lang === 'gu'
+            ? 'gu-IN'
+            : 'en-IN';
+
+
+    /*
+       data-gu / data-en support.
+    */
+
+    document
+        .querySelectorAll(
+            '[data-gu][data-en]'
+        )
+        .forEach(element => {
+
+            const value =
+                element.dataset[
+                    lang === 'gu'
+                        ? 'gu'
+                        : 'en'
+                ];
+
+
+            if (
+                value !== undefined
+            ) {
+
+                element.textContent =
+                    value;
+            }
+        });
+
+
+    /*
+       Placeholder language
+    */
+
+    document
+        .querySelectorAll(
+            '[data-placeholder-gu][data-placeholder-en]'
+        )
+        .forEach(element => {
+
+            element.placeholder =
+                lang === 'gu'
+                    ? element.dataset
+                        .placeholderGu
+                    : element.dataset
+                        .placeholderEn;
+        });
+
+
+    /*
+       Title language
+    */
+
+    document
+        .querySelectorAll(
+            '[data-title-gu][data-title-en]'
+        )
+        .forEach(element => {
+
+            element.title =
+                lang === 'gu'
+                    ? element.dataset
+                        .titleGu
+                    : element.dataset
+                        .titleEn;
+        });
+
+
+    /*
+       Buttons.
+    */
+
+    document
+        .querySelectorAll(
+            '[data-lang-key]'
+        )
+        .forEach(element => {
+
+            const key =
+                element.dataset.langKey;
+
+
+            const translated =
+                t(key);
+
+
+            if (translated) {
+
+                element.textContent =
+                    translated;
+            }
+        });
+
+
+    /*
+       Common navigation selectors.
+    */
+
+    replaceText(
+        [
+            '[data-nav-home]'
+        ],
+        t('navHome')
+    );
+
+
+    replaceText(
+        [
+            '[data-nav-products]'
+        ],
+        t('navProducts')
+    );
+
+
+    replaceText(
+        [
+            '[data-nav-namkeen]'
+        ],
+        t('navNamkeen')
+    );
+
+
+    replaceText(
+        [
+            '[data-nav-about]'
+        ],
+        t('navAbout')
+    );
+
+
+    replaceText(
+        [
+            '[data-nav-contact]'
+        ],
+        t('navContact')
+    );
+
+
+    replaceText(
+        [
+            '[data-cart-label]'
+        ],
+        t('cart')
+    );
+
+
+    replaceText(
+        [
+            '[data-owner-hub]'
+        ],
+        t('ownerHub')
+    );
+
+
+    /*
+       Language buttons state.
+    */
+
+    document
+        .querySelectorAll(
+            '[data-lang-switch]'
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                'active',
+                button.dataset.langSwitch ===
+                    lang
+            );
+        });
+
+
+    document
+        .querySelectorAll(
+            '[data-lang="gu"]'
+        )
+        .forEach(button => {
+
+            if (
+                button.dataset.langSwitch
+            ) {
+
+                button.classList.toggle(
+                    'active',
+                    lang === 'gu'
+                );
+            }
+        });
+
+
+    document
+        .querySelectorAll(
+            '[data-lang="en"]'
+        )
+        .forEach(button => {
+
+            if (
+                button.dataset.langSwitch
+            ) {
+
+                button.classList.toggle(
+                    'active',
+                    lang === 'en'
+                );
+            }
+        });
+
+
+    /*
+       Product text refresh.
+    */
+
+    refreshProductLanguage();
+
+
+    renderCart();
+
+
+    updateCartBadge();
+
+
+    updateCartTotals();
+}
+
+
+window.applyLang =
+    applyLang;
+
+
+/* ================================================================
+   LANGUAGE SWITCH
+================================================================ */
+
+function switchLanguage(
+    lang
+) {
+
+    applyLang(
+        lang
+    );
+}
+
+
+window.switchLanguage =
+    switchLanguage;
+
+
+function changeLanguage(
+    lang
+) {
+
+    applyLang(
+        lang
+    );
+}
+
+
+window.changeLanguage =
+    changeLanguage;
+
+
+/* ================================================================
+   REPLACE TEXT
+================================================================ */
+
+function replaceText(
+    selectors,
+    value
+) {
+
+    selectors.forEach(
+        selector => {
+
+            document
+                .querySelectorAll(
+                    selector
+                )
+                .forEach(
+                    element =>
+                        element.textContent =
+                            value
+                );
+        }
+    );
+}
+
+
+/* ================================================================
+   PRODUCT LANGUAGE
+================================================================ */
+
+function refreshProductLanguage() {
+
+    mergeProductCatalog();
+
+
+    document
+        .querySelectorAll(
+            '[data-product-id]'
+        )
+        .forEach(element => {
+
+            const id =
+                element.dataset.productId;
+
+
+            const product =
+                PRODUCTS[id];
+
+
+            if (!product) return;
+
+
+            const name =
+                currentLang === 'gu'
+                    ? product.nameGu
+                    : product.nameEn;
+
+
+            if (
+                element.dataset.productName !==
+                undefined
+            ) {
+
+                element.dataset.productName =
+                    name;
+            }
+
+
+            element
+                .querySelectorAll(
+                    '[data-product-name]'
+                )
+                .forEach(
+                    child =>
+                        child.textContent =
+                            name
+                );
+
+
+            element
+                .querySelectorAll(
+                    '[data-add-cart-text]'
+                )
+                .forEach(
+                    child =>
+                        child.textContent =
+                            t('addToCart')
+                );
+        });
+}
+
+
+/* ================================================================
+   OWNER HUB
+================================================================ */
+
+function openOwnerHubPage() {
+
+    window.location.href =
+        'admin.html';
+}
+
+
+window.openOwnerHubPage =
+    openOwnerHubPage;
+
+
+function openSingleAdminHub() {
+
+    window.location.href =
+        'admin.html';
+}
+
+
+window.openSingleAdminHub =
+    openSingleAdminHub;
+
+
+function openAdminHub() {
+
+    window.location.href =
+        'admin.html';
+}
+
+
+window.openAdminHub =
+    openAdminHub;
+
+
+/* ================================================================
+   OPEN OWNER HUB NEW TAB
+================================================================ */
+
+function openOwnerHubNewTab() {
+
+    window.open(
+        'admin.html',
+        '_blank'
+    );
+}
+
+
+window.openOwnerHubNewTab =
+    openOwnerHubNewTab;
+
+
+/* ================================================================
+   PRODUCT CARD PRICE REFRESH
+================================================================ */
+
+function refreshProductPrices() {
+
+    mergeProductCatalog();
+
+
+    document
+        .querySelectorAll(
+            '[data-product-id]'
+        )
+        .forEach(card => {
+
+            const id =
+                card.dataset.productId;
+
+
+            const product =
+                PRODUCTS[id];
+
+
+            if (!product) return;
+
+
+            const price =
+                Number(
+                    product.basePrice
+                ) || 0;
+
+
+            card
+                .querySelectorAll(
+                    '[data-product-price]'
+                )
+                .forEach(
+                    element => {
+
+                        element.textContent =
+                            '₹' +
+                            price.toLocaleString(
+                                'en-IN'
+                            );
+                    }
+                );
+
+
+            card
+                .querySelectorAll(
+                    '.product-price'
+                )
+                .forEach(
+                    element => {
+
+                        element.textContent =
+                            '₹' +
+                            price.toLocaleString(
+                                'en-IN'
+                            );
+                    }
+                );
+        });
+}
+
+
+window.refreshProductPrices =
+    refreshProductPrices;
+
+
+/* ================================================================
+   PRODUCT MODAL
+================================================================ */
+
+function openProductModal(
+    productId
+) {
+
+    const product =
+        getProduct(
+            productId
+        );
+
+
+    if (!product) return;
+
+
+    currentProductId =
+        productId;
+
+
+    const modal =
+        document.querySelector(
+            '#product-modal'
+        )
+        ||
+        document.querySelector(
+            '#productModal'
+        );
+
+
+    if (!modal) {
+
+        addToCart(
+            productId,
+            1,
+            1
+        );
+
+        return;
+    }
+
+
+    modal.classList.add(
+        'open'
+    );
+
+    modal.classList.add(
+        'active'
+    );
+
+
+    modal.dataset.productId =
+        productId;
+
+
+    const image =
+        modal.querySelector(
+            '[data-modal-product-image]'
+        );
+
+
+    const name =
+        modal.querySelector(
+            '[data-modal-product-name]'
+        );
+
+
+    const description =
+        modal.querySelector(
+            '[data-modal-product-description]'
+        );
+
+
+    const price =
+        modal.querySelector(
+            '[data-modal-product-price]'
+        );
+
+
+    if (image) {
+
+        image.src =
+            product.img;
+    }
+
+
+    if (name) {
+
+        name.textContent =
+            currentLang === 'gu'
+                ? product.nameGu
+                : product.nameEn;
+    }
+
+
+    if (description) {
+
+        description.textContent =
+            currentLang === 'gu'
+                ? product.descGu
+                : product.descEn;
+    }
+
+
+    if (price) {
+
+        price.textContent =
+            '₹' +
+            Number(
+                product.basePrice
+            ).toLocaleString(
+                'en-IN'
+            );
+    }
+}
+
+
+window.openProductModal =
+    openProductModal;
+
+
+function closeProductModal() {
+
+    document
+        .querySelectorAll(
+            '#product-modal,#productModal'
+        )
+        .forEach(
+            modal =>
+                modal.classList.remove(
+                    'open',
+                    'active'
+                )
+        );
+
+
+    currentProductId =
+        null;
+}
+
+
+window.closeProductModal =
+    closeProductModal;
+
+
+/* ================================================================
+   BUY NOW
+================================================================ */
+
+function buyNow(
+    productId,
+    weightKg = 1
+) {
+
+    cart = [];
+
+
+    saveCart();
+
+
+    addToCart(
+        productId,
+        weightKg,
+        1
+    );
+
+
+    openCart();
+}
+
+
+window.buyNow =
+    buyNow;
+
+
+/* ================================================================
+   EVENT DELEGATION
+================================================================ */
+
+document.addEventListener(
+    'click',
+    event => {
+
+        const button =
+            event.target.closest(
+                '[data-add-to-cart]'
+            );
+
+
+        if (button) {
+
+            event.preventDefault();
+
+            addProductToCartFromElement(
+                button
+            );
+
+            return;
+        }
+
+
+        const cartButton =
+            event.target.closest(
+                '[data-open-cart]'
+            );
+
+
+        if (cartButton) {
+
+            event.preventDefault();
+
+            openCart();
+
+            return;
+        }
+
+
+        const closeCartButton =
+            event.target.closest(
+                '[data-close-cart]'
+            );
+
+
+        if (closeCartButton) {
+
+            event.preventDefault();
+
+            closeCart();
+
+            return;
+        }
+
+
+        const languageButton =
+            event.target.closest(
+                '[data-lang-switch]'
+            );
+
+
+        if (languageButton) {
+
+            event.preventDefault();
+
+            applyLang(
+                languageButton.dataset
+                    .langSwitch
+            );
+
+            return;
+        }
+
+
+        const ownerButton =
+            event.target.closest(
+                '[data-open-owner-hub]'
+            );
+
+
+        if (ownerButton) {
+
+            event.preventDefault();
+
+            openOwnerHubPage();
+
+            return;
+        }
+
+
+        const buyButton =
+            event.target.closest(
+                '[data-buy-now]'
+            );
+
+
+        if (buyButton) {
+
+            event.preventDefault();
+
+
+            const id =
+                buyButton.dataset
+                    .productId;
+
+
+            const weight =
+                Number(
+                    buyButton.dataset
+                        .weight ||
+                    1
+                );
+
+
+            if (id) {
+
+                buyNow(
+                    id,
+                    weight
+                );
+            }
+        }
+
+    }
+);
+
+
+/* ================================================================
+   CHECKOUT BUTTON AUTO HOOK
+================================================================ */
+
+function attachCheckoutButtons() {
+
+    const selectors = [
+
+        '#checkout-button',
+
+        '#checkoutButton',
+
+        '#whatsapp-order-button',
+
+        '#send-whatsapp-order',
+
+        '[data-checkout]',
+
+        '[data-whatsapp-order]'
+
+    ];
+
+
+    document
+        .querySelectorAll(
+            selectors.join(',')
+        )
+        .forEach(button => {
+
+            if (
+                button.dataset
+                    .psmCheckoutAttached
+            ) {
+
+                return;
+            }
+
+
+            button.dataset
+                .psmCheckoutAttached =
+                    'true';
+
+
+            button.addEventListener(
+                'click',
+                event => {
+
+                    event.preventDefault();
+
+                    confirmAndSendWhatsAppOrder();
+
+                }
+            );
+        });
+}
+
+
+/* ================================================================
+   PRODUCT BUTTON AUTO HOOK
+================================================================ */
+
+function attachProductButtons() {
+
+    document
+        .querySelectorAll(
+            '[data-product-id]'
+        )
+        .forEach(card => {
+
+            const buttons =
+                card.querySelectorAll(
+                    '[data-add-to-cart]'
+                );
+
+
+            buttons.forEach(
+                button => {
+
+                    if (
+                        button.dataset
+                            .psmAttached
+                    ) {
+
+                        return;
+                    }
+
+
+                    button.dataset
+                        .psmAttached =
+                            'true';
+
+
+                    if (
+                        !button.dataset
+                            .productId
+                    ) {
+
+                        button.dataset
+                            .productId =
+                                card.dataset
+                                    .productId;
+                    }
+                }
+            );
+        });
+}
+
+
+/* ================================================================
+   CART FORM AUTO DETECTION
+================================================================ */
+
+function attachCartForm() {
+
+    const form =
+        document.querySelector(
+            '#checkout-form'
+        );
+
+
+    if (!form) return;
+
+
+    if (
+        form.dataset
+            .psmAttached
+    ) {
+
+        return;
+    }
+
+
+    form.dataset
+        .psmAttached =
+            'true';
+
+
+    form.addEventListener(
+        'submit',
+        event => {
+
+            event.preventDefault();
+
+            confirmAndSendWhatsAppOrder();
+
+        }
+    );
+}
+
+
+/* ================================================================
+   STORAGE SYNC
+================================================================ */
+
+window.addEventListener(
+    'storage',
+    event => {
+
+        if (
+            event.key ===
+            PSM_CONFIG.cartKey
+        ) {
+
+            loadCart();
+
+            renderCart();
+
+            updateCartBadge();
+
+            updateCartTotals();
+        }
+
+
+        if (
+            event.key ===
+            PSM_CONFIG.priceKey
+            ||
+            event.key ===
+            PSM_CONFIG.catalogKey
+        ) {
+
+            mergeProductCatalog();
+
+            refreshProductPrices();
+
+            refreshProductLanguage();
+
+            renderCart();
+        }
+
+
+        if (
+            event.key ===
+            PSM_CONFIG.languageKey
+        ) {
+
+            currentLang =
+                event.newValue ||
+                'gu';
+
+            applyLang(
+                currentLang
+            );
+        }
+
+    }
+);
+
+
+/* ================================================================
+   PERIODIC PRICE REFRESH
+================================================================ */
+
+let lastPriceSignature =
+    '';
+
+
+function getPriceSignature() {
+
+    return JSON.stringify({
+
+        prices:
+            readJSON(
+                PSM_CONFIG.priceKey,
+                {}
+            ),
+
+        catalog:
+            readJSON(
+                PSM_CONFIG.catalogKey,
+                {}
+            )
+
+    });
+}
+
+
+function checkPriceChanges() {
+
+    const signature =
+        getPriceSignature();
+
+
+    if (
+        signature !==
+        lastPriceSignature
+    ) {
+
+        lastPriceSignature =
+            signature;
+
+
+        mergeProductCatalog();
+
+        refreshProductPrices();
+
+        refreshProductLanguage();
+
+        renderCart();
+    }
+}
+
+
+/* ================================================================
+   INITIALIZATION
+================================================================ */
+
+function initializePatelSweetMart() {
+
+    mergeProductCatalog();
+
+
+    loadCart();
+
+
+    applyLang(
+        currentLang
+    );
+
+
+    refreshProductPrices();
+
+
+    refreshProductLanguage();
+
+
+    renderCart();
+
+
+    updateCartBadge();
+
+
+    updateCartTotals();
+
+
+    attachCheckoutButtons();
+
+
+    attachProductButtons();
+
+
+    attachCartForm();
+
+
+    lastPriceSignature =
+        getPriceSignature();
+
+
+    /*
+       Re-run after existing page scripts.
+    */
+
+    setTimeout(
+        () => {
+
+            mergeProductCatalog();
+
+            loadCart();
+
+            applyLang(
+                currentLang
+            );
+
+            refreshProductPrices();
+
+            refreshProductLanguage();
+
+            renderCart();
+
+            updateCartBadge();
+
+            updateCartTotals();
+
+            attachCheckoutButtons();
+
+            attachProductButtons();
+
+            attachCartForm();
+
+        },
+        300
+    );
+
+
+    /*
+       Check owner changes every 2 seconds.
+    */
+
+    setInterval(
+        checkPriceChanges,
+        2000
+    );
+}
+
+
+/* ================================================================
+   DOM READY
+================================================================ */
+
+if (
+    document.readyState ===
+    'loading'
+) {
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        initializePatelSweetMart
+    );
 
 } else {
 
-  initFixedCartSystem();
+    initializePatelSweetMart();
 }
-```
+
+
+/* ================================================================
+   GLOBAL EXPORTS
+================================================================ */
+
+window.PSM = {
+
+    PRODUCTS,
+
+    cart,
+
+    config:
+        PSM_CONFIG,
+
+    addToCart,
+
+    loadCart,
+
+    saveCart,
+
+    clearCart,
+
+    renderCart,
+
+    openCart,
+
+    closeCart,
+
+    getCartTotal,
+
+    getCartQuantity,
+
+    getCartWeight,
+
+    createOrderObject,
+
+    saveOrderLocally,
+
+    createWhatsAppMessage,
+
+    sendOrderToWhatsApp,
+
+    confirmAndSendWhatsAppOrder,
+
+    applyLang,
+
+    switchLanguage,
+
+    changeLanguage,
+
+    openOwnerHubPage,
+
+    openSingleAdminHub,
+
+    refreshProductPrices,
+
+    getProduct,
+
+    getProductPrice
+
+};
