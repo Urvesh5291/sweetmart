@@ -1,5035 +1,3888 @@
 /* ================================================================
-   PATEL SWEET MART — ADMIN & BUSINESS ANALYTICS JAVASCRIPT
-   Updated Order Sync System
-   LocalStorage + Supabase Hybrid
+   PATEL SWEET MART — admin.js
+   Owner Hub: orders, live prices, products, Supabase sync, backup
    ================================================================ */
 
 'use strict';
 
 /* ================================================================
-   DEFAULT PRODUCT MASTER DATA
+   STORAGE KEYS
+   ================================================================ */
+
+const ADMIN_AUTH_KEY = 'psm_owner_logged_in';
+const ADMIN_SESSION_KEY = 'psm_admin_auth';
+const ADMIN_LANG_KEY = 'psm-admin-lang';
+
+const ORDERS_KEY = 'psm_orders';
+const PRICES_KEY = 'psm_product_prices';
+const CATALOG_KEY = 'psm_custom_catalog';
+
+const SUPA_URL_KEY = 'psm_supabase_url';
+const SUPA_KEY_KEY = 'psm_supabase_key';
+
+
+/* ================================================================
+   DEFAULT PRODUCTS
    ================================================================ */
 
 const DEFAULT_PRODUCTS = {
-  toprapak: {
-    id: 'toprapak',
-    nameGu: 'ટોપરાપાક',
-    nameEn: 'Toprapak',
-    basePrice: 500,
-    img: 'images/product-toprapak.jpg',
-    category: 'mithai',
-    isAvailable: true
-  },
 
-  mohanthal: {
-    id: 'mohanthal',
-    nameGu: 'મોહનથાળ',
-    nameEn: 'Mohanthal',
-    basePrice: 480,
-    img: 'images/product-mohanthal.jpg',
-    category: 'mithai',
-    isAvailable: true
-  },
+    toprapak: {
+        id: 'toprapak',
+        nameGu: 'ટોપરાપાક',
+        nameEn: 'Toprapak',
+        basePrice: 500,
+        category: 'mithai',
+        img: 'images/product-toprapak.webp'
+    },
 
-  penda: {
-    id: 'penda',
-    nameGu: 'માવા પેંડા',
-    nameEn: 'Mava Penda',
-    basePrice: 520,
-    img: 'images/product-penda.jpg',
-    category: 'mithai',
-    isAvailable: true
-  },
+    mohanthal: {
+        id: 'mohanthal',
+        nameGu: 'મોહનથાળ',
+        nameEn: 'Mohanthal',
+        basePrice: 480,
+        category: 'mithai',
+        img: 'images/product-mohanthal.webp'
+    },
 
-  ladva: {
-    id: 'ladva',
-    nameGu: 'સ્પેશિયલ લાડવા',
-    nameEn: 'Special Ladva',
-    basePrice: 400,
-    img: 'images/product-ladva.jpg',
-    category: 'mithai',
-    isAvailable: true
-  },
+    penda: {
+        id: 'penda',
+        nameGu: 'માવા પેંડા',
+        nameEn: 'Mava Penda',
+        basePrice: 520,
+        category: 'mithai',
+        img: 'images/product-penda.webp'
+    },
 
-  jalebi: {
-    id: 'jalebi',
-    nameGu: 'ગરમ જલેબી',
-    nameEn: 'Hot Jalebi',
-    basePrice: 380,
-    img: 'images/product-jalebi.jpg',
-    category: 'mithai',
-    isAvailable: true
-  },
+    ladva: {
+        id: 'ladva',
+        nameGu: 'સ્પેશિયલ લાડવા',
+        nameEn: 'Special Ladva',
+        basePrice: 400,
+        category: 'mithai',
+        img: 'images/product-ladva.webp'
+    },
 
-  feni: {
-    id: 'feni',
-    nameGu: 'સ્વાદિષ્ટ ફેણી',
-    nameEn: 'Feni',
-    basePrice: 450,
-    img: 'images/product-feni.jpg',
-    category: 'mithai',
-    isAvailable: true
-  },
+    jalebi: {
+        id: 'jalebi',
+        nameGu: 'ગરમ જલેબી',
+        nameEn: 'Hot Jalebi',
+        basePrice: 380,
+        category: 'mithai',
+        img: 'images/product-jalebi.webp'
+    },
 
-  ganthiya: {
-    id: 'ganthiya',
-    nameGu: 'ચટાકેદાર ગાંઠિયા',
-    nameEn: 'Ganthiya',
-    basePrice: 340,
-    img: 'images/product-ganthiya.jpg',
-    category: 'namkeen',
-    isAvailable: true
-  },
+    feni: {
+        id: 'feni',
+        nameGu: 'સ્વાદિષ્ટ ફેણી',
+        nameEn: 'Feni',
+        basePrice: 450,
+        category: 'mithai',
+        img: 'images/product-feni.webp'
+    },
 
-  chorafari: {
-    id: 'chorafari',
-    nameGu: 'ચોરાફળી',
-    nameEn: 'Chorafari',
-    basePrice: 360,
-    img: 'images/product-chorafari.jpg',
-    category: 'namkeen',
-    isAvailable: true
-  },
+    ganthiya: {
+        id: 'ganthiya',
+        nameGu: 'ચટાકેદાર ગાંઠિયા',
+        nameEn: 'Ganthiya',
+        basePrice: 340,
+        category: 'namkeen',
+        img: 'images/product-ganthiya.webp'
+    },
 
-  chavanu: {
-    id: 'chavanu',
-    nameGu: 'મિક્સ ચવાણું',
-    nameEn: 'Mix Chavanu',
-    basePrice: 350,
-    img: 'images/product-chavanu.jpg',
-    category: 'namkeen',
-    isAvailable: true
-  },
+    chorafari: {
+        id: 'chorafari',
+        nameGu: 'ચોરાફળી',
+        nameEn: 'Chorafari',
+        basePrice: 360,
+        category: 'namkeen',
+        img: 'images/product-chorafari.webp'
+    },
 
-  farali: {
-    id: 'farali',
-    nameGu: 'ફરાળી નાસ્તો',
-    nameEn: 'Farali Snacks',
-    basePrice: 400,
-    img: 'images/product-farali.jpg',
-    category: 'namkeen',
-    isAvailable: true
-  }
+    chavanu: {
+        id: 'chavanu',
+        nameGu: 'મિક્સ ચવાણું',
+        nameEn: 'Mix Chavanu',
+        basePrice: 350,
+        category: 'namkeen',
+        img: 'images/product-chavanu.webp'
+    },
+
+    farali: {
+        id: 'farali',
+        nameGu: 'ફરાળી નાસ્તો',
+        nameEn: 'Farali Snacks',
+        basePrice: 400,
+        category: 'namkeen',
+        img: 'images/product-farali.webp'
+    },
+
+    hamper: {
+        id: 'hamper',
+        nameGu: 'પ્રીમિયમ ગિફ્ટ બોક્સ',
+        nameEn: 'Royal Gift Box',
+        basePrice: 850,
+        category: 'mithai',
+        img: 'images/category-gifting.webp'
+    }
 };
 
 
 /* ================================================================
-   DEMO ORDERS
+   GLOBAL VARIABLES
    ================================================================ */
 
-const DEMO_ORDERS = [
-  {
-    id: 'PSM-1048',
-    date: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
-    customerName: 'હરેશભાઈ પટેલ (Haresh Patel)',
-    phone: '98250 12345',
-    city: 'ખેરવા (Kherwa)',
-    address: '15, અંબિકા સોસાયટી, કોલેજ રોડ, ખેરવા',
-    notes: 'દિવાળી પૂજા પ્રસાદ માટે - સવારે 10 વાગ્યા સુધી',
-    status: 'new',
-    items: [
-      {
-        productId: 'toprapak',
-        nameGu: 'ટોપરાપાક',
-        nameEn: 'Toprapak',
-        weightLabel: '1.25 kg (સવા કિલો)',
-        weightKg: 1.25,
-        unitPrice: 625,
-        qty: 2,
-        subtotal: 1250
-      },
-      {
-        productId: 'mohanthal',
-        nameGu: 'મોહનથાળ',
-        nameEn: 'Mohanthal',
-        weightLabel: '500g (અડધો કિલો)',
-        weightKg: 0.5,
-        unitPrice: 240,
-        qty: 1,
-        subtotal: 240
-      },
-      {
-        productId: 'ganthiya',
-        nameGu: 'ચટાકેદાર ગાંઠિયા',
-        nameEn: 'Ganthiya',
-        weightLabel: '500g',
-        weightKg: 0.5,
-        unitPrice: 170,
-        qty: 2,
-        subtotal: 340
-      }
-    ],
-    totalAmount: 1830,
-    totalKg: 4.0
-  },
-
-  {
-    id: 'PSM-1047',
-    date: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-    customerName: 'દિલીપભાઈ શાહ (Dilip Shah)',
-    phone: '98795 67890',
-    city: 'અમદાવાદ (Ahmedabad)',
-    address: 'B-402, રોયલ ઓર્કિડ, બોડકદેવ, અમદાવાદ',
-    notes: 'ગિફ્ટિંગ બોક્સ - એક્સપ્રેસ કુરિયર',
-    status: 'confirmed',
-    items: [
-      {
-        productId: 'mohanthal',
-        nameGu: 'મોહનથાળ',
-        nameEn: 'Mohanthal',
-        weightLabel: '1.25 kg (સવા કિલો)',
-        weightKg: 1.25,
-        unitPrice: 600,
-        qty: 3,
-        subtotal: 1800
-      },
-      {
-        productId: 'penda',
-        nameGu: 'માવા પેંડા',
-        nameEn: 'Mava Penda',
-        weightLabel: '1 kg',
-        weightKg: 1,
-        unitPrice: 520,
-        qty: 2,
-        subtotal: 1040
-      }
-    ],
-    totalAmount: 2840,
-    totalKg: 5.75
-  },
-
-  {
-    id: 'PSM-1046',
-    date: new Date(Date.now() - 1000 * 60 * 240).toISOString(),
-    customerName: 'કિરીટભાઈ પ્રજાપતિ (Kirit Prajapati)',
-    phone: '94280 54321',
-    city: 'ખેરવા (Kherwa)',
-    address: 'રામજી મંદિર સામે, મુખ્ય બજાર, ખેરવા',
-    notes: 'દુકાનેથી પિકઅપ',
-    status: 'packed',
-    items: [
-      {
-        productId: 'jalebi',
-        nameGu: 'ગરમ જલેબી',
-        nameEn: 'Hot Jalebi',
-        weightLabel: '500g',
-        weightKg: 0.5,
-        unitPrice: 190,
-        qty: 1,
-        subtotal: 190
-      },
-      {
-        productId: 'ganthiya',
-        nameGu: 'ચટાકેદાર ગાંઠિયા',
-        nameEn: 'Ganthiya',
-        weightLabel: '250g',
-        weightKg: 0.25,
-        unitPrice: 85,
-        qty: 2,
-        subtotal: 170
-      }
-    ],
-    totalAmount: 360,
-    totalKg: 1
-  },
-
-  {
-    id: 'PSM-1045',
-    date: new Date(Date.now() - 1000 * 60 * 480).toISOString(),
-    customerName: 'ભાવેશભાઈ પટેલ (Bhavesh Patel)',
-    phone: '99099 88776',
-    city: 'અમદાવાદ (Ahmedabad)',
-    address: '7, શિવ બંગલોઝ, થલતેજ, અમદાવાદ',
-    notes: 'લગ્ન પ્રસંગ - તાજી બનાવટ',
-    status: 'dispatched',
-    items: [
-      {
-        productId: 'toprapak',
-        nameGu: 'ટોપરાપાક',
-        nameEn: 'Toprapak',
-        weightLabel: '2 kg',
-        weightKg: 2,
-        unitPrice: 1000,
-        qty: 2,
-        subtotal: 2000
-      },
-      {
-        productId: 'ladva',
-        nameGu: 'સ્પેશિયલ લાડવા',
-        nameEn: 'Special Ladva',
-        weightLabel: '1.5 kg (દોઢ કિલો)',
-        weightKg: 1.5,
-        unitPrice: 600,
-        qty: 2,
-        subtotal: 1200
-      },
-      {
-        productId: 'chorafari',
-        nameGu: 'ચોરાફળી',
-        nameEn: 'Chorafari',
-        weightLabel: '500g',
-        weightKg: 0.5,
-        unitPrice: 180,
-        qty: 2,
-        subtotal: 360
-      }
-    ],
-    totalAmount: 3560,
-    totalKg: 8
-  },
-
-  {
-    id: 'PSM-1044',
-    date: new Date(Date.now() - 1000 * 60 * 600).toISOString(),
-    customerName: 'મહેશભાઈ ચૌધરી (Mahesh Chaudhari)',
-    phone: '97123 45678',
-    city: 'ખેરવા (Kherwa)',
-    address: 'સ્વામિનારાયણ સોસાયટી, ખેરવા',
-    notes: '',
-    status: 'delivered',
-    items: [
-      {
-        productId: 'mohanthal',
-        nameGu: 'મોહનથાળ',
-        nameEn: 'Mohanthal',
-        weightLabel: '1 kg',
-        weightKg: 1,
-        unitPrice: 480,
-        qty: 1,
-        subtotal: 480
-      },
-      {
-        productId: 'chavanu',
-        nameGu: 'મિક્સ ચવાણું',
-        nameEn: 'Mix Chavanu',
-        weightLabel: '500g',
-        weightKg: 0.5,
-        unitPrice: 175,
-        qty: 1,
-        subtotal: 175
-      }
-    ],
-    totalAmount: 655,
-    totalKg: 1.5
-  }
-];
-
-
-/* ================================================================
-   GLOBAL STATE
-   ================================================================ */
-
+let products = {};
 let allOrders = [];
-let allProducts = { ...DEFAULT_PRODUCTS };
 
-let currentActiveTab = 'orders';
-let currentStatusFilter = 'all';
-let currentDateFilter = 'all';
-let searchQuery = '';
-
-let supabaseClient = null;
-let orderSyncTimer = null;
+let activeStatus = 'all';
+let searchTerm = '';
+let dateRange = 'all';
 
 
 /* ================================================================
-   ORDER NORMALIZER
+   JSON HELPERS
    ================================================================ */
 
-function normalizeOrder(order) {
-  if (!order || typeof order !== 'object') return null;
-
-  const items = Array.isArray(order.items)
-    ? order.items.map(item => ({
-        productId: item.productId || item.product_id || '',
-        nameGu: item.nameGu || item.product_name_gu || item.name || 'ઉત્પાદન',
-        nameEn: item.nameEn || item.product_name_en || item.name || 'Product',
-        weightLabel: item.weightLabel || item.weight_label || '1 kg',
-        weightKg: Number(item.weightKg ?? item.weight_kg ?? 1),
-        unitPrice: Number(item.unitPrice ?? item.unit_price ?? 0),
-        qty: Number(item.qty ?? item.quantity ?? 1),
-        subtotal: Number(item.subtotal ?? 0)
-      }))
-    : [];
-
-  const calculatedTotal = items.reduce(
-    (sum, item) => sum + (Number(item.subtotal) || 0),
-    0
-  );
-
-  const calculatedKg = items.reduce(
-    (sum, item) =>
-      sum + ((Number(item.weightKg) || 0) * (Number(item.qty) || 0)),
-    0
-  );
-
-  return {
-    id: String(
-      order.id ||
-      order.order_number ||
-      ('PSM-' + Date.now())
-    ),
-
-    date:
-      order.date ||
-      order.created_at ||
-      new Date().toISOString(),
-
-    customerName:
-      order.customerName ||
-      order.customer_name ||
-      'ગ્રાહક',
-
-    phone:
-      order.phone ||
-      order.customer_phone ||
-      '',
-
-    city:
-      order.city ||
-      order.delivery_city ||
-      '',
-
-    address:
-      order.address ||
-      order.delivery_address ||
-      '',
-
-    notes:
-      order.notes ||
-      order.order_notes ||
-      '',
-
-    status:
-      order.status ||
-      'new',
-
-    items,
-
-    totalAmount:
-      Number(
-        order.totalAmount ??
-        order.total_amount ??
-        calculatedTotal
-      ) || 0,
-
-    totalKg:
-      Number(
-        order.totalKg ??
-        order.total_kg ??
-        calculatedKg
-      ) || 0
-  };
-}
-
-
-/* ================================================================
-   READ LOCAL ORDERS SAFELY
-   ================================================================ */
-
-function readLocalOrders() {
-  try {
-    const raw = localStorage.getItem('psm_orders');
-
-    if (!raw) {
-      return [];
-    }
-
-    const parsed = JSON.parse(raw);
-
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed
-      .map(normalizeOrder)
-      .filter(Boolean);
-
-  } catch (error) {
-    console.error('Local orders read error:', error);
-    return [];
-  }
-}
-
-
-/* ================================================================
-   SAVE LOCAL ORDERS
-   ================================================================ */
-
-function saveLocalOrders(orders) {
-  try {
-    localStorage.setItem(
-      'psm_orders',
-      JSON.stringify(orders)
-    );
-
-    return true;
-  } catch (error) {
-    console.error('Local orders save error:', error);
-    return false;
-  }
-}
-
-
-/* ================================================================
-   MERGE ORDERS
-   ================================================================ */
-
-function mergeOrders(localOrders, cloudOrders) {
-
-  const map = new Map();
-
-  /* Cloud first */
-  cloudOrders.forEach(order => {
-    const normalized = normalizeOrder(order);
-
-    if (normalized) {
-      map.set(normalized.id, normalized);
-    }
-  });
-
-  /* Local orders overwrite same ID */
-  localOrders.forEach(order => {
-    const normalized = normalizeOrder(order);
-
-    if (normalized) {
-      map.set(normalized.id, normalized);
-    }
-  });
-
-  const merged = Array.from(map.values());
-
-  merged.sort((a, b) => {
-    return new Date(b.date).getTime() -
-           new Date(a.date).getTime();
-  });
-
-  return merged;
-}
-
-
-/* ================================================================
-   LOAD DATA STORE
-   ================================================================ */
-
-function initDataStore() {
-
-  /* ---------------- ORDERS ---------------- */
-
-  let savedOrders = readLocalOrders();
-
-  /*
-     IMPORTANT:
-     Demo orders are inserted only if there are NO orders.
-     Real WhatsApp orders will never be replaced by demo data.
-  */
-
-  if (savedOrders.length === 0) {
-    savedOrders = DEMO_ORDERS
-      .map(normalizeOrder)
-      .filter(Boolean);
-
-    saveLocalOrders(savedOrders);
-  }
-
-  allOrders = savedOrders;
-
-
-  /* ---------------- CUSTOM PRODUCTS ---------------- */
-
-  try {
-
-    const customCatalog =
-      localStorage.getItem('psm_custom_catalog');
-
-    if (customCatalog) {
-
-      const parsedCustom =
-        JSON.parse(customCatalog);
-
-      allProducts = {
-        ...DEFAULT_PRODUCTS,
-        ...parsedCustom
-      };
-
-    } else {
-
-      allProducts = {
-        ...DEFAULT_PRODUCTS
-      };
-    }
-
-  } catch (error) {
-
-    allProducts = {
-      ...DEFAULT_PRODUCTS
-    };
-  }
-
-
-  /* ---------------- CUSTOM PRICES ---------------- */
-
-  try {
-
-    const savedPrices =
-      localStorage.getItem('psm_product_prices');
-
-    if (savedPrices) {
-
-      const parsed =
-        JSON.parse(savedPrices);
-
-      Object.keys(parsed).forEach(id => {
-
-        if (allProducts[id]) {
-          allProducts[id].basePrice =
-            Number(parsed[id]);
-        }
-
-      });
-    }
-
-  } catch (error) {
-    console.warn('Price loading failed:', error);
-  }
-
-
-  /* ---------------- SUPABASE ---------------- */
-
-  initSupabaseIfConfigured();
-
-  /* ---------------- START AUTO SYNC ---------------- */
-
-  startOrderAutoSync();
-}
-
-
-/* ================================================================
-   SUPABASE INITIALIZATION
-   ================================================================ */
-
-function initSupabaseIfConfigured() {
-
-  const url =
-    localStorage.getItem('psm_supabase_url');
-
-  const key =
-    localStorage.getItem('psm_supabase_key');
-
-  const syncLabel =
-    document.getElementById('sync-label');
-
-
-  if (
-    url &&
-    key &&
-    window.supabase
-  ) {
+function readJSON(key, fallback) {
 
     try {
 
-      supabaseClient =
-        window.supabase.createClient(
-          url,
-          key
+        const value = JSON.parse(
+            localStorage.getItem(key)
         );
 
-      if (syncLabel) {
-        syncLabel.textContent =
-          '🟢 Supabase Cloud Connected';
-      }
-
-      fetchOrdersFromSupabase();
+        return value ?? fallback;
 
     } catch (error) {
 
-      console.error(
-        'Supabase initialization failed:',
-        error
-      );
+        console.warn(
+            'JSON read error:',
+            key,
+            error
+        );
 
-      supabaseClient = null;
-
-      if (syncLabel) {
-        syncLabel.textContent =
-          '🟡 Local Storage Mode';
-      }
+        return fallback;
     }
-
-  } else {
-
-    supabaseClient = null;
-
-    if (syncLabel) {
-      syncLabel.textContent =
-        '🟢 Local Store Ready';
-    }
-  }
 }
 
 
-/* ================================================================
-   FETCH ORDERS FROM SUPABASE
-   ================================================================ */
-
-async function fetchOrdersFromSupabase() {
-
-  if (!supabaseClient) {
-    return;
-  }
-
-  try {
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from('orders')
-      .select('*, order_items(*)')
-      .order('created_at', {
-        ascending: false
-      });
-
-
-    if (error) {
-
-      console.warn(
-        'Supabase order fetch error:',
-        error.message
-      );
-
-      return;
-    }
-
-
-    const cloudOrders = Array.isArray(data)
-      ? data.map(o => {
-
-          const items =
-            Array.isArray(o.order_items)
-              ? o.order_items
-              : [];
-
-          return normalizeOrder({
-            id: o.order_number,
-            date: o.created_at,
-            customerName: o.customer_name,
-            phone: o.customer_phone,
-            city: o.delivery_city,
-            address: o.delivery_address,
-            notes: o.order_notes,
-            status: o.status,
-            totalAmount: o.total_amount,
-
-            items: items.map(item => ({
-              productId: item.product_id,
-              nameGu: item.product_name_gu,
-              nameEn: item.product_name_en,
-              weightLabel: item.weight_label,
-              weightKg: item.weight_kg,
-              unitPrice: item.unit_price,
-              qty: item.quantity,
-              subtotal: item.subtotal
-            }))
-          });
-
-        })
-      : [];
-
-
-    /*
-       IMPORTANT FIX:
-       Do NOT replace local orders with cloud orders.
-
-       Merge both sources.
-    */
-
-    const localOrders =
-      readLocalOrders();
-
-    allOrders =
-      mergeOrders(
-        localOrders,
-        cloudOrders
-      );
-
-
-    /*
-       Save merged result back to localStorage.
-    */
-
-    saveLocalOrders(allOrders);
-
-    renderAllViews();
-
-
-  } catch (error) {
-
-    console.error(
-      'Supabase fetch failed:',
-      error
-    );
-
-  }
-}
-
-
-/* ================================================================
-   LIVE LOCAL ORDER REFRESH
-   ================================================================ */
-
-function refreshOrdersFromLocalStorage() {
-
-  const localOrders =
-    readLocalOrders();
-
-  if (!localOrders.length) {
-    return;
-  }
-
-
-  const oldIds =
-    new Set(
-      allOrders.map(o => o.id)
-    );
-
-  const newIds =
-    new Set(
-      localOrders.map(o => o.id)
-    );
-
-
-  let changed =
-    oldIds.size !== newIds.size;
-
-
-  if (!changed) {
-
-    for (const id of newIds) {
-
-      if (!oldIds.has(id)) {
-        changed = true;
-        break;
-      }
-    }
-  }
-
-
-  if (changed) {
-
-    allOrders = localOrders;
-
-    renderAllViews();
-
-    showNewOrderNotification();
-
-  } else {
-
-    /*
-       Even if count is same,
-       status/amount/customer details may have changed.
-    */
-
-    const oldJson =
-      JSON.stringify(allOrders);
-
-    const newJson =
-      JSON.stringify(localOrders);
-
-    if (oldJson !== newJson) {
-
-      allOrders = localOrders;
-
-      renderAllViews();
-    }
-  }
-}
-
-
-/* ================================================================
-   AUTO ORDER SYNC
-   ================================================================ */
-
-function startOrderAutoSync() {
-
-  if (orderSyncTimer) {
-    clearInterval(orderSyncTimer);
-  }
-
-  orderSyncTimer =
-    setInterval(() => {
-
-      refreshOrdersFromLocalStorage();
-
-    }, 5000);
-}
-
-
-/* ================================================================
-   BROWSER STORAGE EVENT
-   ================================================================ */
-
-window.addEventListener(
-  'storage',
-  function(event) {
-
-    if (event.key === 'psm_orders') {
-
-      refreshOrdersFromLocalStorage();
-
-    }
-
-  }
-);
-
-
-/* ================================================================
-   NEW ORDER NOTIFICATION
-   ================================================================ */
-
-let lastKnownOrderCount = null;
-
-function showNewOrderNotification() {
-
-  const count = allOrders.length;
-
-  if (lastKnownOrderCount === null) {
-    lastKnownOrderCount = count;
-    return;
-  }
-
-  if (count > lastKnownOrderCount) {
+function writeJSON(key, value) {
 
     try {
 
-      if (
-        'Notification' in window &&
-        Notification.permission === 'granted'
-      ) {
-
-        new Notification(
-          'Patel Sweet Mart',
-          {
-            body:
-              'નવો ઓર્ડર આવ્યો છે. Admin panel માં તપાસો.',
-            icon: 'logo.png'
-          }
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
         );
-      }
 
-    } catch (error) {}
+        return true;
 
-  }
+    } catch (error) {
 
-  lastKnownOrderCount = count;
+        console.error(
+            'JSON write error:',
+            key,
+            error
+        );
+
+        return false;
+    }
 }
 
 
 /* ================================================================
-   AUTH GUARD
+   OWNER LOGIN
    ================================================================ */
 
-function checkAuth() {
+function isOwnerLoggedIn() {
 
-  const isAuth =
-    sessionStorage.getItem(
-      'psm_admin_auth'
-    ) === 'authenticated' ||
-
-    localStorage.getItem(
-      'psm_owner_logged_in'
-    ) === 'true';
-
-
-  const modal =
-    document.getElementById(
-      'admin-login-modal'
+    return (
+        sessionStorage.getItem(
+            ADMIN_SESSION_KEY
+        ) === 'authenticated'
+        ||
+        localStorage.getItem(
+            ADMIN_AUTH_KEY
+        ) === 'true'
     );
-
-
-  if (isAuth) {
-
-    if (modal) {
-      modal.style.display = 'none';
-    }
-
-  } else {
-
-    if (modal) {
-      modal.style.display = 'flex';
-    }
-  }
 }
 
 
-function toggleAdminPasswordVisibility(
-  fieldId,
-  btn
-) {
+function requireOwner() {
 
-  const field =
-    document.getElementById(fieldId);
+    if (!isOwnerLoggedIn()) {
 
-  if (!field) return;
+        showLogin();
 
-  if (field.type === 'password') {
+        return false;
+    }
 
-    field.type = 'text';
+    return true;
+}
 
-    btn.innerHTML = '&#128064;';
 
-  } else {
+function showLogin() {
 
-    field.type = 'password';
+    const modal =
+        document.getElementById(
+            'admin-login-modal'
+        );
 
-    btn.innerHTML = '&#128065;';
-  }
+    if (modal) {
+
+        modal.classList.add('open');
+    }
+}
+
+
+function hideLogin() {
+
+    const modal =
+        document.getElementById(
+            'admin-login-modal'
+        );
+
+    if (modal) {
+
+        modal.classList.remove('open');
+    }
+}
+
+
+/* ================================================================
+   LOGIN
+   ================================================================ */
+
+function handleAdminLogin(event) {
+
+    event.preventDefault();
+
+    const input =
+        document.getElementById(
+            'login-password'
+        );
+
+    const remember =
+        document.getElementById(
+            'login-remember'
+        )?.checked;
+
+    const pass =
+        (input?.value || '').trim();
+
+
+    if (!pass) {
+
+        alert(
+            'કૃપા કરીને પાસવર્ડ દાખલ કરો.'
+        );
+
+        return;
+    }
+
+
+    /*
+       Default Owner Hub passwords:
+
+       patel1995
+       admin123
+       patel
+    */
+
+    const validPassword =
+        pass === 'patel1995'
+        ||
+        pass === 'admin123'
+        ||
+        pass.toLowerCase() === 'patel';
+
+
+    if (!validPassword) {
+
+        alert(
+            'ખોટો પાસવર્ડ.\n\n' +
+            'Default password: patel1995'
+        );
+
+        return;
+    }
+
+
+    sessionStorage.setItem(
+        ADMIN_SESSION_KEY,
+        'authenticated'
+    );
+
+
+    if (remember) {
+
+        localStorage.setItem(
+            ADMIN_AUTH_KEY,
+            'true'
+        );
+    }
+
+
+    hideLogin();
+
+    refreshAdminOrders(true);
+
+    loadInventory();
+
+    updateDashboard();
 }
 
 
 function bypassDemoAccess() {
 
-  sessionStorage.setItem(
-    'psm_admin_auth',
-    'authenticated'
-  );
-
-  localStorage.setItem(
-    'psm_owner_logged_in',
-    'true'
-  );
-
-  const modal =
-    document.getElementById(
-      'admin-login-modal'
-    );
-
-  if (modal) {
-    modal.style.display = 'none';
-  }
-
-  renderAllViews();
-}
-
-
-function handleAdminLogin(event) {
-
-  event.preventDefault();
-
-  const email =
-    document.getElementById(
-      'login-email'
-    )?.value.trim();
-
-  const pass =
-    document.getElementById(
-      'login-password'
-    )?.value.trim();
-
-  const remember =
-    document.getElementById(
-      'login-remember'
-    )?.checked;
-
-
-  if (
-    pass === 'patel1995' ||
-    pass === 'admin123' ||
-    pass?.toLowerCase() === 'patel' ||
-    (email && pass)
-  ) {
-
     sessionStorage.setItem(
-      'psm_admin_auth',
-      'authenticated'
+        ADMIN_SESSION_KEY,
+        'authenticated'
     );
 
-    if (remember) {
-
-      localStorage.setItem(
-        'psm_owner_logged_in',
+    localStorage.setItem(
+        ADMIN_AUTH_KEY,
         'true'
-      );
-    }
-
-    const modal =
-      document.getElementById(
-        'admin-login-modal'
-      );
-
-    if (modal) {
-      modal.style.display = 'none';
-    }
-
-    renderAllViews();
-
-  } else {
-
-    alert(
-      '❌ અમાન્ય પાસવર્ડ!'
     );
-  }
+
+    hideLogin();
+
+    refreshAdminOrders(true);
+
+    loadInventory();
+
+    updateDashboard();
 }
 
 
 function adminLogout() {
 
-  sessionStorage.removeItem(
-    'psm_admin_auth'
-  );
+    sessionStorage.removeItem(
+        ADMIN_SESSION_KEY
+    );
 
-  localStorage.removeItem(
-    'psm_owner_logged_in'
-  );
+    localStorage.removeItem(
+        ADMIN_AUTH_KEY
+    );
 
-  location.reload();
+    location.href = 'index.html';
+}
+
+
+function toggleAdminPasswordVisibility(
+    id,
+    btn
+) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) return;
+
+
+    element.type =
+        element.type === 'password'
+            ? 'text'
+            : 'password';
+
+
+    if (btn) {
+
+        btn.innerHTML =
+            element.type === 'password'
+                ? '&#128065;'
+                : '&#128064;';
+    }
 }
 
 
 /* ================================================================
-   TAB SWITCHING
+   SUPABASE
    ================================================================ */
 
-function switchAdminTab(tabName) {
+function getSupabaseConfig() {
 
-  currentActiveTab =
-    tabName;
-
-
-  document
-    .querySelectorAll('.admin-tab-btn')
-    .forEach(btn => {
-
-      btn.classList.toggle(
-        'active',
-        btn.getAttribute('data-tab') === tabName
-      );
-
-    });
+    const url =
+        (
+            localStorage.getItem(
+                SUPA_URL_KEY
+            ) || ''
+        )
+        .trim()
+        .replace(/\/+$/, '');
 
 
-  document
-    .querySelectorAll('.admin-panel-view')
-    .forEach(panel => {
-
-      panel.classList.toggle(
-        'active',
-        panel.id === 'panel-' + tabName
-      );
-
-    });
+    const key =
+        (
+            localStorage.getItem(
+                SUPA_KEY_KEY
+            ) || ''
+        )
+        .trim();
 
 
-  if (tabName === 'kitchen') {
-    renderKitchenPlanner();
-  }
+    return {
 
-  if (tabName === 'analytics') {
-    renderAnalyticsView();
-  }
+        url,
 
-  if (tabName === 'crm') {
-    renderCrmView();
-  }
+        key,
 
-  if (tabName === 'inventory') {
-    renderInventoryGrid();
-  }
+        configured:
+            !!(
+                url &&
+                key
+            )
+    };
+}
+
+
+function supaHeaders() {
+
+    const config =
+        getSupabaseConfig();
+
+
+    return {
+
+        'apikey':
+            config.key,
+
+        'Authorization':
+            'Bearer ' + config.key,
+
+        'Content-Type':
+            'application/json',
+
+        'Accept':
+            'application/json'
+    };
 }
 
 
 /* ================================================================
-   FILTERING
+   SUPABASE ORDERS
    ================================================================ */
+
+async function fetchSupabaseOrders() {
+
+    const config =
+        getSupabaseConfig();
+
+
+    if (!config.configured) {
+
+        return [];
+    }
+
+
+    const response =
+        await fetch(
+            `${config.url}/rest/v1/orders?select=*&order=created_at.desc`,
+            {
+                headers:
+                    supaHeaders()
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            await response.text()
+        );
+    }
+
+
+    const rows =
+        await response.json();
+
+
+    let itemRows = [];
+
+
+    try {
+
+        const itemResponse =
+            await fetch(
+                `${config.url}/rest/v1/order_items?select=*&order=order_id.asc`,
+                {
+                    headers:
+                        supaHeaders()
+                }
+            );
+
+
+        if (itemResponse.ok) {
+
+            itemRows =
+                await itemResponse.json();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            'Supabase order items unavailable:',
+            error
+        );
+    }
+
+
+    return rows.map(row => {
+
+        const items =
+            itemRows
+                .filter(
+                    item =>
+                        String(item.order_id) ===
+                        String(row.id)
+                )
+                .map(item => {
+
+                    return {
+
+                        productId:
+                            item.product_id,
+
+                        nameGu:
+                            item.product_name_gu ||
+                            item.product_name_en ||
+                            'Product',
+
+                        nameEn:
+                            item.product_name_en ||
+                            item.product_name_gu ||
+                            'Product',
+
+                        weightLabel:
+                            item.weight_label ||
+                            (
+                                (
+                                    Number(
+                                        item.weight_kg
+                                    ) || 1
+                                ) +
+                                'kg'
+                            ),
+
+                        weightKg:
+                            Number(
+                                item.weight_kg
+                            ) || 1,
+
+                        unitPrice:
+                            Number(
+                                item.unit_price
+                            ) || 0,
+
+                        qty:
+                            Number(
+                                item.quantity
+                            ) || 1,
+
+                        subtotal:
+                            Number(
+                                item.subtotal
+                            ) || 0
+                    };
+                });
+
+
+        return {
+
+            id:
+                row.order_number ||
+                ('DB-' + row.id),
+
+            dbId:
+                row.id,
+
+            date:
+                row.created_at ||
+                new Date().toISOString(),
+
+            customerName:
+                row.customer_name ||
+                '',
+
+            phone:
+                row.customer_phone ||
+                '',
+
+            city:
+                row.delivery_city ||
+                '',
+
+            address:
+                row.delivery_address ||
+                '',
+
+            notes:
+                row.order_notes ||
+                '',
+
+            status:
+                row.status ||
+                'new',
+
+            totalAmount:
+                Number(
+                    row.total_amount
+                ) || 0,
+
+            totalItems:
+                Number(
+                    row.total_items
+                ) ||
+                items.reduce(
+                    (
+                        total,
+                        item
+                    ) =>
+                        total +
+                        item.qty,
+                    0
+                ),
+
+            items
+        };
+    });
+}
+
+
+/* ================================================================
+   REFRESH ORDERS
+   ================================================================ */
+
+async function refreshAdminOrders(
+    showNotice = false
+) {
+
+    if (!requireOwner()) return;
+
+
+    const localOrders =
+        readJSON(
+            ORDERS_KEY,
+            []
+        );
+
+
+    let sharedOrders = [];
+
+
+    try {
+
+        sharedOrders =
+            await fetchSupabaseOrders();
+
+
+        setSyncStatus(
+            true,
+            'Supabase Cloud Sync'
+        );
+
+    } catch (error) {
+
+        console.warn(
+            'Supabase unavailable:',
+            error
+        );
+
+
+        setSyncStatus(
+            false,
+            'Local Orders (Supabase unavailable)'
+        );
+    }
+
+
+    const orderMap =
+        new Map();
+
+
+    localOrders.forEach(order => {
+
+        orderMap.set(
+            String(order.id),
+            order
+        );
+    });
+
+
+    sharedOrders.forEach(order => {
+
+        const old =
+            orderMap.get(
+                String(order.id)
+            ) || {};
+
+
+        orderMap.set(
+            String(order.id),
+            {
+                ...old,
+                ...order,
+
+                items:
+                    order.items?.length
+                        ? order.items
+                        : (
+                            old.items || []
+                        )
+            }
+        );
+    });
+
+
+    allOrders =
+        [...orderMap.values()]
+            .sort(
+                (a, b) =>
+                    new Date(
+                        b.date || 0
+                    ) -
+                    new Date(
+                        a.date || 0
+                    )
+            );
+
+
+    writeJSON(
+        ORDERS_KEY,
+        allOrders
+    );
+
+
+    renderOrders();
+
+    updateDashboard();
+
+    renderCustomers();
+
+    renderAnalytics();
+
+    renderKitchen();
+
+
+    const badge =
+        document.getElementById(
+            'tab-orders-badge'
+        );
+
+
+    if (badge) {
+
+        badge.textContent =
+            allOrders.length;
+    }
+
+
+    if (showNotice) {
+
+        flash(
+            '✓ Orders refreshed'
+        );
+    }
+}
+
+
+window.refreshAdminOrders =
+    refreshAdminOrders;
+
+
+/* ================================================================
+   LOCAL ORDER REFRESH
+   ================================================================ */
+
+function refreshOrdersFromLocalStorage() {
+
+    allOrders =
+        readJSON(
+            ORDERS_KEY,
+            []
+        );
+
+
+    renderOrders();
+
+    updateDashboard();
+}
+
+
+window.refreshOrdersFromLocalStorage =
+    refreshOrdersFromLocalStorage;
+
+
+/* ================================================================
+   SYNC STATUS
+   ================================================================ */
+
+function setSyncStatus(
+    ok,
+    label
+) {
+
+    const dot =
+        document.getElementById(
+            'sync-status'
+        );
+
+    const labelElement =
+        document.getElementById(
+            'sync-label'
+        );
+
+
+    if (dot) {
+
+        dot.classList.toggle(
+            'offline',
+            !ok
+        );
+    }
+
+
+    if (labelElement) {
+
+        labelElement.textContent =
+            label;
+    }
+}
+
+
+/* ================================================================
+   DATE FILTER
+   ================================================================ */
+
+function normalizeDate(order) {
+
+    return new Date(
+        order.date ||
+        order.createdAt ||
+        0
+    );
+}
+
+
+function inDateRange(order) {
+
+    if (dateRange === 'all') {
+
+        return true;
+    }
+
+
+    const date =
+        normalizeDate(order);
+
+    const now =
+        new Date();
+
+    const start =
+        new Date(now);
+
+
+    if (dateRange === 'today') {
+
+        start.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+    } else if (
+        dateRange === 'week'
+    ) {
+
+        start.setDate(
+            now.getDate() - 6
+        );
+
+        start.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+    } else if (
+        dateRange === 'month'
+    ) {
+
+        start.setDate(1);
+
+        start.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+    }
+
+
+    return date >= start;
+}
+
+
+/* ================================================================
+   FILTER ORDERS
+   ================================================================ */
+
+function filteredOrders() {
+
+    return allOrders.filter(order => {
+
+        const searchText =
+            [
+                order.id,
+                order.customerName,
+                order.phone,
+                order.city,
+                order.address
+            ]
+                .join(' ')
+                .toLowerCase();
+
+
+        const statusOK =
+            activeStatus === 'all'
+            ||
+            order.status ===
+                activeStatus;
+
+
+        const searchOK =
+            !searchTerm
+            ||
+            searchText.includes(
+                searchTerm
+            );
+
+
+        return (
+            statusOK &&
+            searchOK &&
+            inDateRange(order)
+        );
+    });
+}
+
+
+function handleOrderSearch(value) {
+
+    searchTerm =
+        (
+            value || ''
+        )
+            .toLowerCase()
+            .trim();
+
+
+    renderOrders();
+}
+
 
 function filterOrdersByStatus(status) {
 
-  currentStatusFilter =
-    status;
+    activeStatus =
+        status;
 
-  document
-    .querySelectorAll('.order-status-filter')
-    .forEach(btn => {
 
-      btn.classList.toggle(
-        'active',
-        btn.getAttribute('data-status') === status
-      );
+    document
+        .querySelectorAll(
+            '.order-status-filter'
+        )
+        .forEach(button => {
 
-    });
+            button.classList.toggle(
+                'active',
+                button.dataset.status ===
+                    status
+            );
+        });
 
-  renderOrdersTable();
+
+    renderOrders();
 }
 
 
 function filterByDateRange(range) {
 
-  currentDateFilter =
-    range;
-
-  document
-    .querySelectorAll('.date-pill-btn')
-    .forEach(btn => {
-
-      btn.classList.toggle(
-        'active',
-        btn.getAttribute('data-range') === range
-      );
-
-    });
-
-  renderAllViews();
-}
+    dateRange =
+        range;
 
 
-function handleOrderSearch(val) {
-
-  searchQuery =
-    String(val || '')
-      .trim()
-      .toLowerCase();
-
-  renderOrdersTable();
-}
-
-
-/* ================================================================
-   FILTERED ORDERS
-   ================================================================ */
-
-function getFilteredOrders() {
-
-  let list =
-    [...allOrders];
-
-
-  if (
-    currentStatusFilter !== 'all'
-  ) {
-
-    list =
-      list.filter(
-        o =>
-          o.status ===
-          currentStatusFilter
-      );
-  }
-
-
-  const now =
-    new Date();
-
-
-  if (
-    currentDateFilter === 'today'
-  ) {
-
-    list =
-      list.filter(o => {
-
-        const d =
-          new Date(o.date);
-
-        return (
-          d.toDateString() ===
-          now.toDateString()
-        );
-
-      });
-
-  } else if (
-    currentDateFilter === 'week'
-  ) {
-
-    const oneWeekAgo =
-      new Date(
-        now.getTime() -
-        7 * 24 * 60 * 60 * 1000
-      );
-
-    list =
-      list.filter(
-        o =>
-          new Date(o.date) >=
-          oneWeekAgo
-      );
-
-  } else if (
-    currentDateFilter === 'month'
-  ) {
-
-    const oneMonthAgo =
-      new Date(
-        now.getTime() -
-        30 * 24 * 60 * 60 * 1000
-      );
-
-    list =
-      list.filter(
-        o =>
-          new Date(o.date) >=
-          oneMonthAgo
-      );
-  }
-
-
-  if (searchQuery) {
-
-    list =
-      list.filter(o => {
-
-        return (
-          String(o.id)
-            .toLowerCase()
-            .includes(searchQuery) ||
-
-          String(o.customerName)
-            .toLowerCase()
-            .includes(searchQuery) ||
-
-          String(o.phone)
-            .toLowerCase()
-            .includes(searchQuery) ||
-
-          String(o.city)
-            .toLowerCase()
-            .includes(searchQuery)
-        );
-
-      });
-  }
-
-
-  return list;
-}
-
-
-/* ================================================================
-   KPI
-   ================================================================ */
-
-function renderKpis() {
-
-  const filtered =
-    getFilteredOrders();
-
-
-  const totalRev =
-    filtered.reduce(
-      (sum, o) =>
-        sum + Number(o.totalAmount || 0),
-      0
-    );
-
-
-  const totalOrders =
-    filtered.length;
-
-
-  const totalKg =
-    filtered.reduce(
-      (sum, o) =>
-        sum + Number(o.totalKg || 0),
-      0
-    );
-
-
-  const aov =
-    totalOrders > 0
-      ? Math.round(
-          totalRev / totalOrders
+    document
+        .querySelectorAll(
+            '[data-range]'
         )
-      : 0;
+        .forEach(button => {
+
+            button.classList.toggle(
+                'active',
+                button.dataset.range ===
+                    range
+            );
+        });
 
 
-  const revEl =
-    document.getElementById(
-      'kpi-revenue'
-    );
+    renderOrders();
 
-  const ordEl =
-    document.getElementById(
-      'kpi-orders-count'
-    );
-
-  const kgEl =
-    document.getElementById(
-      'kpi-total-kg'
-    );
-
-  const aovEl =
-    document.getElementById(
-      'kpi-aov'
-    );
-
-  const badgeEl =
-    document.getElementById(
-      'tab-orders-badge'
-    );
-
-
-  if (revEl) {
-    revEl.textContent =
-      '₹' +
-      totalRev.toLocaleString(
-        'en-IN'
-      );
-  }
-
-  if (ordEl) {
-    ordEl.textContent =
-      totalOrders;
-  }
-
-  if (kgEl) {
-    kgEl.textContent =
-      totalKg.toFixed(2) +
-      ' kg';
-  }
-
-  if (aovEl) {
-    aovEl.textContent =
-      '₹' +
-      aov.toLocaleString(
-        'en-IN'
-      );
-  }
-
-  if (badgeEl) {
-    badgeEl.textContent =
-      totalOrders;
-  }
+    updateDashboard();
 }
 
 
 /* ================================================================
-   ORDERS TABLE
+   HTML ESCAPE
    ================================================================ */
 
-function renderOrdersTable() {
-
-  const tbody =
-    document.getElementById(
-      'orders-tbody'
-    );
-
-  if (!tbody) return;
-
-
-  const filtered =
-    getFilteredOrders();
-
-
-  if (
-    filtered.length === 0
-  ) {
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="8"
-          style="
-            text-align:center;
-            padding:36px;
-            color:#94A3B8;
-          ">
-          કોઈ ઓર્ડર મળ્યા નથી
-          (No orders found)
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
-  let html = '';
-
-
-  filtered.forEach(o => {
-
-    const d =
-      new Date(o.date);
-
-
-    const dateFormatted =
-      isNaN(d.getTime())
-        ? '-'
-        :
-          d.toLocaleDateString(
-            'gu-IN',
-            {
-              day: '2-digit',
-              month: 'short'
-            }
-          ) +
-          ', ' +
-          d.toLocaleTimeString(
-            'en-US',
-            {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true
-            }
-          );
-
-
-    const items =
-      Array.isArray(o.items)
-        ? o.items
-        : [];
-
-
-    const itemsSummary =
-      items.length
-        ? items.map(it =>
-            `${it.nameGu || it.nameEn}
-             (${it.weightLabel || '-'})
-             × ${it.qty || 1}`
-          ).join('<br>')
-        : '—';
-
-
-    const city =
-      String(o.city || '');
-
-
-    const cityClass =
-      city.toLowerCase().includes('kherwa')
-        ? 'kherwa'
-        : 'ahmedabad';
-
-
-    const phone =
-      String(o.phone || '')
-        .replace(/[^0-9]/g, '');
-
-
-    const customerName =
-      String(
-        o.customerName || 'ગ્રાહક'
-      );
-
-
-    html += `
-      <tr>
-
-        <td>
-          <span class="order-id-badge">
-            #${escapeHtml(o.id)}
-          </span>
-        </td>
-
-        <td style="
-          font-size:0.8rem;
-          color:#64748B;
-        ">
-          ${dateFormatted}
-        </td>
-
-        <td>
-          <div class="cust-name">
-            ${escapeHtml(customerName)}
-          </div>
-
-          <div class="cust-phone">
-            &#128222;
-            ${escapeHtml(o.phone)}
-          </div>
-        </td>
-
-        <td>
-          <span class="city-badge ${cityClass}">
-            ${escapeHtml(city)}
-          </span>
-        </td>
-
-        <td>
-          <div class="items-summary-text">
-            ${itemsSummary}
-          </div>
-        </td>
-
-        <td>
-          <span class="table-price">
-            ₹${Number(
-              o.totalAmount || 0
-            ).toLocaleString('en-IN')}
-          </span>
-        </td>
-
-        <td>
-          <span class="status-pill ${escapeHtml(o.status)}">
-            ${getStatusLabelGu(o.status)}
-          </span>
-        </td>
-
-        <td>
-
-          <div class="table-actions">
-
-            <button
-              class="btn-table-icon"
-              title="ઓર્ડર વિગત જુઓ"
-              onclick="openOrderModal('${safeJs(o.id)}')">
-              &#128065;
-            </button>
-
-            ${
-              phone
-              ? `
-                <a
-                  href="https://wa.me/91${phone}?text=${encodeURIComponent(
-                    'નમસ્તે ' +
-                    customerName +
-                    ', પટેલ સ્વીટ માર્ટમાંથી આપના ઓર્ડર #' +
-                    o.id +
-                    ' સંદર્ભે.'
-                  )}"
-                  target="_blank"
-                  rel="noopener"
-                  class="btn-table-icon btn-wa-action"
-                  title="WhatsApp ચેટ">
-                  &#128172;
-                </a>
-              `
-              : ''
-            }
-
-            <button
-              class="btn-table-icon"
-              title="પ્રિન્ટ સ્લિપ"
-              onclick="printOrderSlip('${safeJs(o.id)}')">
-              &#128438;
-            </button>
-
-          </div>
-
-        </td>
-
-      </tr>
-    `;
-  });
-
-
-  tbody.innerHTML =
-    html;
-}
-
-
-/* ================================================================
-   STATUS LABEL
-   ================================================================ */
-
-function getStatusLabelGu(st) {
-
-  switch (st) {
-
-    case 'new':
-      return 'નવો (New)';
-
-    case 'confirmed':
-      return 'કન્ફર્મ';
-
-    case 'packed':
-      return 'પેક થયેલ';
-
-    case 'dispatched':
-      return 'રવાના (Dispatched)';
-
-    case 'delivered':
-      return 'ડિલિવર (Delivered)';
-
-    case 'cancelled':
-      return 'રદ';
-
-    default:
-      return st || '-';
-  }
-}
-
-
-/* ================================================================
-   KITCHEN
-   ================================================================ */
-
-function renderKitchenPlanner() {
-
-  const container =
-    document.getElementById(
-      'kitchen-grid'
-    );
-
-  if (!container) return;
-
-
-  const orders =
-    getFilteredOrders();
-
-
-  const summary = {};
-
-
-  orders.forEach(o => {
-
-    const items =
-      Array.isArray(o.items)
-        ? o.items
-        : [];
-
-
-    items.forEach(it => {
-
-      const key =
-        it.productId ||
-        String(
-          it.nameEn || 'product'
-        ).toLowerCase();
-
-
-      if (!summary[key]) {
-
-        summary[key] = {
-
-          nameGu:
-            it.nameGu || 'ઉત્પાદન',
-
-          nameEn:
-            it.nameEn || 'Product',
-
-          totalKg: 0,
-
-          packBreakdown: {}
-
-        };
-      }
-
-
-      const itemWeight =
-        (Number(it.weightKg) || 1) *
-        (Number(it.qty) || 1);
-
-
-      summary[key].totalKg +=
-        itemWeight;
-
-
-      const wLabel =
-        it.weightLabel ||
-        '1kg';
-
-
-      summary[key]
-        .packBreakdown[wLabel] =
-          (
-            summary[key]
-              .packBreakdown[wLabel] ||
-            0
-          ) +
-          (Number(it.qty) || 1);
-
-    });
-  });
-
-
-  if (
-    Object.keys(summary).length === 0
-  ) {
-
-    container.innerHTML = `
-      <div style="
-        grid-column:1/-1;
-        text-align:center;
-        padding:40px;
-        color:#94A3B8;
-      ">
-        આજે રસોડા માટે કોઈ ઓર્ડર નથી.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  let html = '';
-
-
-  Object.keys(summary).forEach(k => {
-
-    const s =
-      summary[k];
-
-
-    const packsText =
-      Object.keys(
-        s.packBreakdown
-      )
-      .map(w =>
-        `• <strong>${escapeHtml(w)}</strong>:
-         ${s.packBreakdown[w]} પેક`
-      )
-      .join('<br>');
-
-
-    html += `
-      <div class="kitchen-card">
-
-        <div>
-
-          <div class="kitchen-card-header">
-
-            <div>
-              <div class="kitchen-sweet-name">
-                ${escapeHtml(s.nameGu)}
-              </div>
-
-              <div class="kitchen-sweet-en">
-                ${escapeHtml(s.nameEn)}
-              </div>
-            </div>
-
-            <div>
-
-              <div class="kitchen-kg-total">
-                ${s.totalKg.toFixed(2)} kg
-              </div>
-
-              <div class="kitchen-kg-label">
-                કુલ તૈયારી વજન
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="kitchen-weight-breakdown">
-            ${packsText}
-          </div>
-
-        </div>
-
-      </div>
-    `;
-  });
-
-
-  container.innerHTML =
-    html;
-}
-
-
-/* ================================================================
-   ANALYTICS
-   ================================================================ */
-
-function renderAnalyticsView() {
-
-  renderWeightDistributionChart();
-  renderZoneDistributionChart();
-  renderTopProductsTable();
-}
-
-
-function renderWeightDistributionChart() {
-
-  const chartEl =
-    document.getElementById(
-      'weight-distribution-chart'
-    );
-
-  if (!chartEl) return;
-
-
-  const orders =
-    getFilteredOrders();
-
-
-  const counts = {
-
-    '250g': 0,
-    '500g': 0,
-    '1 kg': 0,
-    '1.25 kg (સવા)': 0,
-    '1.5 kg (દોઢ)': 0,
-    '2 kg+ (બલ્ક)': 0
-
-  };
-
-
-  let totalItemsCount =
-    0;
-
-
-  orders.forEach(o => {
-
-    const items =
-      Array.isArray(o.items)
-        ? o.items
-        : [];
-
-
-    items.forEach(it => {
-
-      const qty =
-        Number(it.qty) || 1;
-
-      totalItemsCount +=
-        qty;
-
-
-      const w =
-        String(
-          it.weightLabel || ''
-        );
-
-
-      if (w.includes('250g')) {
-
-        counts['250g'] += qty;
-
-      } else if (w.includes('500g')) {
-
-        counts['500g'] += qty;
-
-      } else if (
-        w.includes('1.25') ||
-        w.includes('સવા')
-      ) {
-
-        counts[
-          '1.25 kg (સવા)'
-        ] += qty;
-
-      } else if (
-        w.includes('1.5') ||
-        w.includes('દોઢ')
-      ) {
-
-        counts[
-          '1.5 kg (દોઢ)'
-        ] += qty;
-
-      } else if (
-        w.includes('2') ||
-        w.includes('5')
-      ) {
-
-        counts[
-          '2 kg+ (બલ્ક)'
-        ] += qty;
-
-      } else {
-
-        counts['1 kg'] += qty;
-      }
-
-    });
-  });
-
-
-  if (
-    totalItemsCount === 0
-  ) {
-    totalItemsCount = 1;
-  }
-
-
-  let html = '';
-
-
-  Object.keys(counts)
-    .forEach(label => {
-
-      const count =
-        counts[label];
-
-      const pct =
-        Math.round(
-          (count /
-            totalItemsCount) *
-          100
-        );
-
-
-      html += `
-        <div class="bar-item">
-
-          <div class="bar-item-header">
-            <span>
-              ${escapeHtml(label)}
-              (${count} પેક)
-            </span>
-
-            <span>
-              ${pct}%
-            </span>
-          </div>
-
-          <div class="bar-track">
-
-            <div
-              class="bar-fill"
-              style="width:${pct}%;">
-            </div>
-
-          </div>
-
-        </div>
-      `;
-    });
-
-
-  chartEl.innerHTML =
-    html;
-}
-
-
-function renderZoneDistributionChart() {
-
-  const chartEl =
-    document.getElementById(
-      'zone-distribution-chart'
-    );
-
-  if (!chartEl) return;
-
-
-  const orders =
-    getFilteredOrders();
-
-
-  const zones = {
-
-    'ખેરવા (Kherwa)': 0,
-
-    'અમદાવાદ (Ahmedabad)': 0,
-
-    'અન્ય ગુજરાત (Other)': 0
-
-  };
-
-
-  const total =
-    orders.length || 1;
-
-
-  orders.forEach(o => {
-
-    const city =
-      String(
-        o.city || ''
-      );
-
-
-    if (
-      city.includes('Kherwa')
-    ) {
-
-      zones[
-        'ખેરવા (Kherwa)'
-      ] += 1;
-
-    } else if (
-      city.includes('Ahmedabad')
-    ) {
-
-      zones[
-        'અમદાવાદ (Ahmedabad)'
-      ] += 1;
-
-    } else {
-
-      zones[
-        'અન્ય ગુજરાત (Other)'
-      ] += 1;
-    }
-
-  });
-
-
-  let html = '';
-
-
-  Object.keys(zones)
-    .forEach(z => {
-
-      const count =
-        zones[z];
-
-
-      const pct =
-        Math.round(
-          (count /
-            total) *
-          100
-        );
-
-
-      html += `
-        <div class="bar-item">
-
-          <div class="bar-item-header">
-            <span>
-              ${escapeHtml(z)}
-              (${count} ઓર્ડર)
-            </span>
-
-            <span>
-              ${pct}%
-            </span>
-          </div>
-
-          <div class="bar-track">
-
-            <div
-              class="bar-fill"
-              style="
-                width:${pct}%;
-                background:
-                  ${
-                    z.includes('Kherwa')
-                      ? 'var(--gold)'
-                      : 'var(--cobalt)'
-                  };
-              ">
-            </div>
-
-          </div>
-
-        </div>
-      `;
-    });
-
-
-  chartEl.innerHTML =
-    html;
-}
-
-
-function renderTopProductsTable() {
-
-  const tbody =
-    document.getElementById(
-      'analytics-products-tbody'
-    );
-
-  if (!tbody) return;
-
-
-  const orders =
-    getFilteredOrders();
-
-
-  const stats = {};
-
-
-  orders.forEach(o => {
-
-    const items =
-      Array.isArray(o.items)
-        ? o.items
-        : [];
-
-
-    items.forEach(it => {
-
-      const id =
-        it.productId ||
-        String(
-          it.nameEn || 'product'
-        ).toLowerCase();
-
-
-      if (!stats[id]) {
-
-        stats[id] = {
-
-          nameGu:
-            it.nameGu || 'ઉત્પાદન',
-
-          nameEn:
-            it.nameEn || 'Product',
-
-          ordersCount: 0,
-
-          totalKg: 0,
-
-          totalRevenue: 0,
-
-          weightsUsed: {}
-
-        };
-      }
-
-
-      stats[id].ordersCount += 1;
-
-
-      stats[id].totalKg +=
-        (Number(it.weightKg) || 1) *
-        (Number(it.qty) || 1);
-
-
-      stats[id].totalRevenue +=
-        Number(it.subtotal) || 0;
-
-
-      const weight =
-        it.weightLabel ||
-        '1 kg';
-
-
-      stats[id]
-        .weightsUsed[weight] =
-          (
-            stats[id]
-              .weightsUsed[weight] ||
-            0
-          ) +
-          (Number(it.qty) || 1);
-
-    });
-  });
-
-
-  const sorted =
-    Object.values(stats)
-      .sort(
-        (a, b) =>
-          b.totalRevenue -
-          a.totalRevenue
-      );
-
-
-  if (sorted.length === 0) {
-
-    tbody.innerHTML = `
-      <tr>
-        <td
-          colspan="5"
-          style="
-            text-align:center;
-            padding:30px;
-            color:#94A3B8;
-          ">
-          કોઈ ડેટા ઉપલબ્ધ નથી.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
-  let html = '';
-
-
-  sorted.forEach(s => {
-
-    const popularWeight =
-      Object.keys(
-        s.weightsUsed
-      )
-      .sort(
-        (a, b) =>
-          s.weightsUsed[b] -
-          s.weightsUsed[a]
-      )[0] || '1kg';
-
-
-    html += `
-      <tr>
-
-        <td>
-          <strong>
-            ${escapeHtml(s.nameGu)}
-          </strong>
-
-          <span style="
-            font-size:0.8rem;
-            color:#64748B;">
-            (${escapeHtml(s.nameEn)})
-          </span>
-        </td>
-
-        <td>
-          ${s.ordersCount}
-        </td>
-
-        <td>
-          <strong>
-            ${s.totalKg.toFixed(2)} kg
-          </strong>
-        </td>
-
-        <td>
-          <strong style="
-            color:var(--cobalt)">
-            ₹${s.totalRevenue.toLocaleString(
-              'en-IN'
-            )}
-          </strong>
-        </td>
-
-        <td>
-          <span class="city-badge">
-            ${escapeHtml(popularWeight)}
-          </span>
-        </td>
-
-      </tr>
-    `;
-  });
-
-
-  tbody.innerHTML =
-    html;
-}
-
-
-/* ================================================================
-   CRM
-   ================================================================ */
-
-function renderCrmView() {
-
-  const tbody =
-    document.getElementById(
-      'customers-tbody'
-    );
-
-  if (!tbody) return;
-
-
-  const crm = {};
-
-
-  allOrders.forEach(o => {
-
-    const phone =
-      String(o.phone || '')
-        .replace(
-          /[^0-9]/g,
-          ''
-        );
-
-
-    if (!crm[phone]) {
-
-      crm[phone] = {
-
-        name:
-          o.customerName,
-
-        phone:
-          o.phone,
-
-        city:
-          o.city,
-
-        address:
-          o.address,
-
-        totalOrders: 0,
-
-        totalSpend: 0,
-
-        lastOrderDate:
-          o.date
-
-      };
-    }
-
-
-    crm[phone].totalOrders +=
-      1;
-
-
-    crm[phone].totalSpend +=
-      Number(
-        o.totalAmount || 0
-      );
-
-
-    if (
-      new Date(o.date) >
-      new Date(
-        crm[phone].lastOrderDate
-      )
-    ) {
-
-      crm[phone].lastOrderDate =
-        o.date;
-
-      crm[phone].address =
-        o.address;
-    }
-
-  });
-
-
-  const list =
-    Object.values(crm)
-      .sort(
-        (a, b) =>
-          b.totalSpend -
-          a.totalSpend
-      );
-
-
-  let html = '';
-
-
-  list.forEach(c => {
-
-    const d =
-      new Date(
-        c.lastOrderDate
-      ).toLocaleDateString(
-        'gu-IN',
-        {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric'
+function escapeHtml(value) {
+
+    return String(
+        value ?? ''
+    ).replace(
+        /[&<>'"]/g,
+        character => {
+
+            return {
+
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+
+            }[character];
         }
-      );
-
-
-    html += `
-      <tr>
-
-        <td>
-          <strong>
-            ${escapeHtml(c.name)}
-          </strong>
-        </td>
-
-        <td>
-          ${escapeHtml(c.phone)}
-        </td>
-
-        <td>
-          <span class="city-badge">
-            ${escapeHtml(c.city)}
-          </span>
-        </td>
-
-        <td style="
-          max-width:220px;
-          font-size:0.82rem;
-          color:#64748B;">
-          ${escapeHtml(c.address)}
-        </td>
-
-        <td>
-          <strong>
-            ${c.totalOrders}
-          </strong>
-        </td>
-
-        <td>
-          <strong style="
-            color:var(--cobalt)">
-            ₹${c.totalSpend.toLocaleString(
-              'en-IN'
-            )}
-          </strong>
-        </td>
-
-        <td style="
-          font-size:0.8rem;">
-          ${d}
-        </td>
-
-        <td>
-
-          <a
-            href="https://wa.me/91${String(c.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-              'નમસ્તે ' +
-              c.name +
-              ', પટેલ સ્વીટ માર્ટ તરફથી શુભકામનાઓ!'
-            )}"
-            target="_blank"
-            rel="noopener"
-            class="btn-table-icon btn-wa-action"
-            title="WhatsApp મેસેજ">
-            &#128172;
-          </a>
-
-        </td>
-
-      </tr>
-    `;
-  });
-
-
-  tbody.innerHTML =
-    html;
+    );
 }
 
 
 /* ================================================================
-   INVENTORY
+   ORDER ITEMS TEXT
    ================================================================ */
 
-function renderInventoryGrid() {
+function itemsText(order) {
 
-  const grid =
-    document.getElementById(
-      'inventory-grid'
-    );
+    return (
+        order.items || []
+    )
+        .map(item => {
 
-  if (!grid) return;
-
-
-  updateBulkTargetCount();
-
-
-  let html = '';
-
-
-  Object.keys(allProducts)
-    .forEach(id => {
-
-      const p =
-        allProducts[id];
-
-
-      const isCustom =
-        !DEFAULT_PRODUCTS[id];
-
-
-      const catLabel =
-        p.category === 'namkeen'
-          ? 'નમકીન'
-          : 'મીઠાઈ';
-
-
-      html += `
-        <div
-          class="inventory-item-card"
-          id="inv-card-${safeJs(p.id)}">
-
-          <div class="inv-details">
-
-            <img
-              src="${escapeHtml(p.img)}"
-              alt="${escapeHtml(p.nameEn)}"
-              class="inv-img"
-              onerror="
-                this.src='images/product-toprapak.jpg'
-              "
-            />
-
-            <div>
-
-              <div style="
-                display:flex;
-                align-items:center;
-                gap:6px;">
-
-                <div class="inv-name">
-                  ${escapeHtml(p.nameGu)}
-                </div>
-
-                <span class="inv-badge-tag">
-                  ${catLabel}
-                </span>
-
-              </div>
-
-              <div class="inv-en">
-                ${escapeHtml(p.nameEn)}
-              </div>
-
-              ${
-                isCustom
-                  ? `
-                    <div style="margin-top:4px;">
-                      <button
-                        type="button"
-                        class="btn-delete-prod"
-                        onclick="deleteCustomProduct('${safeJs(p.id)}')">
-                        &#128465; હટાવો
-                      </button>
-                    </div>
-                  `
-                  : ''
-              }
-
-            </div>
-
-          </div>
-
-          <div class="inv-controls">
-
-            <div class="inv-price-input-wrap">
-
-              <span style="
-                font-size:0.85rem;
-                font-weight:700;">
-                ₹
-              </span>
-
-              <input
-                type="number"
-                class="inv-price-input"
-                id="inv-price-${safeJs(p.id)}"
-                value="${Number(p.basePrice) || 0}"
-                step="10"
-                min="50"
-                onchange="markInventoryDirty('${safeJs(p.id)}')"
-              />
-
-              <span style="
-                font-size:0.75rem;
-                color:#64748B;">
-                / 1kg
-              </span>
-
-            </div>
-
-            <label class="inv-switch">
-
-              <input
-                type="checkbox"
-                id="inv-stock-${safeJs(p.id)}"
-                ${
-                  p.isAvailable !== false
-                    ? 'checked'
-                    : ''
-                }
-                onchange="
-                  markInventoryDirty('${safeJs(p.id)}')
-                "
-              />
-
-              <span>
-                સ્ટોકમાં છે
-              </span>
-
-            </label>
-
-          </div>
-
-        </div>
-      `;
-    });
-
-
-  grid.innerHTML =
-    html;
-}
-
-
-function markInventoryDirty(id) {
-
-  const card =
-    document.getElementById(
-      'inv-card-' + id
-    );
-
-  if (card) {
-    card.style.borderColor =
-      'var(--gold)';
-  }
+            return (
+                escapeHtml(
+                    item.nameGu ||
+                    item.nameEn
+                ) +
+                ' (' +
+                escapeHtml(
+                    item.weightLabel ||
+                    '1kg'
+                ) +
+                ') × ' +
+                (
+                    item.qty || 1
+                )
+            );
+        })
+        .join('<br>') || '—';
 }
 
 
 /* ================================================================
-   SAVE INVENTORY
+   RENDER ORDERS
    ================================================================ */
 
-function saveAllInventoryPrices() {
+function renderOrders() {
 
-  const priceMap = {};
-
-  let savedCount = 0;
-
-
-  Object.keys(allProducts)
-    .forEach(id => {
-
-      const input =
+    const tbody =
         document.getElementById(
-          'inv-price-' + id
-        );
-
-      const stock =
-        document.getElementById(
-          'inv-stock-' + id
+            'orders-tbody'
         );
 
 
-      if (input) {
-
-        const val =
-          parseFloat(
-            input.value
-          );
+    if (!tbody) return;
 
 
-        if (
-          !isNaN(val) &&
-          val > 0
-        ) {
-
-          allProducts[id]
-            .basePrice =
-              Math.round(val);
-
-          priceMap[id] =
-            Math.round(val);
-
-          savedCount++;
-        }
-      }
+    const orders =
+        filteredOrders();
 
 
-      if (stock) {
+    if (!orders.length) {
 
-        allProducts[id]
-          .isAvailable =
-            stock.checked;
-      }
+        tbody.innerHTML =
+            `
+            <tr>
+                <td
+                    colspan="8"
+                    style="
+                        text-align:center;
+                        padding:32px;
+                        color:#64748B;
+                    "
+                >
+                    કોઈ ઓર્ડર મળ્યો નથી.
+                </td>
+            </tr>
+            `;
 
-    });
-
-
-  try {
-
-    localStorage.setItem(
-      'psm_product_prices',
-      JSON.stringify(priceMap)
-    );
-
-  } catch (error) {}
-
-
-  try {
-
-    const customCatalog =
-      JSON.parse(
-        localStorage.getItem(
-          'psm_custom_catalog'
-        ) || '{}'
-      );
-
-
-    let hasUpdates =
-      false;
-
-
-    Object.keys(customCatalog)
-      .forEach(cid => {
-
-        if (
-          priceMap[cid] !== undefined
-        ) {
-
-          customCatalog[cid]
-            .basePrice =
-              priceMap[cid];
-
-          hasUpdates = true;
-        }
-
-
-        const st =
-          document.getElementById(
-            'inv-stock-' + cid
-          );
-
-
-        if (st) {
-
-          customCatalog[cid]
-            .isAvailable =
-              st.checked;
-
-          hasUpdates = true;
-        }
-
-      });
-
-
-    if (hasUpdates) {
-
-      localStorage.setItem(
-        'psm_custom_catalog',
-        JSON.stringify(
-          customCatalog
-        )
-      );
+        return;
     }
 
-  } catch (error) {}
+
+    tbody.innerHTML =
+        orders
+            .map(order => {
+
+                const total =
+                    Number(
+                        order.totalAmount
+                    ) || 0;
 
 
-  alert(
-    `✓ ${savedCount} ઉત્પાદનોના ભાવ સેવ થઈ ગયા છે.`
-  );
+                const phone =
+                    escapeHtml(
+                        order.phone
+                    );
 
 
-  renderInventoryGrid();
+                const waPhone =
+                    String(
+                        order.phone || ''
+                    )
+                    .replace(
+                        /\D/g,
+                        ''
+                    );
+
+
+                const statusOptions =
+                    [
+                        'new',
+                        'confirmed',
+                        'packed',
+                        'dispatched',
+                        'delivered'
+                    ]
+                        .map(
+                            status =>
+                                `
+                                <option
+                                    value="${status}"
+                                    ${
+                                        order.status === status
+                                            ? 'selected'
+                                            : ''
+                                    }
+                                >
+                                    ${status}
+                                </option>
+                                `
+                        )
+                        .join('');
+
+
+                const waMessage =
+                    encodeURIComponent(
+                        'નમસ્તે ' +
+                        (
+                            order.customerName ||
+                            ''
+                        ) +
+                        ', Patel Sweet Mart order #' +
+                        order.id +
+                        ' વિશે સંપર્ક કરવા માટે આ મેસેજ છે.'
+                    );
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            <strong>
+                                #${escapeHtml(order.id)}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                new Date(
+                                    order.date ||
+                                    Date.now()
+                                ).toLocaleString(
+                                    'en-IN'
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    order.customerName
+                                )}
+                            </strong>
+                            <br>
+                            <small>
+                                ${phone}
+                            </small>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                order.city
+                            )}
+                            <br>
+                            <small>
+                                ${escapeHtml(
+                                    order.address
+                                )}
+                            </small>
+                        </td>
+
+                        <td>
+                            ${itemsText(order)}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ₹${total.toLocaleString(
+                                    'en-IN'
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+
+                            <select
+                                class="admin-input"
+                                onchange="
+                                    updateAdminOrderStatus(
+                                        '${escapeHtml(order.id)}',
+                                        this.value
+                                    )
+                                "
+                            >
+
+                                ${statusOptions}
+
+                            </select>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-panel-action"
+                                onclick="
+                                    openOrderModal(
+                                        '${escapeHtml(order.id)}'
+                                    )
+                                "
+                            >
+                                View
+                            </button>
+
+                            <a
+                                class="btn-panel-action"
+                                style="
+                                    background:#25D366;
+                                    color:#fff;
+                                    text-decoration:none;
+                                    display:inline-block;
+                                    margin-top:4px;
+                                "
+                                target="_blank"
+                                href="https://wa.me/91${waPhone}?text=${waMessage}"
+                            >
+                                WhatsApp
+                            </a>
+
+                        </td>
+
+                    </tr>
+                `;
+            })
+            .join('');
 }
 
 
 /* ================================================================
-   BULK PRICING
+   UPDATE ORDER STATUS
    ================================================================ */
 
-function updateBulkTargetCount() {
-
-  const select =
-    document.getElementById(
-      'bulk-target-category'
-    );
-
-  const countLabel =
-    document.getElementById(
-      'bulk-affected-count'
-    );
-
-
-  if (!select || !countLabel) {
-    return;
-  }
-
-
-  const cat =
-    select.value;
-
-
-  let count = 0;
-
-
-  Object.keys(allProducts)
-    .forEach(id => {
-
-      const p =
-        allProducts[id];
-
-
-      if (
-        cat === 'all' ||
-        p.category === cat
-      ) {
-        count++;
-      }
-
-    });
-
-
-  countLabel.textContent =
-    `${count} ઉત્પાદનો સક્રિય`;
-}
-
-
-function applyQuickBulkPrice(
-  amount,
-  type
+async function updateAdminOrderStatus(
+    orderId,
+    status
 ) {
 
-  const select =
-    document.getElementById(
-      'bulk-target-category'
-    );
+    if (!requireOwner()) return;
 
 
-  const cat =
-    select
-      ? select.value
-      : 'all';
-
-
-  const confirmed =
-    confirm(
-      'શું તમે ભાવમાં આ ફેરફાર લાગુ કરવા માંગો છો?'
-    );
-
-
-  if (!confirmed) return;
-
-
-  let affected = 0;
-
-
-  const priceMap =
-    JSON.parse(
-      localStorage.getItem(
-        'psm_product_prices'
-      ) || '{}'
-    );
-
-
-  Object.keys(allProducts)
-    .forEach(id => {
-
-      const p =
-        allProducts[id];
-
-
-      if (
-        cat === 'all' ||
-        p.category === cat
-      ) {
-
-        let currentPrice =
-          Number(p.basePrice) || 0;
-
-
-        let newPrice =
-          currentPrice;
-
-
-        if (type === 'flat') {
-
-          newPrice =
-            currentPrice +
-            amount;
-
-        } else {
-
-          newPrice =
-            Math.round(
-              currentPrice *
-              (
-                1 +
-                amount / 100
-              )
-            );
-        }
-
-
-        newPrice =
-          Math.round(
-            newPrice / 5
-          ) * 5;
-
-
-        if (
-          newPrice < 50
-        ) {
-          newPrice = 50;
-        }
-
-
-        p.basePrice =
-          newPrice;
-
-
-        priceMap[id] =
-          newPrice;
-
-
-        affected++;
-      }
-
-    });
-
-
-  localStorage.setItem(
-    'psm_product_prices',
-    JSON.stringify(
-      priceMap
-    )
-  );
-
-
-  renderInventoryGrid();
-
-
-  alert(
-    `✓ ${affected} ઉત્પાદનોના ભાવ અપડેટ થયા.`
-  );
-}
-
-
-function applyCustomBulkAdjustment() {
-
-  const dirSelect =
-    document.getElementById(
-      'bulk-custom-dir'
-    );
-
-  const amountInput =
-    document.getElementById(
-      'bulk-custom-amount'
-    );
-
-  const unitSelect =
-    document.getElementById(
-      'bulk-custom-unit'
-    );
-
-
-  if (!amountInput) return;
-
-
-  const rawVal =
-    parseFloat(
-      amountInput.value
-    );
-
-
-  if (
-    isNaN(rawVal) ||
-    rawVal <= 0
-  ) {
-
-    alert(
-      'કૃપા કરીને યોગ્ય રકમ દાખલ કરો.'
-    );
-
-    return;
-  }
-
-
-  const multiplier =
-    dirSelect &&
-    dirSelect.value === 'sub'
-      ? -1
-      : 1;
-
-
-  const finalAmount =
-    rawVal *
-    multiplier;
-
-
-  const unitType =
-    unitSelect
-      ? unitSelect.value
-      : 'flat';
-
-
-  applyQuickBulkPrice(
-    finalAmount,
-    unitType
-  );
-
-
-  amountInput.value =
-    '';
-}
-
-
-/* ================================================================
-   ADD PRODUCT
-   ================================================================ */
-
-function openAddProductModal() {
-
-  const modal =
-    document.getElementById(
-      'add-product-modal'
-    );
-
-  if (modal) {
-
-    modal.classList.add(
-      'open'
-    );
-
-    updateNewProdPreview();
-  }
-}
-
-
-function closeAddProductModal() {
-
-  const modal =
-    document.getElementById(
-      'add-product-modal'
-    );
-
-
-  if (modal) {
-
-    modal.classList.remove(
-      'open'
-    );
-
-
-    const form =
-      document.getElementById(
-        'add-product-form'
-      );
-
-
-    if (form) {
-      form.reset();
-    }
-  }
-}
-
-
-function onNewProdPresetChange() {
-
-  const select =
-    document.getElementById(
-      'new-prod-preset-img'
-    );
-
-
-  const customGroup =
-    document.getElementById(
-      'new-prod-custom-url-group'
-    );
-
-
-  if (!select) return;
-
-
-  if (
-    select.value === 'custom'
-  ) {
-
-    if (customGroup) {
-      customGroup.style.display =
-        'block';
-    }
-
-  } else {
-
-    if (customGroup) {
-      customGroup.style.display =
-        'none';
-    }
-  }
-
-
-  updateNewProdPreview();
-}
-
-
-function updateNewProdPreview() {
-
-  const nameGu =
-    (
-      document.getElementById(
-        'new-prod-name-gu'
-      )?.value ||
-      'નવું ઉત્પાદન'
-    ).trim();
-
-
-  const nameEn =
-    (
-      document.getElementById(
-        'new-prod-name-en'
-      )?.value ||
-      'New Product'
-    ).trim();
-
-
-  const category =
-    document.getElementById(
-      'new-prod-category'
-    )?.value ||
-    'mithai';
-
-
-  const price =
-    document.getElementById(
-      'new-prod-price'
-    )?.value ||
-    '500';
-
-
-  const presetSelect =
-    document.getElementById(
-      'new-prod-preset-img'
-    );
-
-
-  const customUrlInput =
-    document.getElementById(
-      'new-prod-img'
-    );
-
-
-  let imgSrc =
-    'images/product-toprapak.jpg';
-
-
-  if (
-    presetSelect &&
-    presetSelect.value !== 'custom'
-  ) {
-
-    imgSrc =
-      presetSelect.value;
-
-  } else if (
-    customUrlInput &&
-    customUrlInput.value.trim()
-  ) {
-
-    imgSrc =
-      customUrlInput.value.trim();
-  }
-
-
-  const previewTitle =
-    document.getElementById(
-      'new-prod-preview-title'
-    );
-
-  const previewEn =
-    document.getElementById(
-      'new-prod-preview-en'
-    );
-
-  const previewTag =
-    document.getElementById(
-      'new-prod-preview-tag'
-    );
-
-  const previewPrice =
-    document.getElementById(
-      'new-prod-preview-price'
-    );
-
-  const previewImg =
-    document.getElementById(
-      'new-prod-preview-img'
-    );
-
-
-  if (previewTitle) {
-    previewTitle.textContent =
-      nameGu;
-  }
-
-  if (previewEn) {
-    previewEn.textContent =
-      nameEn;
-  }
-
-  if (previewTag) {
-    previewTag.textContent =
-      category === 'namkeen'
-        ? 'નમકીન'
-        : 'મીઠાઈ';
-  }
-
-  if (previewPrice) {
-    previewPrice.textContent =
-      '₹' + price;
-  }
-
-  if (previewImg) {
-    previewImg.src =
-      imgSrc;
-  }
-}
-
-
-function handleAddNewProduct(event) {
-
-  event.preventDefault();
-
-
-  const nameGu =
-    document.getElementById(
-      'new-prod-name-gu'
-    ).value.trim();
-
-
-  const nameEn =
-    document.getElementById(
-      'new-prod-name-en'
-    ).value.trim();
-
-
-  const category =
-    document.getElementById(
-      'new-prod-category'
-    ).value;
-
-
-  const price =
-    parseFloat(
-      document.getElementById(
-        'new-prod-price'
-      ).value
-    ) || 500;
-
-
-  const descGu =
-    document.getElementById(
-      'new-prod-desc-gu'
-    ).value.trim();
-
-
-  const presetSelect =
-    document.getElementById(
-      'new-prod-preset-img'
-    );
-
-
-  const customUrl =
-    document.getElementById(
-      'new-prod-img'
-    )?.value
-      ?.trim();
-
-
-  let imgSrc =
-    (
-      presetSelect &&
-      presetSelect.value !== 'custom'
-    )
-      ? presetSelect.value
-      : (
-          customUrl ||
-          'images/product-toprapak.jpg'
+    const order =
+        allOrders.find(
+            item =>
+                String(item.id) ===
+                String(orderId)
         );
 
 
-  const slug =
-    nameEn
-      .toLowerCase()
-      .replace(
-        /[^a-z0-9]/g,
-        '_'
-      ) ||
-    ('prod_' + Date.now());
+    if (!order) return;
 
 
-  const uniqueId =
-    allProducts[slug]
-      ? `${slug}_${Date.now()}`
-      : slug;
+    order.status =
+        status;
 
 
-  const newProd = {
-
-    id: uniqueId,
-
-    nameGu,
-
-    nameEn,
-
-    basePrice: price,
-
-    category,
-
-    img: imgSrc,
-
-    descGu:
-      descGu ||
-      'શુદ્ધ ઘી અને પરંપરાગત કારીગરી સાથે બનેલી ઉત્તમ બનાવટ',
-
-    descEn:
-      'Handcrafted fresh with pure desi ingredients and heritage recipes.',
-
-    isAvailable: true,
-
-    isCustom: true,
-
-    createdAt:
-      new Date().toISOString()
-
-  };
+    order.updatedAt =
+        new Date().toISOString();
 
 
-  allProducts[uniqueId] =
-    newProd;
-
-
-  try {
-
-    const existingCustom =
-      JSON.parse(
-        localStorage.getItem(
-          'psm_custom_catalog'
-        ) || '{}'
-      );
-
-
-    existingCustom[uniqueId] =
-      newProd;
-
-
-    localStorage.setItem(
-      'psm_custom_catalog',
-      JSON.stringify(
-        existingCustom
-      )
+    writeJSON(
+        ORDERS_KEY,
+        allOrders
     );
 
-  } catch (error) {}
+
+    /*
+       Optional Supabase update
+    */
+
+    const config =
+        getSupabaseConfig();
 
 
-  try {
+    if (
+        config.configured &&
+        order.dbId
+    ) {
 
-    const priceMap =
-      JSON.parse(
-        localStorage.getItem(
-          'psm_product_prices'
-        ) || '{}'
-      );
+        try {
+
+            const response =
+                await fetch(
+                    `${config.url}/rest/v1/orders?id=eq.${encodeURIComponent(order.dbId)}`,
+                    {
+                        method: 'PATCH',
+
+                        headers: {
+                            ...supaHeaders(),
+                            'Prefer':
+                                'return=minimal'
+                        },
+
+                        body:
+                            JSON.stringify({
+                                status:
+                                    status
+                            })
+                    }
+                );
 
 
-    priceMap[uniqueId] =
-      price;
+            if (!response.ok) {
+
+                console.warn(
+                    'Supabase status update failed:',
+                    await response.text()
+                );
+            }
+
+        } catch (error) {
+
+            console.warn(
+                'Supabase status error:',
+                error
+            );
+        }
+    }
 
 
-    localStorage.setItem(
-      'psm_product_prices',
-      JSON.stringify(
-        priceMap
-      )
+    renderOrders();
+
+    updateDashboard();
+
+    flash(
+        '✓ Order status updated'
     );
-
-  } catch (error) {}
-
-
-  closeAddProductModal();
-
-  renderInventoryGrid();
-
-
-  alert(
-    `✓ "${nameGu}" સફળતાપૂર્વક ઉમેરાયું છે.`
-  );
 }
 
 
-function deleteCustomProduct(id) {
-
-  const p =
-    allProducts[id];
-
-
-  if (!p) return;
-
-
-  const confirmed =
-    confirm(
-      `"${p.nameGu}" ઉત્પાદન હટાવવું છે?`
-    );
-
-
-  if (!confirmed) return;
-
-
-  delete allProducts[id];
-
-
-  try {
-
-    const existingCustom =
-      JSON.parse(
-        localStorage.getItem(
-          'psm_custom_catalog'
-        ) || '{}'
-      );
-
-
-    delete existingCustom[id];
-
-
-    localStorage.setItem(
-      'psm_custom_catalog',
-      JSON.stringify(
-        existingCustom
-      )
-    );
-
-  } catch (error) {}
-
-
-  try {
-
-    const priceMap =
-      JSON.parse(
-        localStorage.getItem(
-          'psm_product_prices'
-        ) || '{}'
-      );
-
-
-    delete priceMap[id];
-
-
-    localStorage.setItem(
-      'psm_product_prices',
-      JSON.stringify(
-        priceMap
-      )
-    );
-
-  } catch (error) {}
-
-
-  renderInventoryGrid();
-
-  alert(
-    '✓ ઉત્પાદન હટાવી દેવાયું છે.'
-  );
-}
+window.updateAdminOrderStatus =
+    updateAdminOrderStatus;
 
 
 /* ================================================================
    ORDER MODAL
    ================================================================ */
 
-let currentModalOrderId =
-  null;
-
-
 function openOrderModal(orderId) {
 
-  const o =
-    allOrders.find(
-      x =>
-        String(x.id) ===
-        String(orderId)
-    );
+    const order =
+        allOrders.find(
+            item =>
+                String(item.id) ===
+                String(orderId)
+        );
+
+
+    if (!order) return;
+
+
+    const modal =
+        document.getElementById(
+            'order-view-modal'
+        );
+
+
+    if (!modal) {
+
+        alert(
+            'Order #' +
+            orderId +
+            '\n\n' +
+            'Customer: ' +
+            order.customerName +
+            '\n' +
+            'Phone: ' +
+            order.phone +
+            '\n' +
+            'City: ' +
+            order.city +
+            '\n' +
+            'Address: ' +
+            order.address +
+            '\n' +
+            'Total: ₹' +
+            Number(
+                order.totalAmount || 0
+            ).toLocaleString(
+                'en-IN'
+            )
+        );
+
+        return;
+    }
+
+
+    const title =
+        document.getElementById(
+            'order-modal-title'
+        );
+
+
+    const body =
+        document.getElementById(
+            'order-modal-body'
+        );
+
+
+    if (title) {
+
+        title.textContent =
+            'Order #' +
+            order.id;
+    }
+
+
+    if (body) {
+
+        body.innerHTML = `
+
+            <div
+                style="
+                    display:grid;
+                    gap:10px;
+                "
+            >
+
+                <div>
+                    <strong>
+                        Customer:
+                    </strong>
+                    ${escapeHtml(
+                        order.customerName
+                    )}
+                </div>
+
+                <div>
+                    <strong>
+                        Phone:
+                    </strong>
+                    ${escapeHtml(
+                        order.phone
+                    )}
+                </div>
+
+                <div>
+                    <strong>
+                        City:
+                    </strong>
+                    ${escapeHtml(
+                        order.city
+                    )}
+                </div>
+
+                <div>
+                    <strong>
+                        Address:
+                    </strong>
+                    ${escapeHtml(
+                        order.address
+                    )}
+                </div>
+
+                <div>
+                    <strong>
+                        Notes:
+                    </strong>
+                    ${escapeHtml(
+                        order.notes ||
+                        ''
+                    )}
+                </div>
+
+                <hr>
+
+                <div>
+                    <strong>
+                        Products:
+                    </strong>
+                    <br>
+                    ${itemsText(order)}
+                </div>
+
+                <div
+                    style="
+                        font-size:20px;
+                        font-weight:800;
+                    "
+                >
+                    Total:
+                    ₹${Number(
+                        order.totalAmount || 0
+                    ).toLocaleString(
+                        'en-IN'
+                    )}
+                </div>
+
+            </div>
+        `;
+    }
 
 
-  if (!o) return;
-
-
-  currentModalOrderId =
-    orderId;
-
-
-  const title =
-    document.getElementById(
-      'modal-order-title'
-    );
-
-
-  if (title) {
-
-    title.textContent =
-      `ઓર્ડર વિગત #${o.id}`;
-  }
-
-
-  const items =
-    Array.isArray(o.items)
-      ? o.items
-      : [];
-
-
-  const itemsHtml =
-    items.map(it => `
-
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        padding:8px 0;
-        border-bottom:1px solid #E2E8F0;
-      ">
-
-        <div>
-
-          <strong>
-            ${escapeHtml(it.nameGu)}
-            (${escapeHtml(it.nameEn)})
-          </strong>
-
-          <br>
-
-          <small style="
-            color:#64748B;
-          ">
-            વજન:
-            ${escapeHtml(it.weightLabel)}
-            |
-            જથ્થો:
-            ${it.qty}
-            પેક
-            @ ₹${it.unitPrice}
-          </small>
-
-        </div>
-
-        <div style="
-          font-weight:800;
-          color:var(--cobalt);
-        ">
-          ₹${Number(
-            it.subtotal || 0
-          ).toLocaleString('en-IN')}
-        </div>
-
-      </div>
-
-    `).join('');
-
-
-  const body =
-    document.getElementById(
-      'modal-order-body'
-    );
-
-
-  if (body) {
-
-    body.innerHTML = `
-
-      <div>
-
-        <div style="
-          font-size:0.8rem;
-          color:#64748B;
-          font-weight:700;
-        ">
-          ગ્રાહકની વિગત
-        </div>
-
-        <div style="
-          font-size:1.1rem;
-          font-weight:800;
-          margin-top:2px;
-        ">
-          ${escapeHtml(o.customerName)}
-        </div>
-
-        <div style="
-          color:#64748B;
-        ">
-          ફોન:
-          ${escapeHtml(o.phone)}
-          |
-          શહેર:
-          ${escapeHtml(o.city)}
-        </div>
-
-        <div style="
-          margin-top:4px;
-          padding:8px;
-          background:#F8FAFC;
-          border-radius:6px;
-          font-size:0.88rem;
-        ">
-          સરનામું:
-          ${escapeHtml(o.address)}
-        </div>
-
-        ${
-          o.notes
-            ? `
-              <div style="
-                margin-top:6px;
-                color:#C2410C;
-                font-size:0.85rem;
-              ">
-                <strong>
-                  ઓર્ડર નોંધ:
-                </strong>
-                ${escapeHtml(o.notes)}
-              </div>
-            `
-            : ''
-        }
-
-      </div>
-
-
-      <div>
-
-        <div style="
-          font-size:0.8rem;
-          color:#64748B;
-          font-weight:700;
-          margin-bottom:6px;
-        ">
-          ઓર્ડર કરેલી વસ્તુઓ
-        </div>
-
-        ${itemsHtml}
-
-        <div style="
-          display:flex;
-          justify-content:space-between;
-          padding-top:12px;
-          font-size:1.15rem;
-          font-weight:800;
-        ">
-
-          <span>
-            કુલ રકમ:
-          </span>
-
-          <span style="
-            color:var(--cobalt);
-          ">
-            ₹${Number(
-              o.totalAmount || 0
-            ).toLocaleString('en-IN')}
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div>
-
-        <label style="
-          font-size:0.8rem;
-          color:#64748B;
-          font-weight:700;
-          display:block;
-          margin-bottom:6px;
-        ">
-          ઓર્ડર સ્થિતિ બદલો
-        </label>
-
-        <select
-          id="modal-status-select"
-          class="admin-input"
-          style="font-weight:700;">
-
-          <option
-            value="new"
-            ${
-              o.status === 'new'
-                ? 'selected'
-                : ''
-            }>
-            નવો
-          </option>
-
-          <option
-            value="confirmed"
-            ${
-              o.status === 'confirmed'
-                ? 'selected'
-                : ''
-            }>
-            કન્ફર્મ
-          </option>
-
-          <option
-            value="packed"
-            ${
-              o.status === 'packed'
-                ? 'selected'
-                : ''
-            }>
-            પેક થયેલ
-          </option>
-
-          <option
-            value="dispatched"
-            ${
-              o.status === 'dispatched'
-                ? 'selected'
-                : ''
-            }>
-            રવાના
-          </option>
-
-          <option
-            value="delivered"
-            ${
-              o.status === 'delivered'
-                ? 'selected'
-                : ''
-            }>
-            પૂર્ણ
-          </option>
-
-          <option
-            value="cancelled"
-            ${
-              o.status === 'cancelled'
-                ? 'selected'
-                : ''
-            }>
-            રદ
-          </option>
-
-        </select>
-
-      </div>
-    `;
-  }
-
-
-  const footer =
-    document.getElementById(
-      'modal-order-footer'
-    );
-
-
-  if (footer) {
-
-    footer.innerHTML = `
-
-      <button
-        type="button"
-        class="btn-panel-action"
-        style="background:#25D366;"
-        onclick="sendWhatsAppStatusUpdate('${safeJs(o.id)}')">
-
-        &#128172;
-        ગ્રાહકને WhatsApp અપડેટ
-
-      </button>
-
-      <div style="
-        display:flex;
-        gap:8px;
-      ">
-
-        <button
-          type="button"
-          class="btn-logout"
-          onclick="closeOrderModal()">
-          બંધ કરો
-        </button>
-
-        <button
-          type="button"
-          class="btn-panel-action"
-          onclick="saveOrderStatusFromModal()">
-          સેવ સ્થિતિ
-        </button>
-
-      </div>
-    `;
-  }
-
-
-  const modal =
-    document.getElementById(
-      'order-detail-modal'
-    );
-
-
-  if (modal) {
     modal.classList.add(
-      'open'
+        'open'
     );
-  }
 }
+
+
+window.openOrderModal =
+    openOrderModal;
 
 
 function closeOrderModal() {
 
-  const modal =
-    document.getElementById(
-      'order-detail-modal'
-    );
-
-
-  if (modal) {
-    modal.classList.remove(
-      'open'
-    );
-  }
+    document
+        .getElementById(
+            'order-view-modal'
+        )
+        ?.classList.remove(
+            'open'
+        );
 }
 
 
+window.closeOrderModal =
+    closeOrderModal;
+
+
 /* ================================================================
-   SAVE ORDER STATUS
+   PRODUCTS
    ================================================================ */
 
-async function saveOrderStatusFromModal() {
+function loadProducts() {
 
-  if (!currentModalOrderId) {
-    return;
-  }
-
-
-  const select =
-    document.getElementById(
-      'modal-status-select'
-    );
+    products = {
+        ...DEFAULT_PRODUCTS
+    };
 
 
-  if (!select) {
-    return;
-  }
-
-
-  const newStatus =
-    select.value;
-
-
-  const idx =
-    allOrders.findIndex(
-      o =>
-        String(o.id) ===
-        String(currentModalOrderId)
-    );
-
-
-  if (idx === -1) {
-    return;
-  }
-
-
-  allOrders[idx].status =
-    newStatus;
-
-
-  saveLocalOrders(
-    allOrders
-  );
-
-
-  /* Supabase update */
-
-  if (supabaseClient) {
-
-    try {
-
-      await supabaseClient
-        .from('orders')
-        .update({
-          status: newStatus
-        })
-        .eq(
-          'order_number',
-          currentModalOrderId
+    const customCatalog =
+        readJSON(
+            CATALOG_KEY,
+            {}
         );
 
-    } catch (error) {
 
-      console.warn(
-        'Status Supabase update failed:',
-        error
-      );
-    }
-  }
+    Object.keys(
+        customCatalog
+    ).forEach(id => {
+
+        products[id] =
+            customCatalog[id];
+    });
 
 
-  renderAllViews();
+    const savedPrices =
+        readJSON(
+            PRICES_KEY,
+            {}
+        );
 
-  closeOrderModal();
+
+    Object.keys(
+        savedPrices
+    ).forEach(id => {
+
+        if (products[id]) {
+
+            products[id].basePrice =
+                Number(
+                    savedPrices[id]
+                ) ||
+                products[id].basePrice;
+        }
+    });
+
+
+    return products;
 }
 
 
 /* ================================================================
-   WHATSAPP STATUS UPDATE
+   SAVE PRICE
    ================================================================ */
 
-function sendWhatsAppStatusUpdate(
-  orderId
+function savePrice(
+    productId,
+    price
 ) {
 
-  const o =
-    allOrders.find(
-      x =>
-        String(x.id) ===
-        String(orderId)
+    const prices =
+        readJSON(
+            PRICES_KEY,
+            {}
+        );
+
+
+    prices[productId] =
+        Math.round(
+            Number(price) || 0
+        );
+
+
+    writeJSON(
+        PRICES_KEY,
+        prices
     );
 
 
-  if (!o) return;
+    if (products[productId]) {
+
+        products[productId].basePrice =
+            prices[productId];
+    }
+}
 
 
-  const cleanPhone =
-    String(o.phone || '')
-      .replace(
-        /[^0-9]/g,
-        ''
-      );
+window.savePrice =
+    savePrice;
 
 
-  if (!cleanPhone) {
+/* ================================================================
+   LIVE PRICE UPDATE
+   ================================================================ */
 
-    alert(
-      'ગ્રાહકનો ફોન નંબર ઉપલબ્ધ નથી.'
+function updateProductPrice(
+    productId,
+    value
+) {
+
+    if (!requireOwner()) return;
+
+
+    const price =
+        Math.round(
+            Number(value)
+        );
+
+
+    if (!Number.isFinite(price) || price < 0) {
+
+        alert(
+            'Valid price દાખલ કરો.'
+        );
+
+        return;
+    }
+
+
+    savePrice(
+        productId,
+        price
     );
 
-    return;
-  }
+
+    loadInventory();
 
 
-  const statusMsg =
-    `નમસ્તે ${o.customerName}, ` +
-    `પટેલ સ્વીટ માર્ટમાંથી આપના ` +
-    `ઓર્ડર #${o.id} ની સ્થિતિ: ` +
-    `*${getStatusLabelGu(o.status)}*. ` +
-    `વિતરણ સ્થળ: ${o.city}. ` +
-    `આભાર!`;
+    flash(
+        '✓ Price updated'
+    );
+}
 
 
-  const url =
-    `https://wa.me/91${cleanPhone}` +
-    `?text=${encodeURIComponent(
-      statusMsg
-    )}`;
+window.updateProductPrice =
+    updateProductPrice;
 
 
-  window.open(
-    url,
-    '_blank',
-    'noopener,noreferrer'
-  );
+/* ================================================================
+   INVENTORY
+   ================================================================ */
+
+function loadInventory() {
+
+    loadProducts();
+
+
+    const tbody =
+        document.getElementById(
+            'inventory-tbody'
+        );
+
+
+    if (!tbody) return;
+
+
+    tbody.innerHTML =
+        Object.values(products)
+            .map(product => {
+
+                const category =
+                    product.category ===
+                    'namkeen'
+                        ? 'નમકીન'
+                        : 'મીઠાઈ';
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div
+                                style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:10px;
+                                "
+                            >
+
+                                <img
+                                    src="${escapeHtml(
+                                        product.img ||
+                                        'images/product-toprapak.webp'
+                                    )}"
+                                    style="
+                                        width:55px;
+                                        height:55px;
+                                        object-fit:cover;
+                                        border-radius:8px;
+                                    "
+                                    onerror="
+                                        this.src='images/product-toprapak.webp'
+                                    "
+                                >
+
+                                <div>
+
+                                    <strong>
+                                        ${escapeHtml(
+                                            product.nameGu ||
+                                            product.nameEn
+                                        )}
+                                    </strong>
+
+                                    <br>
+
+                                    <small>
+                                        ${escapeHtml(
+                                            product.nameEn ||
+                                            ''
+                                        )}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            ${category}
+                        </td>
+
+                        <td>
+
+                            <input
+                                class="admin-input"
+                                type="number"
+                                min="0"
+                                value="${Number(
+                                    product.basePrice || 0
+                                )}"
+                                onchange="
+                                    updateProductPrice(
+                                        '${escapeHtml(product.id)}',
+                                        this.value
+                                    )
+                                "
+                            >
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-panel-action"
+                                onclick="
+                                    updateProductPrice(
+                                        '${escapeHtml(product.id)}',
+                                        prompt(
+                                            'New price:',
+                                            '${Number(
+                                                product.basePrice || 0
+                                            )}'
+                                        )
+                                    )
+                                "
+                            >
+                                Change
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+            })
+            .join('');
+}
+
+
+window.loadInventory =
+    loadInventory;
+
+
+/* ================================================================
+   BULK PRICE UPDATE
+   ================================================================ */
+
+function applyBulkPriceChange() {
+
+    if (!requireOwner()) return;
+
+
+    const type =
+        document.getElementById(
+            'bulk-price-type'
+        )?.value ||
+        'percent';
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                'bulk-price-value'
+            )?.value
+        );
+
+
+    if (
+        !Number.isFinite(amount)
+    ) {
+
+        alert(
+            'Bulk price value દાખલ કરો.'
+        );
+
+        return;
+    }
+
+
+    Object.values(
+        products
+    ).forEach(product => {
+
+        const oldPrice =
+            Number(
+                product.basePrice || 0
+            );
+
+
+        let newPrice =
+            oldPrice;
+
+
+        if (type === 'percent') {
+
+            newPrice =
+                oldPrice +
+                (
+                    oldPrice *
+                    amount /
+                    100
+                );
+
+        } else if (
+            type === 'fixed'
+        ) {
+
+            newPrice =
+                oldPrice +
+                amount;
+        }
+
+
+        newPrice =
+            Math.max(
+                0,
+                Math.round(newPrice)
+            );
+
+
+        savePrice(
+            product.id,
+            newPrice
+        );
+    });
+
+
+    loadInventory();
+
+
+    flash(
+        '✓ Bulk pricing updated'
+    );
+}
+
+
+window.applyBulkPriceChange =
+    applyBulkPriceChange;
+
+
+/* ================================================================
+   ADD PRODUCT MODAL
+   ================================================================ */
+
+function openAddProductModal() {
+
+    if (!requireOwner()) return;
+
+
+    document
+        .getElementById(
+            'add-product-modal'
+        )
+        ?.classList.add(
+            'open'
+        );
+}
+
+
+window.openAddProductModal =
+    openAddProductModal;
+
+
+function closeAddProductModal() {
+
+    document
+        .getElementById(
+            'add-product-modal'
+        )
+        ?.classList.remove(
+            'open'
+        );
+}
+
+
+window.closeAddProductModal =
+    closeAddProductModal;
+
+
+/* ================================================================
+   NEW PRODUCT PREVIEW
+   ================================================================ */
+
+function updateNewProdPreview() {
+
+    const gu =
+        document.getElementById(
+            'new-prod-name-gu'
+        )?.value ||
+        'નવું ઉત્પાદન';
+
+
+    const en =
+        document.getElementById(
+            'new-prod-name-en'
+        )?.value ||
+        'New Product';
+
+
+    const price =
+        Number(
+            document.getElementById(
+                'new-prod-price'
+            )?.value
+        ) || 0;
+
+
+    const category =
+        document.getElementById(
+            'new-prod-category'
+        )?.value ||
+        'mithai';
+
+
+    const image =
+        document.getElementById(
+            'new-prod-img'
+        )?.value ||
+        'images/product-toprapak.webp';
+
+
+    const name =
+        document.getElementById(
+            'new-prod-preview-name'
+        );
+
+
+    const nameEn =
+        document.getElementById(
+            'new-prod-preview-en'
+        );
+
+
+    const priceElement =
+        document.getElementById(
+            'new-prod-preview-price'
+        );
+
+
+    const imageElement =
+        document.getElementById(
+            'new-prod-preview-img'
+        );
+
+
+    const tag =
+        document.getElementById(
+            'new-prod-preview-tag'
+        );
+
+
+    if (name) {
+
+        name.textContent =
+            gu;
+    }
+
+
+    if (nameEn) {
+
+        nameEn.textContent =
+            en;
+    }
+
+
+    if (priceElement) {
+
+        priceElement.textContent =
+            '₹' +
+            Number(
+                price
+            ).toLocaleString(
+                'en-IN'
+            );
+    }
+
+
+    if (imageElement) {
+
+        imageElement.src =
+            image;
+    }
+
+
+    if (tag) {
+
+        tag.textContent =
+            category === 'namkeen'
+                ? 'નમકીન'
+                : 'મીઠાઈ';
+    }
+}
+
+
+window.updateNewProdPreview =
+    updateNewProdPreview;
+
+
+/* ================================================================
+   IMAGE PRESET
+   ================================================================ */
+
+function onNewProdPresetChange() {
+
+    const select =
+        document.getElementById(
+            'new-prod-preset-img'
+        );
+
+
+    const value =
+        select?.value ||
+        '';
+
+
+    const customGroup =
+        document.getElementById(
+            'new-prod-custom-url-group'
+        );
+
+
+    const imageInput =
+        document.getElementById(
+            'new-prod-img'
+        );
+
+
+    const preview =
+        document.getElementById(
+            'new-prod-preview-img'
+        );
+
+
+    if (customGroup) {
+
+        customGroup.style.display =
+            value === 'custom'
+                ? 'block'
+                : 'none';
+    }
+
+
+    if (
+        value !== 'custom' &&
+        value
+    ) {
+
+        if (imageInput) {
+
+            imageInput.value =
+                value;
+        }
+
+
+        if (preview) {
+
+            preview.src =
+                value;
+        }
+    }
+
+
+    updateNewProdPreview();
+}
+
+
+window.onNewProdPresetChange =
+    onNewProdPresetChange;
+
+
+/* ================================================================
+   ADD NEW PRODUCT
+   ================================================================ */
+
+function handleAddNewProduct(event) {
+
+    event.preventDefault();
+
+
+    if (!requireOwner()) return;
+
+
+    const gu =
+        document.getElementById(
+            'new-prod-name-gu'
+        )
+        ?.value
+        .trim();
+
+
+    const en =
+        document.getElementById(
+            'new-prod-name-en'
+        )
+        ?.value
+        .trim();
+
+
+    const category =
+        document.getElementById(
+            'new-prod-category'
+        )
+        ?.value ||
+        'mithai';
+
+
+    const price =
+        Math.round(
+            Number(
+                document.getElementById(
+                    'new-prod-price'
+                )?.value
+            )
+        );
+
+
+    const image =
+        document.getElementById(
+            'new-prod-img'
+        )
+        ?.value
+        .trim()
+        ||
+        'images/product-toprapak.webp';
+
+
+    const description =
+        document.getElementById(
+            'new-prod-desc-gu'
+        )
+        ?.value
+        .trim();
+
+
+    if (
+        !gu ||
+        !en ||
+        !price
+    ) {
+
+        alert(
+            'બધી જરૂરી વિગતો भरो.'
+        );
+
+        return;
+    }
+
+
+    const id =
+        (
+            en
+                .toLowerCase()
+                .replace(
+                    /[^a-z0-9]+/g,
+                    '_'
+                )
+            ||
+            'product'
+        ) +
+        '_' +
+        Date.now();
+
+
+    const product = {
+
+        id,
+
+        nameGu:
+            gu,
+
+        nameEn:
+            en,
+
+        basePrice:
+            price,
+
+        category,
+
+        img:
+            image,
+
+        descGu:
+            description ||
+            'શુદ્ધ દેશી ઘી અને તાજી સામગ્રી સાથે પરંપરાગત બનાવટ',
+
+        descEn:
+            'Fresh handcrafted traditional product',
+
+        isAvailable:
+            true,
+
+        isCustom:
+            true,
+
+        createdAt:
+            new Date().toISOString()
+    };
+
+
+    const catalog =
+        readJSON(
+            CATALOG_KEY,
+            {}
+        );
+
+
+    catalog[id] =
+        product;
+
+
+    writeJSON(
+        CATALOG_KEY,
+        catalog
+    );
+
+
+    savePrice(
+        id,
+        price
+    );
+
+
+    closeAddProductModal();
+
+
+    document
+        .getElementById(
+            'add-product-form'
+        )
+        ?.reset();
+
+
+    loadInventory();
+
+
+    flash(
+        '✓ નવું ઉત્પાદન live ઉમેરાયું'
+    );
+}
+
+
+window.handleAddNewProduct =
+    handleAddNewProduct;
+
+
+/* ================================================================
+   ADMIN TABS
+   ================================================================ */
+
+function switchAdminTab(tab) {
+
+    if (!requireOwner()) return;
+
+
+    document
+        .querySelectorAll(
+            '.admin-panel-view'
+        )
+        .forEach(panel => {
+
+            panel.classList.toggle(
+                'active',
+                panel.id ===
+                    'panel-' + tab
+            );
+        });
+
+
+    document
+        .querySelectorAll(
+            '.admin-tab-btn'
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                'active',
+                button.dataset.tab ===
+                    tab
+            );
+        });
+
+
+    if (tab === 'orders') {
+
+        refreshAdminOrders(false);
+    }
+
+
+    if (tab === 'inventory') {
+
+        loadInventory();
+    }
+
+
+    if (tab === 'analytics') {
+
+        renderAnalytics();
+    }
+
+
+    if (tab === 'crm') {
+
+        renderCustomers();
+    }
+
+
+    if (tab === 'kitchen') {
+
+        renderKitchen();
+    }
+}
+
+
+window.switchAdminTab =
+    switchAdminTab;
+
+
+/* ================================================================
+   FLASH MESSAGE
+   ================================================================ */
+
+function flash(message) {
+
+    const element =
+        document.createElement(
+            'div'
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.cssText = `
+
+        position:fixed;
+
+        right:20px;
+
+        bottom:20px;
+
+        z-index:99999;
+
+        background:#173F8A;
+
+        color:#fff;
+
+        padding:12px 16px;
+
+        border-radius:10px;
+
+        font-weight:700;
+
+        box-shadow:
+            0 8px 30px
+            rgba(0,0,0,.2);
+
+    `;
+
+
+    document.body.appendChild(
+        element
+    );
+
+
+    setTimeout(
+        () => element.remove(),
+        2500
+    );
 }
 
 
 /* ================================================================
-   PRINT ORDER
+   DASHBOARD
    ================================================================ */
 
-function printOrderSlip(orderId) {
+function updateDashboard() {
 
-  const o =
-    allOrders.find(
-      x =>
-        String(x.id) ===
-        String(orderId)
-    );
+    const orders =
+        allOrders.filter(
+            inDateRange
+        );
 
 
-  if (!o) return;
+    const revenue =
+        orders.reduce(
+            (sum, order) =>
+                sum +
+                Number(
+                    order.totalAmount || 0
+                ),
+            0
+        );
 
 
-  const slipArea =
-    document.getElementById(
-      'print-slip-area'
-    );
+    const totalKg =
+        orders.reduce(
+            (sum, order) => {
+
+                if (
+                    Number(
+                        order.totalKg
+                    )
+                ) {
+
+                    return (
+                        sum +
+                        Number(
+                            order.totalKg
+                        )
+                    );
+                }
 
 
-  if (!slipArea) return;
+                return (
+                    sum +
+                    (
+                        order.items || []
+                    ).reduce(
+                        (
+                            itemSum,
+                            item
+                        ) => {
+
+                            return (
+                                itemSum +
+                                (
+                                    Number(
+                                        item.weightKg
+                                    ) || 1
+                                ) *
+                                (
+                                    Number(
+                                        item.qty
+                                    ) || 1
+                                )
+                            );
+                        },
+                        0
+                    )
+                );
+            },
+            0
+        );
 
 
-  const items =
-    Array.isArray(o.items)
-      ? o.items
-      : [];
+    const count =
+        orders.length;
 
 
-  const itemsRows =
-    items.map(
-      (it, idx) => `
-
-        <tr>
-
-          <td style="
-            padding:6px;
-            border:1px solid #000;">
-            ${idx + 1}
-          </td>
-
-          <td style="
-            padding:6px;
-            border:1px solid #000;">
-            ${escapeHtml(it.nameGu)}
-            (${escapeHtml(it.nameEn)})
-          </td>
-
-          <td style="
-            padding:6px;
-            border:1px solid #000;
-            font-weight:bold;">
-            ${escapeHtml(it.weightLabel)}
-          </td>
-
-          <td style="
-            padding:6px;
-            border:1px solid #000;">
-            ${it.qty} પેક
-          </td>
-
-          <td style="
-            padding:6px;
-            border:1px solid #000;
-            text-align:right;">
-            ₹${Number(
-              it.subtotal || 0
-            )}
-          </td>
-
-        </tr>
-
-      `
-    ).join('');
+    const average =
+        count
+            ? revenue / count
+            : 0;
 
 
-  slipArea.innerHTML = `
-
-    <div style="
-      max-width:480px;
-      margin:0 auto;
-      font-family:sans-serif;
-      padding:20px;
-      border:2px solid #000;">
-
-      <div style="
-        text-align:center;
-        border-bottom:2px solid #000;
-        padding-bottom:12px;
-        margin-bottom:14px;">
-
-        <h2 style="
-          margin:0;
-          font-size:1.4rem;">
-          પટેલ સ્વીટ માર્ટ
-        </h2>
-
-        <div style="
-          font-size:0.85rem;">
-          મુખ્ય બજાર, ખેરવા
-        </div>
-
-        <div style="
-          font-size:0.95rem;
-          font-weight:bold;
-          margin-top:6px;">
-          ડિલિવરી સ્લિપ / ORDER RECEIPT
-        </div>
-
-      </div>
+    const revenueElement =
+        document.getElementById(
+            'kpi-revenue'
+        );
 
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        margin-bottom:10px;
-        font-size:0.9rem;">
+    if (revenueElement) {
 
-        <div>
-          <strong>ઓર્ડર ID:</strong>
-          #${escapeHtml(o.id)}
-        </div>
-
-        <div>
-          <strong>તારીખ:</strong>
-          ${new Date(o.date)
-            .toLocaleDateString('gu-IN')}
-        </div>
-
-      </div>
+        revenueElement.textContent =
+            '₹' +
+            revenue.toLocaleString(
+                'en-IN'
+            );
+    }
 
 
-      <div style="
-        margin-bottom:12px;
-        font-size:0.9rem;
-        border-bottom:1px dashed #000;
-        padding-bottom:10px;">
+    const countElement =
+        document.getElementById(
+            'kpi-orders-count'
+        );
 
-        <div>
-          <strong>ગ્રાહક:</strong>
-          ${escapeHtml(o.customerName)}
-        </div>
 
-        <div>
-          <strong>ફોન:</strong>
-          ${escapeHtml(o.phone)}
-        </div>
+    if (countElement) {
 
-        <div>
-          <strong>શહેર:</strong>
-          ${escapeHtml(o.city)}
-        </div>
+        countElement.textContent =
+            count;
+    }
 
-        <div>
-          <strong>સરનામું:</strong>
-          ${escapeHtml(o.address)}
-        </div>
 
-        ${
-          o.notes
-            ? `
-              <div>
-                <strong>નોંધ:</strong>
-                ${escapeHtml(o.notes)}
-              </div>
-            `
-            : ''
+    const kgElement =
+        document.getElementById(
+            'kpi-total-kg'
+        );
+
+
+    if (kgElement) {
+
+        kgElement.textContent =
+            totalKg.toFixed(2) +
+            ' kg';
+    }
+
+
+    const averageElement =
+        document.getElementById(
+            'kpi-aov'
+        );
+
+
+    if (averageElement) {
+
+        averageElement.textContent =
+            '₹' +
+            Math.round(
+                average
+            ).toLocaleString(
+                'en-IN'
+            );
+    }
+
+
+    const subtitle =
+        document.getElementById(
+            'kpi-orders-sub'
+        );
+
+
+    if (subtitle) {
+
+        subtitle.textContent =
+            'ખેરવા & અમદાવાદ';
+    }
+}
+
+
+/* ================================================================
+   CUSTOMERS
+   ================================================================ */
+
+function renderCustomers() {
+
+    const tbody =
+        document.getElementById(
+            'customers-tbody'
+        );
+
+
+    if (!tbody) return;
+
+
+    const customerMap =
+        new Map();
+
+
+    allOrders.forEach(order => {
+
+        const key =
+            order.phone ||
+            order.customerName;
+
+
+        if (!customerMap.has(key)) {
+
+            customerMap.set(
+                key,
+                {
+                    ...order,
+                    count: 0,
+                    total: 0
+                }
+            );
         }
 
-      </div>
+
+        const customer =
+            customerMap.get(key);
 
 
-      <table style="
-        width:100%;
-        border-collapse:collapse;
-        font-size:0.85rem;
-        margin-bottom:14px;">
+        customer.count++;
 
-        <thead>
-
-          <tr style="
-            background:#eee;">
-
-            <th style="
-              padding:6px;
-              border:1px solid #000;">
-              #
-            </th>
-
-            <th style="
-              padding:6px;
-              border:1px solid #000;">
-              આઇટમ
-            </th>
-
-            <th style="
-              padding:6px;
-              border:1px solid #000;">
-              વજન
-            </th>
-
-            <th style="
-              padding:6px;
-              border:1px solid #000;">
-              જથ્થો
-            </th>
-
-            <th style="
-              padding:6px;
-              border:1px solid #000;">
-              રકમ
-            </th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-          ${itemsRows}
-        </tbody>
-
-      </table>
+        customer.total +=
+            Number(
+                order.totalAmount || 0
+            );
+    });
 
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        font-size:1.1rem;
-        font-weight:bold;
-        border-top:2px solid #000;
-        padding-top:8px;">
-
-        <span>
-          કુલ રકમ:
-        </span>
-
-        <span>
-          ₹${Number(
-            o.totalAmount || 0
-          ).toLocaleString('en-IN')}
-        </span>
-
-      </div>
+    const customers =
+        [...customerMap.values()];
 
 
-      <div style="
-        text-align:center;
-        margin-top:20px;
-        font-size:0.8rem;">
+    tbody.innerHTML =
+        customers
+            .map(
+                customer =>
+                    `
+                    <tr>
 
-        શુદ્ધતા અને પરંપરાનો ભરોસો — 1995થી<br>
-        મુલાકાત બદલ આભાર!
+                        <td>
+                            ${escapeHtml(
+                                customer.customerName
+                            )}
+                        </td>
 
-      </div>
+                        <td>
+                            ${escapeHtml(
+                                customer.phone
+                            )}
+                        </td>
 
-    </div>
-  `;
+                        <td>
+                            ${escapeHtml(
+                                customer.city || ''
+                            )}
+                        </td>
 
+                        <td>
+                            ${customer.count}
+                        </td>
 
-  window.print();
+                        <td>
+                            ₹${customer.total.toLocaleString(
+                                'en-IN'
+                            )}
+                        </td>
+
+                    </tr>
+                    `
+            )
+            .join('')
+            ||
+            `
+            <tr>
+                <td colspan="5">
+                    No customers yet.
+                </td>
+            </tr>
+            `;
 }
+
+
+window.renderCustomers =
+    renderCustomers;
+
+
+/* ================================================================
+   ANALYTICS
+   ================================================================ */
+
+function renderAnalytics() {
+
+    const tbody =
+        document.getElementById(
+            'analytics-products-tbody'
+        );
+
+
+    if (!tbody) return;
+
+
+    const map = {};
+
+
+    allOrders.forEach(order => {
+
+        (
+            order.items || []
+        ).forEach(item => {
+
+            const key =
+                item.productId ||
+                item.nameEn;
+
+
+            if (!map[key]) {
+
+                map[key] = {
+
+                    name:
+                        item.nameGu ||
+                        item.nameEn,
+
+                    qty: 0,
+
+                    revenue: 0,
+
+                    kg: 0
+                };
+            }
+
+
+            map[key].qty +=
+                Number(
+                    item.qty
+                ) || 0;
+
+
+            map[key].revenue +=
+                Number(
+                    item.subtotal
+                ) || 0;
+
+
+            map[key].kg +=
+                (
+                    Number(
+                        item.weightKg
+                    ) || 1
+                ) *
+                (
+                    Number(
+                        item.qty
+                    ) || 1
+                );
+        });
+    });
+
+
+    const data =
+        Object.values(map)
+            .sort(
+                (a, b) =>
+                    b.revenue -
+                    a.revenue
+            );
+
+
+    tbody.innerHTML =
+        data
+            .map(
+                item =>
+                    `
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(
+                                item.name
+                            )}
+                        </td>
+
+                        <td>
+                            ${item.qty}
+                        </td>
+
+                        <td>
+                            ${item.kg.toFixed(2)}
+                            kg
+                        </td>
+
+                        <td>
+                            ₹${item.revenue.toLocaleString(
+                                'en-IN'
+                            )}
+                        </td>
+
+                    </tr>
+                    `
+            )
+            .join('')
+            ||
+            `
+            <tr>
+                <td colspan="4">
+                    No sales data.
+                </td>
+            </tr>
+            `;
+}
+
+
+window.renderAnalytics =
+    renderAnalytics;
+
+
+/* ================================================================
+   KITCHEN
+   ================================================================ */
+
+function renderKitchen() {
+
+    const grid =
+        document.getElementById(
+            'kitchen-grid'
+        );
+
+
+    if (!grid) return;
+
+
+    const map = {};
+
+
+    allOrders
+        .filter(
+            order =>
+                order.status !==
+                'delivered'
+        )
+        .forEach(order => {
+
+            (
+                order.items || []
+            ).forEach(item => {
+
+                const key =
+                    item.productId ||
+                    item.nameEn;
+
+
+                if (!map[key]) {
+
+                    map[key] = {
+
+                        name:
+                            item.nameGu ||
+                            item.nameEn,
+
+                        kg: 0
+                    };
+                }
+
+
+                map[key].kg +=
+                    (
+                        Number(
+                            item.weightKg
+                        ) || 1
+                    ) *
+                    (
+                        Number(
+                            item.qty
+                        ) || 1
+                    );
+            });
+        });
+
+
+    grid.innerHTML =
+        Object.values(map)
+            .map(
+                item =>
+                    `
+                    <div
+                        style="
+                            padding:14px;
+                            background:#fff;
+                            border:1px solid #E2E8F0;
+                            border-radius:10px;
+                        "
+                    >
+
+                        <strong>
+                            ${escapeHtml(
+                                item.name
+                            )}
+                        </strong>
+
+                        <div
+                            style="
+                                font-size:1.2rem;
+                                font-weight:800;
+                                color:var(--cobalt);
+                            "
+                        >
+                            ${item.kg.toFixed(2)}
+                            kg
+                        </div>
+
+                    </div>
+                    `
+            )
+            .join('')
+            ||
+            `
+            <div
+                style="
+                    padding:20px;
+                    color:#64748B;
+                "
+            >
+                હાલ કોઈ kitchen batch નથી.
+            </div>
+            `;
+}
+
+
+window.renderKitchen =
+    renderKitchen;
 
 
 /* ================================================================
    CSV EXPORT
    ================================================================ */
 
-function exportOrdersToExcel() {
+function downloadCsv(
+    filename,
+    rows
+) {
 
-  const orders =
-    getFilteredOrders();
-
-
-  let csv =
-    'Order ID,Date,Customer Name,Phone,City,Address,Total Amount,Status,Items\n';
-
-
-  orders.forEach(o => {
-
-    const items =
-      Array.isArray(o.items)
-        ? o.items
-        : [];
-
-
-    const itemsStr =
-      items.map(
-        it =>
-          `${it.nameEn} (${it.weightLabel} x ${it.qty})`
-      ).join('; ');
-
-
-    csv +=
-      `"${escapeCsv(o.id)}",` +
-      `"${escapeCsv(o.date)}",` +
-      `"${escapeCsv(o.customerName)}",` +
-      `"${escapeCsv(o.phone)}",` +
-      `"${escapeCsv(o.city)}",` +
-      `"${escapeCsv(o.address)}",` +
-      `"${o.totalAmount}",` +
-      `"${escapeCsv(o.status)}",` +
-      `"${escapeCsv(itemsStr)}"\n`;
-
-  });
+    const csv =
+        '\ufeff' +
+        rows
+            .map(row =>
+                row
+                    .map(
+                        value =>
+                            '"' +
+                            String(
+                                value ?? ''
+                            ).replace(
+                                /"/g,
+                                '""'
+                            ) +
+                            '"'
+                    )
+                    .join(',')
+            )
+            .join('\n');
 
 
-  downloadCsv(
-    csv,
-    `Patel_Sweet_Mart_Orders_${new Date().toISOString().slice(0, 10)}.csv`
-  );
-}
-
-
-function exportCustomersToExcel() {
-
-  const crm = {};
-
-
-  allOrders.forEach(o => {
-
-    const phone =
-      String(o.phone || '')
-        .replace(
-          /[^0-9]/g,
-          ''
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    'text/csv;charset=utf-8'
+            }
         );
 
 
-    if (!crm[phone]) {
-
-      crm[phone] = {
-
-        name:
-          o.customerName,
-
-        phone:
-          o.phone,
-
-        city:
-          o.city,
-
-        totalOrders: 0,
-
-        totalSpend: 0,
-
-        lastOrder:
-          o.date
-
-      };
-    }
+    const url =
+        URL.createObjectURL(
+            blob
+        );
 
 
-    crm[phone].totalOrders +=
-      1;
+    const link =
+        document.createElement(
+            'a'
+        );
 
 
-    crm[phone].totalSpend +=
-      Number(
-        o.totalAmount || 0
-      );
+    link.href =
+        url;
+
+    link.download =
+        filename;
 
 
-    if (
-      new Date(o.date) >
-      new Date(
-        crm[phone].lastOrder
-      )
-    ) {
-
-      crm[phone].lastOrder =
-        o.date;
-    }
-
-  });
+    document.body.appendChild(
+        link
+    );
 
 
-  let csv =
-    'Customer Name,Phone,City,Total Orders,Lifetime Spend (INR),Last Order Date\n';
+    link.click();
 
 
-  Object.values(crm)
-    .forEach(c => {
+    link.remove();
 
-      csv +=
-        `"${escapeCsv(c.name)}",` +
-        `"${escapeCsv(c.phone)}",` +
-        `"${escapeCsv(c.city)}",` +
-        `"${c.totalOrders}",` +
-        `"${c.totalSpend}",` +
-        `"${escapeCsv(c.lastOrder)}"\n`;
 
+    setTimeout(
+        () =>
+            URL.revokeObjectURL(
+                url
+            ),
+        1000
+    );
+}
+
+
+/* ================================================================
+   EXPORT ORDERS
+   ================================================================ */
+
+function exportOrdersToExcel() {
+
+    const rows = [
+        [
+            'Order ID',
+            'Date',
+            'Customer',
+            'Phone',
+            'City',
+            'Address',
+            'Status',
+            'Total',
+            'Items'
+        ]
+    ];
+
+
+    allOrders.forEach(order => {
+
+        rows.push([
+
+            order.id,
+
+            order.date,
+
+            order.customerName,
+
+            order.phone,
+
+            order.city,
+
+            order.address,
+
+            order.status,
+
+            order.totalAmount,
+
+            (
+                order.items || []
+            )
+                .map(
+                    item =>
+                        `${item.nameEn} ${item.weightLabel} x${item.qty}`
+                )
+                .join(' | ')
+
+        ]);
     });
 
 
-  downloadCsv(
-    csv,
-    `Patel_Sweet_Mart_Customers_CRM_${new Date().toISOString().slice(0, 10)}.csv`
-  );
+    downloadCsv(
+        'patel-sweet-mart-orders.csv',
+        rows
+    );
 }
 
 
-function downloadCsv(
-  content,
-  filename
-) {
-
-  const blob =
-    new Blob(
-      ['\uFEFF' + content],
-      {
-        type:
-          'text/csv;charset=utf-8;'
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const a =
-    document.createElement(
-      'a'
-    );
-
-
-  a.href =
-    url;
-
-  a.download =
-    filename;
-
-
-  document.body.appendChild(
-    a
-  );
-
-
-  a.click();
-
-
-  document.body.removeChild(
-    a
-  );
-
-
-  URL.revokeObjectURL(
-    url
-  );
-}
+window.exportOrdersToExcel =
+    exportOrdersToExcel;
 
 
 /* ================================================================
-   SUPABASE SETTINGS
+   EXPORT CUSTOMERS
    ================================================================ */
 
-function saveSupabaseSettings(
-  event
-) {
+function exportCustomersToExcel() {
 
-  event.preventDefault();
-
-
-  const url =
-    document.getElementById(
-      'cfg-supabase-url'
-    )?.value.trim();
-
-
-  const key =
-    document.getElementById(
-      'cfg-supabase-key'
-    )?.value.trim();
+    const rows = [
+        [
+            'Customer',
+            'Phone',
+            'City',
+            'Orders',
+            'Total'
+        ]
+    ];
 
 
-  if (!url || !key) {
+    const map = {};
 
-    alert(
-      'કૃપા કરીને Project URL અને Key દાખલ કરો.'
+
+    allOrders.forEach(order => {
+
+        const key =
+            order.phone ||
+            order.customerName;
+
+
+        if (!map[key]) {
+
+            map[key] = {
+
+                name:
+                    order.customerName,
+
+                phone:
+                    order.phone,
+
+                city:
+                    order.city,
+
+                count: 0,
+
+                total: 0
+            };
+        }
+
+
+        map[key].count++;
+
+        map[key].total +=
+            Number(
+                order.totalAmount || 0
+            );
+    });
+
+
+    Object.values(map)
+        .forEach(customer => {
+
+            rows.push([
+
+                customer.name,
+
+                customer.phone,
+
+                customer.city,
+
+                customer.count,
+
+                customer.total
+
+            ]);
+        });
+
+
+    downloadCsv(
+        'patel-sweet-mart-customers.csv',
+        rows
     );
-
-    return;
-  }
-
-
-  localStorage.setItem(
-    'psm_supabase_url',
-    url
-  );
-
-
-  localStorage.setItem(
-    'psm_supabase_key',
-    key
-  );
-
-
-  initSupabaseIfConfigured();
-
-  testSupabaseConnection();
 }
 
 
-async function testSupabaseConnection() {
-
-  const box =
-    document.getElementById(
-      'cfg-status-box'
-    );
-
-
-  if (!box) return;
-
-
-  const url =
-    localStorage.getItem(
-      'psm_supabase_url'
-    );
-
-
-  const key =
-    localStorage.getItem(
-      'psm_supabase_key'
-    );
-
-
-  box.style.display =
-    'block';
-
-
-  box.innerHTML =
-    '⏳ Supabase Cloud સાથે કનેક્ટ થઈ રહ્યું છે...';
-
-
-  if (
-    !url ||
-    !key ||
-    !window.supabase
-  ) {
-
-    box.innerHTML =
-      '❌ Supabase configuration missing.';
-
-    return;
-  }
-
-
-  try {
-
-    const client =
-      window.supabase.createClient(
-        url,
-        key
-      );
-
-
-    const {
-      data,
-      error
-    } =
-      await client
-        .from('orders')
-        .select('id')
-        .limit(1);
-
-
-    if (error) {
-
-      box.innerHTML =
-        `⚠️ Supabase error: ${escapeHtml(error.message)}`;
-
-    } else {
-
-      box.innerHTML =
-        '✓ Supabase database connected successfully.';
-
-      supabaseClient =
-        client;
-
-      fetchOrdersFromSupabase();
-    }
-
-  } catch (error) {
-
-    box.innerHTML =
-      `❌ Connection failed: ${escapeHtml(error.message)}`;
-  }
-}
+window.exportCustomersToExcel =
+    exportCustomersToExcel;
 
 
 /* ================================================================
-   BACKUP
+   FULL BACKUP
    ================================================================ */
 
 function exportFullBackup() {
 
-  try {
+    const backup = {
 
-    const backupData = {
+        version: 2,
 
-      storeName:
-        'Patel Sweet Mart',
+        exportedAt:
+            new Date().toISOString(),
 
-      version:
-        '3.0',
+        orders:
+            readJSON(
+                ORDERS_KEY,
+                []
+            ),
 
-      exportTimestamp:
-        new Date().toISOString(),
+        prices:
+            readJSON(
+                PRICES_KEY,
+                {}
+            ),
 
-      exportFormattedDate:
-        new Date().toLocaleString('gu-IN'),
+        customCatalog:
+            readJSON(
+                CATALOG_KEY,
+                {}
+            ),
 
-      ordersCount:
-        allOrders.length,
+        supabase: {
 
-      orders:
-        allOrders,
+            url:
+                localStorage.getItem(
+                    SUPA_URL_KEY
+                ) || '',
 
-      customCatalog:
-        JSON.parse(
-          localStorage.getItem(
-            'psm_custom_catalog'
-          ) || '{}'
-        ),
-
-      productPrices:
-        JSON.parse(
-          localStorage.getItem(
-            'psm_product_prices'
-          ) || '{}'
-        )
-
+            key:
+                localStorage.getItem(
+                    SUPA_KEY_KEY
+                ) || ''
+        }
     };
-
-
-    const jsonStr =
-      JSON.stringify(
-        backupData,
-        null,
-        2
-      );
-
-
-    const dateSlug =
-      new Date()
-        .toISOString()
-        .slice(0, 10);
-
-
-    const filename =
-      `Patel_Sweet_Mart_Backup_${dateSlug}.json`;
 
 
     const blob =
-      new Blob(
-        [jsonStr],
-        {
-          type:
-            'application/json'
-        }
-      );
+        new Blob(
+            [
+                JSON.stringify(
+                    backup,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                    'application/json'
+            }
+        );
 
 
     const url =
-      URL.createObjectURL(
-        blob
-      );
+        URL.createObjectURL(
+            blob
+        );
 
 
-    const a =
-      document.createElement(
-        'a'
-      );
+    const link =
+        document.createElement(
+            'a'
+        );
 
 
-    a.href =
-      url;
+    link.href =
+        url;
 
-    a.download =
-      filename;
+
+    link.download =
+        'patel-sweet-mart-backup-' +
+        new Date()
+            .toISOString()
+            .slice(0, 10) +
+        '.json';
 
 
     document.body.appendChild(
-      a
+        link
     );
 
 
-    a.click();
+    link.click();
 
 
-    document.body.removeChild(
-      a
+    link.remove();
+
+
+    setTimeout(
+        () =>
+            URL.revokeObjectURL(
+                url
+            ),
+        1000
     );
 
 
-    URL.revokeObjectURL(
-      url
-    );
+    const backupText =
+        document.getElementById(
+            'safety-last-backup-text'
+        );
 
 
-    alert(
-      `✓ Backup તૈયાર છે. ${allOrders.length} orders save થયા.`
-    );
+    if (backupText) {
 
-  } catch (error) {
-
-    alert(
-      'Backup error: ' +
-      error.message
-    );
-  }
+        backupText.textContent =
+            'છેલ્લું બેકઅપ: ' +
+            new Date().toLocaleString(
+                'en-IN'
+            );
+    }
 }
 
+
+window.exportFullBackup =
+    exportFullBackup;
+
+
+/* ================================================================
+   RESTORE BACKUP
+   ================================================================ */
 
 function triggerRestoreBackup() {
 
-  const input =
-    document.getElementById(
-      'backup-file-input'
-    );
-
-
-  if (input) {
-    input.click();
-  }
+    document
+        .getElementById(
+            'backup-file-input'
+        )
+        ?.click();
 }
 
 
-function handleRestoreBackupFile(
-  event
-) {
-
-  const file =
-    event.target.files &&
-    event.target.files[0];
+window.triggerRestoreBackup =
+    triggerRestoreBackup;
 
 
-  if (!file) return;
+function handleRestoreBackupFile(event) {
+
+    const file =
+        event.target.files?.[0];
 
 
-  const reader =
-    new FileReader();
+    if (!file) return;
 
 
-  reader.onload =
-    function(e) {
-
-      try {
-
-        const data =
-          JSON.parse(
-            e.target.result
-          );
+    const reader =
+        new FileReader();
 
 
-        if (
-          !data ||
-          !Array.isArray(
-            data.orders
-          )
-        ) {
+    reader.onload =
+        () => {
 
-          alert(
-            '❌ Invalid backup file.'
-          );
+            try {
 
-          return;
-        }
+                const backup =
+                    JSON.parse(
+                        reader.result
+                    );
 
 
-        const confirmed =
-          confirm(
-            `આ backup માં ${data.orders.length} orders છે. Restore કરવું છે?`
-          );
+                if (
+                    Array.isArray(
+                        backup.orders
+                    )
+                ) {
+
+                    writeJSON(
+                        ORDERS_KEY,
+                        backup.orders
+                    );
+                }
 
 
-        if (!confirmed) {
-          return;
-        }
+                if (backup.prices) {
+
+                    writeJSON(
+                        PRICES_KEY,
+                        backup.prices
+                    );
+                }
 
 
-        allOrders =
-          data.orders
-            .map(normalizeOrder)
-            .filter(Boolean);
+                if (
+                    backup.customCatalog
+                ) {
+
+                    writeJSON(
+                        CATALOG_KEY,
+                        backup.customCatalog
+                    );
+                }
 
 
-        saveLocalOrders(
-          allOrders
+                loadProducts();
+
+                loadInventory();
+
+                refreshAdminOrders(false);
+
+
+                flash(
+                    '✓ Backup restored'
+                );
+
+            } catch (error) {
+
+                alert(
+                    'Backup invalid:\n\n' +
+                    error.message
+                );
+            }
+        };
+
+
+    reader.readAsText(file);
+}
+
+
+window.handleRestoreBackupFile =
+    handleRestoreBackupFile;
+
+
+/* ================================================================
+   RESET DEFAULT PRODUCTS
+   ================================================================ */
+
+function confirmResetDefaults() {
+
+    const confirmReset =
+        confirm(
+            'Local product prices અને custom catalog defaults પર reset કરવા છે?\n\nOrders delete નહીં થાય.'
         );
 
 
-        if (data.customCatalog) {
+    if (!confirmReset) return;
 
-          localStorage.setItem(
-            'psm_custom_catalog',
-            JSON.stringify(
-              data.customCatalog
+
+    localStorage.removeItem(
+        PRICES_KEY
+    );
+
+
+    localStorage.removeItem(
+        CATALOG_KEY
+    );
+
+
+    loadProducts();
+
+    loadInventory();
+
+
+    flash(
+        '✓ Product defaults restored'
+    );
+}
+
+
+window.confirmResetDefaults =
+    confirmResetDefaults;
+
+
+/* ================================================================
+   SUPABASE CONFIG
+   ================================================================ */
+
+function saveSupabaseConfig(event) {
+
+    event.preventDefault();
+
+
+    const url =
+        document
+            .getElementById(
+                'cfg-supabase-url'
             )
-          );
-        }
+            ?.value
+            .trim()
+            .replace(
+                /\/+$/,
+                ''
+            );
 
 
-        if (data.productPrices) {
-
-          localStorage.setItem(
-            'psm_product_prices',
-            JSON.stringify(
-              data.productPrices
+    const key =
+        document
+            .getElementById(
+                'cfg-supabase-key'
             )
-          );
-        }
+            ?.value
+            .trim();
 
 
-        initDataStore();
+    localStorage.setItem(
+        SUPA_URL_KEY,
+        url
+    );
 
-        renderAllViews();
 
+    localStorage.setItem(
+        SUPA_KEY_KEY,
+        key
+    );
+
+
+    updateConfigStatus();
+
+    refreshAdminOrders(true);
+}
+
+
+window.saveSupabaseConfig =
+    saveSupabaseConfig;
+
+
+function updateConfigStatus() {
+
+    const config =
+        getSupabaseConfig();
+
+
+    const box =
+        document.getElementById(
+            'cfg-status-box'
+        );
+
+
+    if (box) {
+
+        box.innerHTML =
+            config.configured
+
+                ? `
+                    ✅ Supabase configured.
+                    Orders will sync across devices
+                    when the database tables/RLS
+                    allow REST access.
+                  `
+
+                : `
+                    ⚠️ Supabase not configured.
+                    Orders are still saved locally
+                    in this browser.
+                  `;
+    }
+
+
+    const urlInput =
+        document.getElementById(
+            'cfg-supabase-url'
+        );
+
+
+    const keyInput =
+        document.getElementById(
+            'cfg-supabase-key'
+        );
+
+
+    if (urlInput) {
+
+        urlInput.value =
+            config.url;
+    }
+
+
+    if (keyInput) {
+
+        keyInput.value =
+            config.key;
+    }
+}
+
+
+window.updateConfigStatus =
+    updateConfigStatus;
+
+
+/* ================================================================
+   TEST SUPABASE
+   ================================================================ */
+
+async function testSupabaseConnection() {
+
+    const config =
+        getSupabaseConfig();
+
+
+    if (!config.configured) {
 
         alert(
-          `✓ ${allOrders.length} orders restore થયા.`
+            'પહેલા Supabase URL અને Anon Key સેવ કરો.'
         );
 
-      } catch (error) {
+        return;
+    }
 
-        alert(
-          '❌ Backup read error: ' +
-          error.message
-        );
-      }
-    };
-
-
-  reader.readAsText(
-    file
-  );
-
-
-  event.target.value =
-    '';
-}
-
-
-/* ================================================================
-   MASTER REFRESH
-   ================================================================ */
-
-function renderAllViews() {
-
-  /*
-     Always read newest local orders
-     before rendering.
-  */
-
-  const localOrders =
-    readLocalOrders();
-
-
-  if (localOrders.length > 0) {
-
-    allOrders =
-      mergeOrders(
-        localOrders,
-        []
-      );
-  }
-
-
-  renderKpis();
-
-  renderOrdersTable();
-
-
-  if (
-    currentActiveTab ===
-    'kitchen'
-  ) {
-
-    renderKitchenPlanner();
-  }
-
-
-  if (
-    currentActiveTab ===
-    'analytics'
-  ) {
-
-    renderAnalyticsView();
-  }
-
-
-  if (
-    currentActiveTab ===
-    'crm'
-  ) {
-
-    renderCrmView();
-  }
-
-
-  if (
-    currentActiveTab ===
-    'inventory'
-  ) {
-
-    renderInventoryGrid();
-  }
-}
-
-
-/* ================================================================
-   LOAD EXISTING CONFIG
-   ================================================================ */
-
-function loadExistingConfigInputs() {
-
-  const url =
-    localStorage.getItem(
-      'psm_supabase_url'
-    );
-
-
-  const key =
-    localStorage.getItem(
-      'psm_supabase_key'
-    );
-
-
-  const urlInput =
-    document.getElementById(
-      'cfg-supabase-url'
-    );
-
-
-  const keyInput =
-    document.getElementById(
-      'cfg-supabase-key'
-    );
-
-
-  if (
-    url &&
-    urlInput
-  ) {
-
-    urlInput.value =
-      url;
-  }
-
-
-  if (
-    key &&
-    keyInput
-  ) {
-
-    keyInput.value =
-      key;
-  }
-}
-
-
-/* ================================================================
-   HELPERS
-   ================================================================ */
-
-function escapeHtml(value) {
-
-  return String(
-    value ?? ''
-  )
-  .replace(
-    /&/g,
-    '&amp;'
-  )
-  .replace(
-    /</g,
-    '&lt;'
-  )
-  .replace(
-    />/g,
-    '&gt;'
-  )
-  .replace(
-    /"/g,
-    '&quot;'
-  )
-  .replace(
-    /'/g,
-    '&#039;'
-  );
-}
-
-
-function escapeCsv(value) {
-
-  return String(
-    value ?? ''
-  )
-  .replace(
-    /"/g,
-    '""'
-  );
-}
-
-
-function safeJs(value) {
-
-  return String(
-    value ?? ''
-  )
-  .replace(
-    /\\/g,
-    '\\\\'
-  )
-  .replace(
-    /'/g,
-    "\\'"
-  );
-}
-
-
-/* ================================================================
-   INITIALIZATION
-   ================================================================ */
-
-document.addEventListener(
-  'DOMContentLoaded',
-  () => {
-
-    initDataStore();
-
-    checkAuth();
-
-    loadExistingConfigInputs();
-
-    renderAllViews();
-
-    /*
-       Ask notification permission only
-       after user interaction/browser allows it.
-    */
 
     try {
 
-      if (
-        'Notification' in window &&
-        Notification.permission === 'default'
-      ) {
+        const response =
+            await fetch(
+                `${config.url}/rest/v1/orders?select=id&limit=1`,
+                {
+                    headers:
+                        supaHeaders()
+                }
+            );
 
-        Notification.requestPermission()
-          .catch(() => {});
 
-      }
+        if (!response.ok) {
 
-    } catch (error) {}
+            throw new Error(
+                await response.text()
+            );
+        }
 
-  }
+
+        alert(
+            '✅ Supabase connection OK'
+        );
+
+
+        setSyncStatus(
+            true,
+            'Supabase Cloud Sync'
+        );
+
+    } catch (error) {
+
+        alert(
+            '❌ Supabase connection failed\n\n' +
+            error.message
+        );
+
+
+        setSyncStatus(
+            false,
+            'Supabase connection failed'
+        );
+    }
+}
+
+
+window.testSupabaseConnection =
+    testSupabaseConnection;
+
+
+/* ================================================================
+   REMOVE SUPABASE CONFIG
+   ================================================================ */
+
+function removeSupabaseConfig() {
+
+    localStorage.removeItem(
+        SUPA_URL_KEY
+    );
+
+
+    localStorage.removeItem(
+        SUPA_KEY_KEY
+    );
+
+
+    updateConfigStatus();
+
+
+    setSyncStatus(
+        false,
+        'Local Orders'
+    );
+}
+
+
+window.removeSupabaseConfig =
+    removeSupabaseConfig;
+
+
+/* ================================================================
+   LIVE STORAGE SYNC
+   ================================================================ */
+
+window.addEventListener(
+    'storage',
+    event => {
+
+        if (
+            [
+                ORDERS_KEY,
+                PRICES_KEY,
+                CATALOG_KEY
+            ].includes(
+                event.key
+            )
+        ) {
+
+            loadProducts();
+
+
+            if (
+                event.key !==
+                ORDERS_KEY
+            ) {
+
+                loadInventory();
+            }
+
+
+            if (
+                event.key ===
+                ORDERS_KEY
+            ) {
+
+                allOrders =
+                    readJSON(
+                        ORDERS_KEY,
+                        []
+                    );
+
+
+                renderOrders();
+
+                updateDashboard();
+
+                renderCustomers();
+
+                renderAnalytics();
+
+                renderKitchen();
+            }
+        }
+    }
+);
+
+
+/* ================================================================
+   DOM READY
+   ================================================================ */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        const supabaseForm =
+            document.getElementById(
+                'supabase-config-form'
+            );
+
+
+        if (supabaseForm) {
+
+            supabaseForm.addEventListener(
+                'submit',
+                saveSupabaseConfig
+            );
+        }
+
+
+        loadProducts();
+
+        updateConfigStatus();
+
+
+        if (
+            isOwnerLoggedIn()
+        ) {
+
+            hideLogin();
+
+            loadInventory();
+
+            refreshAdminOrders(false);
+
+        } else {
+
+            showLogin();
+        }
+
+
+        const previewImage =
+            document.getElementById(
+                'new-prod-preview-img'
+            );
+
+
+        if (previewImage) {
+
+            previewImage.addEventListener(
+                'error',
+                event => {
+
+                    event.target.src =
+                        'images/product-toprapak.webp';
+                }
+            );
+        }
+
+
+        /*
+           Auto update new product preview
+        */
+
+        [
+            'new-prod-name-gu',
+            'new-prod-name-en',
+            'new-prod-price',
+            'new-prod-category',
+            'new-prod-img'
+        ].forEach(id => {
+
+            document
+                .getElementById(id)
+                ?.addEventListener(
+                    'input',
+                    updateNewProdPreview
+                );
+
+            document
+                .getElementById(id)
+                ?.addEventListener(
+                    'change',
+                    updateNewProdPreview
+                );
+        });
+    }
 );
