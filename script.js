@@ -14,7 +14,7 @@
 const PSM_CONFIG = {
 
     whatsappNumber:
-        '919999999999',
+        '9173565466',
 
     currency:
         '₹',
