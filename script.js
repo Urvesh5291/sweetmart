@@ -4854,6 +4854,374 @@ window.PSM = {
         }
 
     };
+   /* ============================================================
+   FINAL ADD TO CART FIX
+   PATEL SWEET MART
+   ============================================================ */
+
+function addCurrentProductToCart(productId) {
+
+    try {
+
+        const id = String(productId || '').trim();
+
+        console.log('ADD TO CART CLICK:', id);
+
+        /* ---------------- PRODUCT CHECK ---------------- */
+
+        if (
+            typeof PRODUCTS === 'undefined' ||
+            !PRODUCTS ||
+            !PRODUCTS[id]
+        ) {
+
+            console.error(
+                'PRODUCT NOT FOUND:',
+                id,
+                typeof PRODUCTS !== 'undefined'
+                    ? PRODUCTS
+                    : 'PRODUCTS undefined'
+            );
+
+            showToast(
+                currentLang === 'gu'
+                    ? '❌ ઉત્પાદન મળ્યું નથી.'
+                    : '❌ Product not found.'
+            );
+
+            return false;
+        }
+
+
+        const product = PRODUCTS[id];
+
+
+        /* ---------------- CART CHECK ---------------- */
+
+        if (!Array.isArray(cart)) {
+            cart = [];
+        }
+
+
+        /* ---------------- WEIGHT ---------------- */
+
+        let selected =
+            selectedWeights &&
+            selectedWeights[id]
+                ? selectedWeights[id]
+                : null;
+
+
+        /*
+         * જો કોઈ weight select નથી તો 1kg
+         * default રહેશે.
+         */
+
+        if (!selected) {
+
+            selected = {
+
+                weightKey: '1kg',
+
+                multiplier: 1,
+
+                label: '1kg',
+
+                labelGu: '1kg',
+
+                labelEn: '1kg',
+
+                price:
+                    Number(product.basePrice) || 0
+
+            };
+
+            selectedWeights[id] = selected;
+
+        }
+
+
+        let weightKey =
+            String(
+                selected.weightKey || '1kg'
+            );
+
+
+        let multiplier =
+            Number(
+                selected.multiplier
+            );
+
+
+        if (
+            !Number.isFinite(multiplier) ||
+            multiplier <= 0
+        ) {
+
+            multiplier = 1;
+
+        }
+
+
+        /* ---------------- PRICE ---------------- */
+
+        let itemPrice =
+            Number(selected.price);
+
+
+        if (
+            !Number.isFinite(itemPrice) ||
+            itemPrice <= 0
+        ) {
+
+            itemPrice =
+                Math.round(
+                    (Number(product.basePrice) || 0)
+                    * multiplier
+                );
+
+        }
+
+
+        /* ---------------- CART ITEM ID ---------------- */
+
+        const cartItemId =
+            id + '_' + weightKey;
+
+
+        /* ---------------- EXISTING ITEM ---------------- */
+
+        const existingIndex =
+            cart.findIndex(function (item) {
+
+                return String(item.id) ===
+                    String(cartItemId);
+
+            });
+
+
+        if (existingIndex !== -1) {
+
+            cart[existingIndex].qty =
+                Number(
+                    cart[existingIndex].qty || 0
+                ) + 1;
+
+        } else {
+
+            /* ---------------- NEW ITEM ---------------- */
+
+            cart.push({
+
+                id:
+                    cartItemId,
+
+                productId:
+                    id,
+
+                nameGu:
+                    product.nameGu ||
+                    product.name ||
+                    id,
+
+                nameEn:
+                    product.nameEn ||
+                    product.name ||
+                    id,
+
+                weightKey:
+                    weightKey,
+
+                weightLabel:
+                    selected.label ||
+                    weightKey,
+
+                weightLabelGu:
+                    selected.labelGu ||
+                    selected.label ||
+                    weightKey,
+
+                weightLabelEn:
+                    selected.labelEn ||
+                    selected.label ||
+                    weightKey,
+
+                multiplier:
+                    multiplier,
+
+                basePrice:
+                    Number(
+                        product.basePrice
+                    ) || 0,
+
+                price:
+                    itemPrice,
+
+                img:
+                    product.img ||
+                    'logo.png',
+
+                qty:
+                    1
+
+            });
+
+        }
+
+
+        console.log(
+            'CART AFTER ADD:',
+            cart
+        );
+
+
+        /* ---------------- SAVE CART ---------------- */
+
+        saveCart();
+
+
+        /* ---------------- FORCE LOCAL STORAGE ---------------- */
+
+        const cartJSON =
+            JSON.stringify(cart);
+
+
+        localStorage.setItem(
+            'psm-cart',
+            cartJSON
+        );
+
+        localStorage.setItem(
+            'psm_cart',
+            cartJSON
+        );
+
+
+        /* ---------------- UPDATE CART UI ---------------- */
+
+        updateCartBadges();
+
+        renderCartBody();
+
+
+        /* ---------------- BUTTON EFFECT ---------------- */
+
+        const button =
+            document.getElementById(
+                'btn-add-' + id
+            );
+
+
+        if (button) {
+
+            const originalHTML =
+                button.innerHTML;
+
+
+            button.classList.add(
+                'added'
+            );
+
+
+            button.innerHTML =
+                currentLang === 'gu'
+
+                    ? '✓ ઉમેરાયું'
+
+                    : '✓ Added';
+
+
+            setTimeout(function () {
+
+                button.innerHTML =
+                    originalHTML;
+
+                button.classList.remove(
+                    'added'
+                );
+
+            }, 1200);
+
+        }
+
+
+        /* ---------------- TOAST ---------------- */
+
+        const displayName =
+            currentLang === 'gu'
+                ? (
+                    product.nameGu ||
+                    product.name ||
+                    id
+                )
+                : (
+                    product.nameEn ||
+                    product.name ||
+                    id
+                );
+
+
+        const weightText =
+            selected.label ||
+            weightKey;
+
+
+        showToast(
+
+            currentLang === 'gu'
+
+                ? '🛒 <strong>' +
+                  displayName +
+                  '</strong> (' +
+                  weightText +
+                  ') કાર્ટમાં ઉમેરાયું!'
+
+                : '🛒 <strong>' +
+                  displayName +
+                  '</strong> (' +
+                  weightText +
+                  ') added to cart!'
+
+        );
+
+
+        /* ---------------- OPEN CART ---------------- */
+
+        /*
+         * Cart drawer automatically open કરવું હોય
+         * તો નીચેની line uncomment કરી શકો.
+         */
+
+        // openCart();
+
+
+        return true;
+
+
+    } catch (error) {
+
+        console.error(
+            'ADD TO CART ERROR:',
+            error
+        );
+
+
+        showToast(
+
+            currentLang === 'gu'
+
+                ? '❌ કાર્ટમાં ઉમેરવામાં error આવ્યો.'
+
+                : '❌ Error adding product to cart.'
+
+        );
+
+
+        return false;
+
+    }
+
+               }
    /* ==========================================================
        INIT
        ========================================================== */
